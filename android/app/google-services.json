@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "114285129135",
+    "firebase_url": "https://quran-cognitive-search-e-e8a88.firebaseio.com",
+    "project_id": "quran-cognitive-search-e-e8a88",
+    "storage_bucket": "quran-cognitive-search-e-e8a88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114285129135:android:072b48f3c7cbda3e",
+        "android_client_info": {
+          "package_name": "com.example.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114285129135-07hdk702222bqreu0ad746logs3kqcgc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_app",
+            "certificate_hash": "1c5d817f48c5ca0e84f432fa953a442cf79727f1"
+          }
+        },
+        {
+          "client_id": "114285129135-5kulc3ni8enk062mrdiaue78kc32ea3q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKkbXhA48rTkN2ps6OFz_VGGWSnNFo5t4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114285129135-5kulc3ni8enk062mrdiaue78kc32ea3q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
