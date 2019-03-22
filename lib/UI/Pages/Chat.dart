@@ -1,9 +1,9 @@
-/*
 import 'package:flutter/material.dart';
+import 'package:watson_assistant/watson_assistant.dart';
 
 final ThemeData androidTheme = new ThemeData(
   primaryColor: Colors.blue[800],
-  accentColor: Colors.green[100]
+  accentColor: Colors.green
 );
 
 const String defaultName = "watson chatbot";
@@ -25,6 +25,39 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> with TickerProviderStateMixin{
+
+  String _text;
+  WatsonAssistantCredential credential = WatsonAssistantCredential(
+      uri: "https://gateway-lon.watsonplatform.net/assistant/api/v1/",
+      username: "apikey",
+      password: "AsFfZQsMEhF3TVDXlv4tkoTF0lEVLOkxMoMK5rac3Zay",
+      workspaceId: "7262e9e2-62da-47e6-8ede-8bb364549138");
+
+  WatsonAssistantApiV1 watsonAssistant;
+  WatsonAssistantResult watsonAssistantResponse;
+  WatsonAssistantContext watsonAssistantContext =
+  WatsonAssistantContext(context: {});
+
+  final myController = TextEditingController();
+
+  void _callWatsonAssistant() async {
+    watsonAssistantResponse = await watsonAssistant.sendMessage(
+        myController.text, watsonAssistantContext);
+    _submitMsg(myController.text);
+    setState(() {
+      _text = watsonAssistantResponse.resultText;
+      _submitMsg(_text);
+    });
+    watsonAssistantContext = watsonAssistantResponse.context;
+   myController.clear();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    watsonAssistant =
+        WatsonAssistantApiV1(watsonAssistantCredential: credential);
+  }
 
   final List<Msg> _message = <Msg>[];
   final TextEditingController _textController = new TextEditingController();
@@ -68,7 +101,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin{
             children: <Widget>[
               new Flexible(
                   child: new TextField(
-                    controller: _textController,
+                    controller: myController,
                     onChanged: (String txt) {
                       setState(() {
                         _isWriting = txt.length > 0;
@@ -82,7 +115,10 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin{
                 margin: new EdgeInsets.symmetric(horizontal: 3.0),
                 child: IconButton(
                     icon: Icon(Icons.message),
-                    onPressed: _isWriting ? () =>  _submitMsg(_textController.text) : null
+                    onPressed: () {
+                      _callWatsonAssistant();
+                    }
+                  /*_isWriting ? () =>  _submitMsg(myController.text) : null*/
                 ),
               )
             ],
@@ -99,6 +135,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin{
   }
 
   void _submitMsg(String txt) {
+
     _textController.clear();
     setState(() {
       _isWriting = false;
@@ -107,6 +144,18 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin{
       txt: txt,
       animationController: new AnimationController(vsync: this,duration: Duration(microseconds: 800)),
     );
+    setState(() {
+      _message.insert(0, msg);
+    });
+    msg.animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    for ( Msg msg in _message ) {
+      msg.animationController.dispose();
+    }
+    super.dispose();
   }
 }
 
@@ -152,4 +201,3 @@ class Msg extends StatelessWidget {
     );
   }
 }
-*/
