@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app/Tools/progress_dialog.dart';
 import 'package:flutter_app/Tools/snackBar.dart';
+import 'package:flutter_app/sevices/Shared.dart';
 import 'package:flutter_app/sevices/studentManagment.dart';
 import 'package:flutter_app/sevices/teacherManagement.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SinhUp extends StatefulWidget {
   @override
@@ -13,7 +15,7 @@ class SinhUp extends StatefulWidget {
 class _SinhUpState extends State<SinhUp> {
 
   bool _secureText = true;
-
+  SharedPrefs shared = SharedPrefs();
   showHide() {
     setState(() {
       _secureText = !_secureText;
@@ -39,6 +41,7 @@ class _SinhUpState extends State<SinhUp> {
   var _currencies = ['Student', 'Teacher'];
   var _currentItemSelected = 'Student';
   FirebaseUser currentUserLoggedIn;
+  SharedPreferences prefs;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
@@ -468,6 +471,7 @@ class _SinhUpState extends State<SinhUp> {
   }
 
   Future<void> signIn() async {
+   // prefs = await SharedPreferences.getInstance();
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       FirebaseAuth.instance
@@ -476,16 +480,17 @@ class _SinhUpState extends State<SinhUp> {
         if (_currentItemSelected == 'Student') {
           StudentManagement().storeNewStudent(
               signedInUser, context, _name, _currentItemSelected, _birthDate);
-        } else if (_currentItemSelected == 'Teacher') {
+          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate);
+          } else if (_currentItemSelected == 'Teacher') {
           TeacherManagement().storeNewTeacher(
               signedInUser, context, _name, _currentItemSelected);
         }
-        //final List<DocumentSnapshot> documents = result.documents;
       }).catchError((e) {
         closeProgressDialog(context);
         showSnackBar(e.toString(), _scafoldKey);
         print(e);
       });
+
     }
   }
 
