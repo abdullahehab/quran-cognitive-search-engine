@@ -5,6 +5,7 @@ import 'package:flutter_app/Tools/progress_dialog.dart';
 import 'package:flutter_app/Tools/snackBar.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
 import 'package:flutter_app/UI/Login_SignUp/signupgage.dart';
+import 'package:flutter_app/sevices/Shared.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
@@ -451,11 +452,13 @@ class _logInPageState extends State<logInPage> {
             .setData({'nickname': currentUser.displayName, 'email': currentUser.email, 'photoUrl': currentUser.photoUrl, 'id': currentUser.uid});
 
         // Write data to local
+        SharedPrefs s = SharedPrefs();
         currentUserLoggedIn = currentUser;
+        s.saveUserData(currentUserLoggedIn, "", "", "");/*
         await prefs.setString('id', currentUserLoggedIn.uid);
         await prefs.setString('nickname', currentUserLoggedIn.displayName);
         await prefs.setString('photoUrl', currentUserLoggedIn.photoUrl);
-        await prefs.setString('email', currentUserLoggedIn.email);
+        await prefs.setString('email', currentUserLoggedIn.email);*/
       } else {
         // Write data to local
         await prefs.setString('id', documents[0]['id']);
