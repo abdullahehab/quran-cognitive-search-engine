@@ -18,6 +18,8 @@ class _ProfilePageState extends State<ProfilePage> {
   String aboutMe = '';
   String photoUrl = '';
   String email = '';
+  String type = '';
+  String birthDate = '';
 
   @override
   void initState() {
@@ -35,6 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
     aboutMe = prefs.getString('aboutMe') ?? '';
     photoUrl = prefs.getString('photoUrl') ?? '';
     email = prefs.getString('email');
+    type = prefs.get('userType');
+    birthDate = prefs.get('birthdate');
     //print(photoUrl);
 
     // Force refresh input
