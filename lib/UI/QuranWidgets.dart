@@ -4,6 +4,8 @@ import 'package:flutter_app/UI/Pages/allStudent.dart';
 import 'package:flutter_app/UI/Pages/allTeacher.dart';
 import 'package:flutter_app/UI/Pages/profilePage.dart';
 import 'package:flutter_app/quranList.dart';
+import 'package:flutter_app/sevices/studentManagment.dart';
+import 'package:flutter_app/sevices/teacherManagement.dart';
 import 'package:flutter_app/speed%20radial/speed_dial.dart';
 import 'package:flutter_app/speed%20radial/speed_dial_child.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -22,7 +24,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
   int pageNumber = 9;
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
@@ -145,7 +147,6 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
               child: Icon(Icons.exit_to_app),
               onTap: () {
                 handleSignOut();
-
                 },
             ),
             backgroundColor: Colors.green,
@@ -173,11 +174,15 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
   }
 
   Future<Null> handleSignOut() async {
-    await FirebaseAuth.instance.signOut();
-    await googleSignIn.disconnect();
+    await _auth.signOut();
     await googleSignIn.signOut();
-    if(FirebaseUser == null) {
+    if(googleSignIn.currentUser == null) {
       Toast.show('Sign Out success', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+    }else {
+      Toast.show('Faild to Sign Out', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.red);
       Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
     }
     }
