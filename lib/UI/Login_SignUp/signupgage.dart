@@ -26,6 +26,10 @@ class _SinhUpState extends State<SinhUp> {
   final _nameText = TextEditingController();
   final _passwordText = TextEditingController();
   final String _birthDate = null;
+  final String jobTitle = null;
+  final String education = null;
+  final int numOfReading = 0;
+  final int numOfParts = 0;
   bool _validate = false;
 
   @override
@@ -127,6 +131,13 @@ class _SinhUpState extends State<SinhUp> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.stretch,
                                           children: <Widget>[
+                                            Center(
+                                              child: CircleAvatar(
+                                                backgroundImage: AssetImage("images/man.png"),
+                                                radius: 70.0,
+                                              ),
+                                            ),
+                                            SizedBox(height: 30.0,),
                                             DropdownButtonHideUnderline(
                                               child: DropdownButton<String>(
                                                 style: TextStyle(
@@ -471,6 +482,9 @@ class _SinhUpState extends State<SinhUp> {
   }
 
   Future<void> signIn() async {
+    /*FirebaseUser user =  await FirebaseAuth.instance.currentUser();
+    user.sendEmailVerification().whenComplete(() {
+    });*/
    // prefs = await SharedPreferences.getInstance();
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -479,11 +493,11 @@ class _SinhUpState extends State<SinhUp> {
           .then((signedInUser) {
         if (_currentItemSelected == 'Student') {
           StudentManagement().storeNewStudent(
-              signedInUser, context, _name, _currentItemSelected, _birthDate);
-          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate);
+              signedInUser, context, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
+          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
           } else if (_currentItemSelected == 'Teacher') {
           TeacherManagement().storeNewTeacher(
-              signedInUser, context, _name, _currentItemSelected);
+              signedInUser, context, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
         }
       }).catchError((e) {
         closeProgressDialog(context);
@@ -499,57 +513,7 @@ class _SinhUpState extends State<SinhUp> {
       this._currentItemSelected = newValueSelected;
     });
   }
-
-/*  Future<void> signIn() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _email, password: _password)
-          .then((signedInUser) {
-        if(_currentItemSelected == 'Student'){
-          StudentManagement()
-              .storeNewStudent(signedInUser, context, _name, _currentItemSelected);
-        }else if(_currentItemSelected == 'Teacher') {
-          TeacherManagement()
-              .storeNewTeacher(signedInUser, context, _name, _currentItemSelected);
-        }
-      }).catchError((e) {
-        print(e);
-      });
-    }
-  }*/
 }
-
-///ButtonBlack class
-class ButtonBlackBottom extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(30.0),
-      child: Container(
-        height: 55.0,
-        width: 600.0,
-        child: Text(
-          "Sign Up",
-          style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 0.2,
-              fontFamily: "Sans",
-              fontSize: 18.0,
-              fontWeight: FontWeight.w800),
-        ),
-        /*rgb(5, 206, 158)*/
-        alignment: FractionalOffset.center,
-        decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 15.0)],
-            borderRadius: BorderRadius.circular(30.0),
-            gradient: LinearGradient(
-                colors: <Color>[Colors.teal[400], Colors.teal[400]])),
-      ),
-    );
-  }
-}
-//7teh hena
 
 class textFromField extends StatelessWidget {
   bool password;

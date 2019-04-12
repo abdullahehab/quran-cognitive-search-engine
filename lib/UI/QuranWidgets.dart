@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/UI/Pages/WatsonChatBot.dart';
 import 'package:flutter_app/UI/Pages/allStudent.dart';
 import 'package:flutter_app/UI/Pages/allTeacher.dart';
 import 'package:flutter_app/UI/Pages/profilePage.dart';
@@ -47,37 +48,40 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: InkWell(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 19.0),
-          child: new DefaultTabController(
-              length: quran_imgs.length,
-              child: PageView.builder(
-               // physics: new NeverScrollableScrollPhysics(),
-                controller: PageController(
-                    initialPage: pageNumber
-                ),
-                reverse: true,
-                itemBuilder: (context, index) {
-                    try {
-                      return
-                        Image.asset(
-                          'assets/quran/' + quran_imgs[index],
-                          fit: BoxFit.fill,
-                        );
-                    }
-                    catch (e) {
-                      print(e);
+      body: Stack(
+        children: <Widget>[
+          InkWell(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 19.0),
+              child: new DefaultTabController(
+                  length: quran_imgs.length,
+                  child: PageView.builder(
+                    controller: PageController(
+                        initialPage: pageNumber
+                    ),
+                    reverse: true,
+                    itemBuilder: (context, index) {
+                      try {
+                        return
+                          Image.asset(
+                            'assets/quran/' + quran_imgs[index],
+                            fit: BoxFit.fill,
+                          );
+                      }
+                      catch (e) {
+                        print(e);
 
-                  }
+                      }
 
-                },
-              )),
-        ),
-        onTap: () {
-          print('taped');
-          _visibilitymethod();
-        },
+                    },
+                  )),
+            ),
+            onTap: () {
+              print('taped');
+              _visibilitymethod();
+            },
+          ),
+        ],
       ),
       floatingActionButton: SpeedDial(
         // both default to 16
@@ -108,7 +112,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
               //   backgroundColor: backgroundColor,
               mini: true,
               child: new InkWell(
-                child: Icon(Icons.add),
+                child: Icon(Icons.person),
                 onTap: () {
                    Navigator.push(context, MaterialPageRoute(builder: (context) => GetAllTeacher()));
                 },
@@ -120,7 +124,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
             label: 'All Teachers',),
           SpeedDialChild(
             child: InkWell(
-              child: Icon(Icons.build),
+              child: Icon(Icons.person),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => GetAllStudent()));
               },
@@ -132,7 +136,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
           ),
           SpeedDialChild(
             child: InkWell(
-              child: Icon(Icons.person),
+              child: Icon(Icons.assignment_ind),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilePage()));
               },
@@ -155,19 +159,24 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
             onTap: () => print('THIRD CHILD'),
           ),
           SpeedDialChild(
+            child: InkWell(
+              child: Icon(Icons.bubble_chart),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FriendlychatApp()));
+              },
+            ),
+            backgroundColor: Colors.green,
+            label: 'Chat Bot',
+            //    labelStyle: TextTheme(fontSize: 18.0),
+            onTap: () => print('THIRD CHILD'),
+          ),
+          /*SpeedDialChild(
             child: Icon(Icons.keyboard_voice),
             backgroundColor: Colors.green,
             label: 'Third',
             //    labelStyle: TextTheme(fontSize: 18.0),
             onTap: () => print('THIRD CHILD'),
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.keyboard_voice),
-            backgroundColor: Colors.green,
-            label: 'Third',
-            //    labelStyle: TextTheme(fontSize: 18.0),
-            onTap: () => print('THIRD CHILD'),
-          ),
+          ),*/
         ],
       ),
     );

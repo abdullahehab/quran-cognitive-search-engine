@@ -4,13 +4,18 @@ import 'package:flutter_app/UI/QuranWidgets.dart';
 
 class StudentManagement {
 
-  storeNewStudent(user, context, name, currentItemSelected, _birthDate) {
-    Firestore.instance.collection('/students').add({
+  /*
+  * _birthDate, education, numOfReading, numOfParts*/
+  storeNewStudent(user, context, name, currentItemSelected, _birthDate, education, numOfReading, numOfParts) {
+     Firestore.instance.collection('/students').add({
       'uid': user.uid,
       'name': name,
       'email': user.email,
       'type': currentItemSelected,
-      'birth': _birthDate
+      'birth': _birthDate,
+      'education' : education,
+      'numberOfReading' : numOfReading,
+      'numberOfParts' : numOfParts
     }).then((value) {
       Navigator.of(context).pop();
       Navigator.push(

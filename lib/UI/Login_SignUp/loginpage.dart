@@ -152,7 +152,7 @@ class _logInPageState extends State<logInPage> {
                 begin: FractionalOffset.topCenter,
                 end: FractionalOffset.bottomCenter,
               )),
-              child: SingleChildScrollView(
+              child: SafeArea(
                 child: Stack(
                   //alignment: AlignmentDirectional.bottomCenter,
                   children: <Widget>[
@@ -313,27 +313,6 @@ class _logInPageState extends State<logInPage> {
                                                 },
                                               )),
                                         ),
-                                        /*InkWell(
-                                          child: ButtonBlackBottom(),
-                                          onTap: () {
-                                            if(emailController.text == "") {
-                                              showSnackBar("Email Cannot Be Empty!", _scafoldKey);
-                                              *//*
-                                              * _scafoldKey*//*
-                                            }
-                                            *//*setState(() {
-                                              _emailText.text.isEmpty
-                                                  ? _validate = true
-                                                  : _validate = false;
-                                              _passwordText.text.isEmpty
-                                                  ? _validate = true
-                                                  : _validate = false;
-                                            });*//*
-                                            if (_keyForm.currentState.validate()){
-                                              logIn();
-                                            }
-                                          },
-                                        ),*/
                                         ListTile(
                                           leading:
                                               Text("Don't Have An Account?",
@@ -404,11 +383,17 @@ class _logInPageState extends State<logInPage> {
 
   /*Handle Firebase SignIn*/
   Future<void> logIn() async {
+    prefs = await SharedPreferences.getInstance();
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: _email, password: _password)
         .then((FirebaseUser user) {
-          print(user.displayName);
-      closeProgressDialog(context);
+      SharedPrefs s = SharedPrefs();
+      prefs.setString('nickname', user.displayName);
+      print(user.displayName);
+      prefs.setString('email', user.email);
+      print(user.email);
+      s.saveUserData(user, "", "", "", "", "", "");
+      //closeProgressDialog(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
     }).catchError((e) {
       closeProgressDialog(context);
@@ -453,12 +438,10 @@ class _logInPageState extends State<logInPage> {
 
         // Write data to local
         SharedPrefs s = SharedPrefs();
-        currentUserLoggedIn = currentUser;
-        s.saveUserData(currentUserLoggedIn, "", "", "");/*
-        await prefs.setString('id', currentUserLoggedIn.uid);
-        await prefs.setString('nickname', currentUserLoggedIn.displayName);
-        await prefs.setString('photoUrl', currentUserLoggedIn.photoUrl);
-        await prefs.setString('email', currentUserLoggedIn.email);*/
+        s.saveUserData(currentUser, "", "", "", "", "", "");
+        print(currentUser.displayName);
+        print(currentUser.email);
+        print(currentUser.photoUrl);
       } else {
         // Write data to local
         await prefs.setString('id', documents[0]['id']);
@@ -486,30 +469,6 @@ class _logInPageState extends State<logInPage> {
     assert(user.uid == currentUser.uid);
     return 'signInWithGoogle succeeded: $user';
   }
-
-  /*Handle Google SignIn*/
-  /*Future<void> googleSignIn() async {
-    googleAuth.signIn().then((result) {
-      result.authentication.then((googleKey) {
-        FirebaseAuth.instance
-            .signInWithGoogle(
-            idToken: googleKey.idToken, accessToken: googleKey.accessToken)
-            .then((signedInUser) {
-          print('Singed in as ${signedInUser.displayName}');
-          Navigator.push(context, MaterialPageRoute(builder: (context) => homepage(user: signedInUser)));
-         // ProfilePage(user: signedInUser);
-        }).catchError((e) {
-          print(e);
-        });
-      }).catchError((e) {
-        print(e);
-      });
-    }).catchError((e) {
-      print(e);
-    });
-  }*/
-
-
 
 /*Handle facebook ligIn*/
   /*Future<void> facebookSignIn() async {
@@ -539,117 +498,7 @@ class _logInPageState extends State<logInPage> {
     });
   }*/
 
-/*Handle Twitter Login*/
-  /* Future<void> loginWithTwitter() async {
-    twitterLogin.authorize().then((result) {
-      switch(result.status) {
-        case TwitterLoginStatus.loggedIn:
-          FirebaseAuth.instance.signInWithTwitter(
-              authToken: result.session.token,
-              authTokenSecret: result.session.secret
-          ).then((signedInUser) {
-            Navigator.of(context).pushReplacementNamed('/homepage');
-          }).catchError((e) {
-            print(e);
-          });
-          break;
-
-        case TwitterLoginStatus.cancelledByUser:
-          print('cancelled by user');
-          break;
-
-        case TwitterLoginStatus.error:
-          print('error');
-          break;
-      }
-    }).catchError((e) {
-      print(e);
-    });
-  }*/
-/* Handle firebase loigin*/
-  /*Future<void> login() async {
-    FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: _email, password: _password)
-        .then((FirebaseUser user) {
-      Navigator.of(context).pushReplacementNamed('/homepage');
-    }).catchError((e) {
-      Scaffold.of(context).showSnackBar(new SnackBar(
-        content: new Text(e.toString()),
-      ));
-    });
-  }
-*/
 }
-
-///ButtonBlack class
-class ButtonBlackBottom extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return
-      Padding(
-      padding: EdgeInsets.all(30.0),
-      child: Container(
-        height: 55.0,
-        width: 600.0,
-        child: Text(
-          "Login",
-          style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 0.2,
-              fontFamily: "Sans",
-              fontSize: 18.0,
-              fontWeight: FontWeight.w800),
-        ),
-        /*rgb(5, 206, 158)*/
-        alignment: FractionalOffset.center,
-        decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 15.0)],
-            borderRadius: BorderRadius.circular(30.0),
-            gradient: LinearGradient(
-                colors: <Color>[Colors.teal[400], Colors.teal[400]])),
-      ),
-    );
-  }
-}
-
-///buttonCustomFacebook class
-class buttonCustomFacebook extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: Container(
-        alignment: FractionalOffset.center,
-        height: 49.0,
-        width: 500.0,
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(107, 112, 248, 1.0),
-          borderRadius: BorderRadius.circular(40.0),
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 15.0)],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              "images/icon_facebook.png",
-              height: 25.0,
-            ),
-            Padding(padding: EdgeInsets.symmetric(horizontal: 7.0)),
-            Text(
-              "Login With Facebook",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Sans'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 ///buttonCustomGoogle class
 class buttonCustomGoogle extends StatelessWidget {
   @override
@@ -687,3 +536,43 @@ class buttonCustomGoogle extends StatelessWidget {
     );
   }
 }
+
+///buttonCustomFacebook class
+/*
+class buttonCustomFacebook extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: Container(
+        alignment: FractionalOffset.center,
+        height: 49.0,
+        width: 500.0,
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(107, 112, 248, 1.0),
+          borderRadius: BorderRadius.circular(40.0),
+          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 15.0)],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              "images/icon_facebook.png",
+              height: 25.0,
+            ),
+            Padding(padding: EdgeInsets.symmetric(horizontal: 7.0)),
+            Text(
+              "Login With Facebook",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Sans'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+*/
