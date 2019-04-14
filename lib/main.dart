@@ -8,4 +8,6 @@ import 'package:flutter_app/UI/SplashScreen.dart';
 
 void main() => runApp(MaterialApp(
   home: logInPage(),
+  //home: AllQuran(),
+  debugShowCheckedModeBanner: true,
 ));

@@ -263,14 +263,7 @@ class _EditProfileState extends State<EditProfile> {
                                                           color: primaryColor
                                                               .withOpacity(0.5),
                                                         ),
-                                                  //      onPressed: getImage,
-                                                        padding: EdgeInsets.all(
-                                                            30.0),
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        highlightColor:
-                                                            greyColor,
-                                                        iconSize: 30.0,
+                                                        //onPressed: getImage,
                                                       ),
                                                     ],
                                                   ),
