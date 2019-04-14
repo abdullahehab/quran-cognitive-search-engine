@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
 class StudentManagement {
 
@@ -29,13 +31,22 @@ class StudentManagement {
   getAllStudent() async {
     return await Firestore.instance.collection('students').snapshots();
   }
-
-  updateStudent(selectedDoc, newValues) {
+  SharedPreferences prefs;
+  updateStudent(selectedDoc, String name, String email, context) {
     Firestore.instance
         .collection('students')
         .document(selectedDoc)
-        .updateData(newValues)
-        .catchError((e) {
+        .updateData({'name': name, 'email': email}).then((data) async {
+      print(name);
+      print(email);
+      prefs.setString('nickname', name);
+      prefs.setString('email', email);
+
+      Toast.show('Update success', context,
+          duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+        //.catchError((e) {
+      //print(e);
+    }).catchError((e) {
       print(e);
     });
   }

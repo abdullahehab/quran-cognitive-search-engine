@@ -387,12 +387,12 @@ class _logInPageState extends State<logInPage> {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: _email, password: _password)
         .then((FirebaseUser user) {
-      SharedPrefs s = SharedPrefs();
+      SharedPrefs shared = SharedPrefs();
       prefs.setString('nickname', user.displayName);
       print(user.displayName);
       prefs.setString('email', user.email);
       print(user.email);
-      s.saveUserData(user, "", "", "", "", "", "");
+      shared.saveUserData(user, "", "", "", "", "", "");
       //closeProgressDialog(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
     }).catchError((e) {

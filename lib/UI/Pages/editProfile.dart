@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Tools/const.dart';
 import 'package:flutter_app/Tools/snackBar.dart';
 import 'dart:async';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'package:flutter_app/sevices/studentManagment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -16,7 +16,7 @@ class EditProfile extends StatefulWidget {
   @override
   _EditProfileState createState() => _EditProfileState();
 }
-
+StudentManagement s = new StudentManagement();
 class _EditProfileState extends State<EditProfile> {
   DateTime selectedDate = DateTime.now();
 
@@ -77,7 +77,7 @@ class _EditProfileState extends State<EditProfile> {
   void readLocal() async {
     prefs = await SharedPreferences.getInstance();
     id = prefs.getString('id') ?? '';
-    //  print(id);
+    print(id);
     nickname = prefs.getString('nickname') ?? '';
     //  print(nickname);
     //  aboutMe = prefs.getString('aboutMe') ?? '';
@@ -111,7 +111,7 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
-  Future getImage() async {
+  /*Future getImage() async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
@@ -121,16 +121,16 @@ class _EditProfileState extends State<EditProfile> {
       });
     }
     //uploadFile();
-  }
+  }*/
 
   Future<void> handleUpdateData() async {
     focusNodeName.unfocus();
     focusNodeEmail.unfocus();
 
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    String userID = user.uid.toString();
+    //String userID = user.uid.toString();
     Firestore.instance
-        .collection('students')
+        .collection('users')
         .document(id)
         .updateData({'name': _name, 'email': _email}).then((data) async {
       print(nickname);
@@ -263,7 +263,7 @@ class _EditProfileState extends State<EditProfile> {
                                                           color: primaryColor
                                                               .withOpacity(0.5),
                                                         ),
-                                                        onPressed: getImage,
+                                                  //      onPressed: getImage,
                                                         padding: EdgeInsets.all(
                                                             30.0),
                                                         splashColor:
@@ -480,7 +480,8 @@ class _EditProfileState extends State<EditProfile> {
     showSnackBar("All Fields required", _scafoldKey);
     return;
     }*/
-                                                        handleUpdateData();
+                                                        //handleUpdateData();
+                                                        s.updateStudent(id, _nameText.text,_emailText.text, context);
                                                         //print(nameController.text);
                                                       },
                                                     )),
