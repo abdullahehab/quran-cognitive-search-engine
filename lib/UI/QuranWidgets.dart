@@ -87,22 +87,6 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
               color: Colors.black.withOpacity(0.7),
             child: Column(
               children: <Widget>[
-                /*Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0,right: 80.0),
-                      child: Text("سوره البقرة",style: TextStyle(color: Colors.white,fontSize: 25.0),),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0,right: 80.0),
-                      child: Text("10",style: TextStyle(color: Colors.white,fontSize: 25.0),),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0,),
-                      child: Text(" الجزء الاول ",style: TextStyle(color: Colors.white,fontSize: 25.0),),
-                    ),
-                  ],
-                ),*/
                 /* Edit By Gehad Adelaziz 13/4/2019 3:14 pm*/
                 ListTile(
                   leading:Text(" سوره البقرة ",style: TextStyle(color: Colors.white,fontSize: 20.0),),
