@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Tools/const.dart';
 import 'package:flutter_app/Tools/snackBar.dart';
 import 'dart:async';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'package:flutter_app/sevices/studentManagment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -111,7 +111,7 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
-  Future getImage() async {
+  /*Future getImage() async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
@@ -121,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
       });
     }
     //uploadFile();
-  }
+  }*/
 
   Future<void> handleUpdateData() async {
     focusNodeName.unfocus();
@@ -263,7 +263,7 @@ class _EditProfileState extends State<EditProfile> {
                                                           color: primaryColor
                                                               .withOpacity(0.5),
                                                         ),
-                                                        onPressed: getImage,
+                                                      //  onPressed: getImage,
                                                         padding: EdgeInsets.all(
                                                             30.0),
                                                         splashColor:
