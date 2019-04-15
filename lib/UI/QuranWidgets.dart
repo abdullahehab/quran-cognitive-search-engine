@@ -34,6 +34,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
   // Speed Radial //
   bool _iconVisibility = true;
 
+
   void _visibilitymethod() {
     setState(() {
       if (_iconVisibility) {
@@ -82,20 +83,15 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
             },
           ),
           /* Edit By Gehad Adelaziz 4/3/2019 1:20 pm*/
-          Container(
-              height: 70.0,
+          /*Container(
+              height: 40.0,
               color: Colors.black.withOpacity(0.7),
-            child: Column(
-              children: <Widget>[
-                /* Edit By Gehad Adelaziz 13/4/2019 3:14 pm*/
-                ListTile(
-                  leading:Text(" سوره البقرة ",style: TextStyle(color: Colors.white,fontSize: 20.0),),
-                  title: Center(child: Text(" 10 ",style: TextStyle(color: Colors.white,fontSize: 20.0),)),
-                  trailing: Text(" الجزء الاول",style: TextStyle(color: Colors.white,fontSize: 20.0),),
-                ),
-              ],
+            child: ListTile(
+              leading:Text("سوره البقرة",style: TextStyle(color: Colors.white,fontSize: 20.0),),
+              title: Center(child: Text("10",style: TextStyle(color: Colors.white,fontSize: 20.0),)),
+              trailing: Text("الجزء الاول",style: TextStyle(color: Colors.white,fontSize: 20.0),),
             ),
-          ),
+          ),*/
         ],
       ),
       floatingActionButton: SpeedDial(

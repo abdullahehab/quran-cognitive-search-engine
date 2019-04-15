@@ -135,7 +135,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
                                                         style: BorderStyle.solid,
                                                         width: 3.0),
                                                     onPressed: () {
-                                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewUserProfile(user: students.documents[i])));
+                                                      //Navigator.push(context, MaterialPageRoute(builder: (context) => ViewUserProfile(user: students.documents[i])));
                                                     })),
                                           ],
                                         ),

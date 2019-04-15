@@ -131,7 +131,7 @@ class _EditProfileState extends State<EditProfile> {
     //String userID = user.uid.toString();
     Firestore.instance
         .collection('users')
-        .document(id)
+        .document(user.uid)
         .updateData({'name': _name, 'email': _email}).then((data) async {
       print(nickname);
       print(email);

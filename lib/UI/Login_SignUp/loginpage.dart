@@ -175,7 +175,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                         begin: FractionalOffset.topCenter,
                         end: FractionalOffset.bottomCenter,
                       )),
-                  child: SafeArea(
+                  child: SingleChildScrollView(
                     child: Stack(
                       //alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
