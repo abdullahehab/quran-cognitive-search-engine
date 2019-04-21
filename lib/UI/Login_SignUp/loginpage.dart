@@ -153,7 +153,6 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
     animationController.forward();
     return AnimatedBuilder(animation: animationController, builder: (BuildContext context , Widget child){
       return Scaffold(
-        
         key: _scafoldKey,
         body: Stack(
           fit: StackFit.expand,
@@ -175,7 +174,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                         begin: FractionalOffset.topCenter,
                         end: FractionalOffset.bottomCenter,
                       )),
-                  child: SafeArea(
+                  child: SingleChildScrollView(
                     child: Stack(
                       //alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
@@ -456,7 +455,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
       print(user.displayName);
       prefs.setString('email', user.email);
       print(user.email);
-      shared.saveUserData(user, "", "", "", "", "", "");
+      shared.saveUserData(user, "", "", "", "", "", "","","","","","","");
       //closeProgressDialog(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
     }).catchError((e) {
@@ -502,7 +501,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
 
         // Write data to local
         SharedPrefs s = SharedPrefs();
-        s.saveUserData(currentUser, "", "", "", "", "", "");
+        s.saveUserData(currentUser, "", "", "", "", "", "","", "","","","","");
         print(currentUser.displayName);
         print(currentUser.email);
         print(currentUser.photoUrl);

@@ -82,12 +82,12 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
             },
           ),
           /* Edit By Gehad Adelaziz 4/3/2019 1:20 pm*/
-          Container(
+          /*Container(
               height: 70.0,
               color: Colors.black.withOpacity(0.7),
             child: Column(
               children: <Widget>[
-                /* Edit By Gehad Adelaziz 13/4/2019 3:14 pm*/
+                *//* Edit By Gehad Adelaziz 13/4/2019 3:14 pm*//*
                 ListTile(
                   leading:Text(" سوره البقرة ",style: TextStyle(color: Colors.white,fontSize: 20.0),),
                   title: Center(child: Text(" 10 ",style: TextStyle(color: Colors.white,fontSize: 20.0),)),
@@ -95,7 +95,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
                 ),
               ],
             ),
-          ),
+          ),*/
         ],
       ),
       floatingActionButton: SpeedDial(

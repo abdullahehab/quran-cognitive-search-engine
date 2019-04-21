@@ -23,6 +23,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
     studentManagement.getAllStudent().then((results) {
       setState(() {
         students = results;
+        print(results);
       });
     });
     super.initState();
@@ -53,8 +54,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
 
   Widget _studentList() {
     if (students != null) {
-      return
-        ListView.builder(
+      return ListView.builder(
           itemCount: students.documents.length,
           itemBuilder: (context, i) {
             return new Column(
@@ -64,21 +64,20 @@ class _GetAllStudentState extends State<GetAllStudent> {
                     children: <Widget>[
                       Center(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 3.0,
-                            shape: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(color: Colors.white)),
-                            color: Colors.white,
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Card(
+                              elevation: 3.0,
+                              shape: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide: BorderSide(color: Colors.white)),
+                              color: Colors.white,
+                              child: Container(
                                 child: Row(
                                   children: <Widget>[
                                     Container(
-                                      width: 150.0,
-
+                                      width: 120.0,
                                       child: Column(
                                         children: <Widget>[
                                           CircleAvatar(
@@ -90,7 +89,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
                                       ),
                                     ),
                                     Container(
-                                      width: double.infinity,
+                                      width: 220.0,
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 10.0),
                                         child: Column(
@@ -135,7 +134,9 @@ class _GetAllStudentState extends State<GetAllStudent> {
                                                         style: BorderStyle.solid,
                                                         width: 3.0),
                                                     onPressed: () {
-                                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewUserProfile(user: students.documents[i])));
+                                                      Navigator.of(context)
+                                                          .pushReplacementNamed(
+                                                          '/homepage');
                                                     })),
                                           ],
                                         ),

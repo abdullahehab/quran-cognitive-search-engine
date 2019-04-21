@@ -20,8 +20,12 @@ class _ProfilePageState extends State<ProfilePage> {
   String type = '';
   String birthDate = '';
   String stuEducation = '';
-  int numOfReading = 0;
-  int numOfParts = 0;
+  String numOfReading = '';
+  String numOfParts = '';
+  String gender ='';
+  String igaza = '';
+  String university = '';
+  var date = new DateTime.now().year;
 
   @override
   void initState() {
@@ -33,19 +37,18 @@ class _ProfilePageState extends State<ProfilePage> {
   void readLocal() async {
     prefs = await SharedPreferences.getInstance();
     id = prefs.getString('id') ?? '';
-    print(id);
     nickname = prefs.getString('nickname') ?? '';
-    print(nickname);
     aboutMe = prefs.getString('aboutMe') ?? '';
     photoUrl = prefs.getString('photoUrl') ?? '';
     email = prefs.getString('email');
-    print(email);
-    type = prefs.get('userType');
-    birthDate = prefs.get('birthdate');
-    stuEducation = prefs.get('education');
-    numOfReading = prefs.get('numOfReading');
-    numOfParts = prefs.get('numOfParts');
-    //print(photoUrl);
+    type = prefs.getString('userType');
+    birthDate = prefs.getString('birthdate');
+    stuEducation = prefs.getString('education');
+    numOfReading = prefs.getString('numOfReading');
+    numOfParts = prefs.getString('numOfParts');
+    gender = prefs.getString('gender');
+    igaza = prefs.getString('igaza');
+    university = prefs.getString('university');
 
     // Force refresh input
     setState(() {});
@@ -121,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    nickname == null ? '' : nickname,
+                    nickname == null ? "Guest" : nickname,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
@@ -129,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 Text(
-                  email == null ? '' : email,
+                  email == null ? "Guest@gmail.com" : email,
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -140,14 +143,14 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           DefaultTabController(
               length: 3,
-              initialIndex: 1,
+              initialIndex: 0,
               child: Column(
                 children: [
                   TabBar(
                     tabs: [
                       Tab(text: 'Basic Info'),
                       Tab(text: 'Education'),
-                      Tab(text: 'Experience')
+                      //Tab(text: 'Experience')
                     ],
                     labelColor: Colors.black,
                     indicatorColor: Colors.deepPurple,
@@ -158,13 +161,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: TabBarView(
                         children: [
                           new ListView(
-                            children: basicInfo,
+                            children: basicInfo(birthDate, aboutMe, date, gender),
                           ),
                           new ListView(
-                            children: education,
+                            children: education(stuEducation, university, numOfParts, numOfReading, type, igaza),
                           ),
                           Center(child: Text('Education here')),
-                          Center(child: Text('Experience here')),
+                        //  Center(child: Text('Experience here')),
                         ],
                       ))
                 ],
@@ -175,12 +178,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-List<Widget> basicInfo = <Widget>[
+List<Widget> basicInfo(String birthDate, String aboutMe, var date, String gender) => <Widget>[
   Column(
-    children: <Widget>[
+    children: <Widget>
+    [
       SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
+        child: Column
+          (
+            children: <Widget>[
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -205,7 +210,7 @@ List<Widget> basicInfo = <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(left: 19.0),
                                 child: Text(
-                                  "Age: 23 Years Old",
+                                  "Age: ${birthDate}",
                                   style: TextStyle(
                                       color: Colors.blue,
                                       fontSize: 18.0,
@@ -216,7 +221,7 @@ List<Widget> basicInfo = <Widget>[
                                 width: 30.0,
                               ),
                               Text(
-                                "Gender: Female",
+                                "Gender: $gender",
                                 style: TextStyle(
                                     color: Colors.blue,
                                     fontSize: 18.0,
@@ -224,17 +229,23 @@ List<Widget> basicInfo = <Widget>[
                               ),
                             ],
                           ),
+                          SizedBox(height: 15.0,),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
-                            child: const ListTile(
-                              title: Text(
-                                'Nationality: Egyption',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                            child:
+                            Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 19.0),
+                                  child: Text(
+                                    "Nationality: 23 Years Old",
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                           ),
                         ],
@@ -265,15 +276,20 @@ List<Widget> basicInfo = <Widget>[
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
-                            child: const ListTile(
-                              title: Text(
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                            child:
+                            Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 19.0),
+                                  child: Text(
+                                    "$aboutMe",
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
                           ),
                         ],
@@ -290,7 +306,8 @@ List<Widget> basicInfo = <Widget>[
   )
 ];
 
-List<Widget> education = <Widget>[
+
+List<Widget> education(String education, String university, String numOfParts, String numOfReading, String userType, String igaza) => <Widget>[
   Column(
     children: <Widget>[
       SingleChildScrollView(
@@ -324,7 +341,7 @@ List<Widget> education = <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(left: 15.0),
                                 child: Text(
-                                  "English School",
+                                  "$university University",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 22.0,
@@ -339,7 +356,7 @@ List<Widget> education = <Widget>[
                             child: Row(
                               children: <Widget>[
                                 Text(
-                                  "Thanawya amma (Egyption)",
+                                  "$education",
                                   style: TextStyle(
                                       fontSize: 18.0, color: Colors.blue),
                                 )
@@ -352,7 +369,7 @@ List<Widget> education = <Widget>[
                             child: Row(
                               children: <Widget>[
                                 Text(
-                                  "High Graduation School",
+                                  "$university",
                                   style: TextStyle(fontSize: 18.0),
                                 )
                               ],
@@ -370,7 +387,7 @@ List<Widget> education = <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(left: 15.0),
                                 child: Text(
-                                  "Helwan University",
+                                  "Number Of Reading : $numOfReading",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 22.0,
@@ -384,11 +401,13 @@ List<Widget> education = <Widget>[
                                 const EdgeInsets.only(left: 65.0, top: 3.0),
                             child: Row(
                               children: <Widget>[
-                                Text(
-                                  "Fine Arts- Decor Department",
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.blue),
-                                )
+                                 Text(
+                                "Number Of Parts : $numOfParts",
+                                style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                           ),
@@ -397,10 +416,14 @@ List<Widget> education = <Widget>[
                                 const EdgeInsets.only(left: 65.0, top: 3.0),
                             child: Row(
                               children: <Widget>[
-                                Text(
-                                  "University Student",
-                                  style: TextStyle(fontSize: 18.0),
-                                )
+                                userType == "Teacher" ?
+Text(
+"Igaza : $igaza",
+style: TextStyle(
+color: Colors.black,
+fontSize: 22.0,
+fontWeight: FontWeight.bold),
+): Container()
                               ],
                             ),
                           ),
@@ -512,10 +535,11 @@ List<Widget> education = <Widget>[
                                 const EdgeInsets.only(left: 65.0, top: 3.0),
                             child: Row(
                               children: <Widget>[
+                                userType == "Teacher" ?
                                 Text(
-                                  "University Student",
+                                  "Igaza $igaza",
                                   style: TextStyle(fontSize: 18.0),
-                                )
+                                ): Container()
                               ],
                             ),
                           ),
