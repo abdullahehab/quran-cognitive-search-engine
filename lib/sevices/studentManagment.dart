@@ -5,30 +5,58 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 class StudentManagement {
-
-  /*
-  * _birthDate, education, numOfReading, numOfParts*/
-  storeNewStudent(user, context, name, currentItemSelected, _birthDate, education, numOfReading, numOfParts) {
-     Firestore.instance.collection('/students').add({
-      'uid': user.uid,
+  createNewStudent(user, context, name, email, currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, university) {
+    DocumentReference ds = Firestore.instance.collection('/students').document(email);
+    Map<String, dynamic> user = {
+//      'uid': user.uid,
       'name': name,
-      'email': user.email,
       'type': currentItemSelected,
       'birth': _birthDate,
       'education' : education,
       'numberOfReading' : numOfReading,
-      'numberOfParts' : numOfParts
-    }).then((value) {
-      Navigator.of(context).pop();
+      'numberOfParts' : numOfParts,
+      'jobTitle' : jobTitle,
+      'photoUrl' : photoUrl,
+      'aboutMe' : aboutMe,
+      'gender' : gender,
+      'university' : university
+    };
+    ds.setData(user).whenComplete((){
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => AllQuran()));
-      // ProfilePage(user: user);
-    }).catchError((e) {
+      print('user created');
+      Toast.show('welcome $name', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+    });
+  }
+  //SharedPreferences prefs;
+  updateStudentData(context, name, email, jobTitle, numOfReading,numOfParts,education, birthDate, photoUrl, aboutMe, gender, university) {
+    DocumentReference ds = Firestore.instance.collection('/students').document(email);
+    Map<String, dynamic> user = {
+      'name' : name,
+      'email' : email,
+      'jobTitle': jobTitle,
+      'numberOfReading': numOfReading,
+      'numberOfParts' : numOfParts,
+      'education': education,
+      'birth': birthDate,
+      'photoUrl' :photoUrl,
+      'aboutMe' : aboutMe,
+      'gender' : gender,
+      'university' : university
+    };
+    ds.updateData(user).whenComplete((){
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => AllQuran()));
+      Toast.show('user $name profile updated done', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+    }).catchError((e){
       print(e);
     });
   }
 
   getAllStudent() async {
+    return await Firestore.instance.collection('/students').getDocuments();
+  }
+  /*getAllStudent() async {
     return await Firestore.instance.collection('students').snapshots();
   }
   SharedPreferences prefs;
@@ -45,9 +73,9 @@ class StudentManagement {
       Toast.show('Update success', context,
           duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
         //.catchError((e) {
-      //print(e);
+        //print(e);
     }).catchError((e) {
       print(e);
     });
-  }
+  }*/
 }

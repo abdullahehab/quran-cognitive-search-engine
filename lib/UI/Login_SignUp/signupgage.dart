@@ -26,10 +26,15 @@ class _SinhUpState extends State<SinhUp> {
   final _nameText = TextEditingController();
   final _passwordText = TextEditingController();
   final String _birthDate = null;
-  final String jobTitle = null;
-  final String education = null;
-  final int numOfReading = 0;
-  final int numOfParts = 0;
+  final String jobTitle = '';
+  final String education = '';
+  final String numOfReading = '';
+  final String numOfParts = '' ;
+  final String aboutMe = '';
+  final String gender = '';
+  final String igaza = '';
+  final String university = '';
+  String photoUrl = '';
   bool _validate = false;
 
   @override
@@ -492,12 +497,11 @@ class _SinhUpState extends State<SinhUp> {
           .createUserWithEmailAndPassword(email: _email, password: _password)
           .then((signedInUser) {
         if (_currentItemSelected == 'Student') {
-          StudentManagement().storeNewStudent(
-              signedInUser, context, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
-          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
+          StudentManagement().createNewStudent(signedInUser, context ,_name, _email, _currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, university);
+          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, "", university);
           } else if (_currentItemSelected == 'Teacher') {
-          TeacherManagement().storeNewTeacher(
-              signedInUser, context, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
+          TeacherManagement().createNewTeacher(signedInUser, context, _name, _email, _currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, igaza, university);
+          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, igaza, university);
         }
       }).catchError((e) {
         closeProgressDialog(context);
