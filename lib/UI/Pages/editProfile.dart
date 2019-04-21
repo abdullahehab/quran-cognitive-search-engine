@@ -1,9 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Tools/const.dart';
@@ -555,7 +552,16 @@ class _EditProfileState extends State<EditProfile> {
                                                                 "UbuntuBold"),
                                                       ),
                                                       onPressed: () {
-                                                          if ( userType == 'Student') {
+                                                        if (_nameController.text == "" ||
+                                                            _jobTitleController.text == "" ||
+                                                            _numOfReadingController.text == "" ||
+                                                            _numOfPartsController.text == "" ||
+                                                            _educationController.text == "" ||
+                                                            _aboutMeController.text == "" ||
+                                                            _universityController.text == "" ) {
+                                                          showSnackBar("All Fields required", _scafoldKey);
+
+                                                        } else if ( userType == 'Student') {
                                                             student.updateStudentData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController.text, _currentItemSelectedGender, _universityController.text);
                                                             prefs.setString('nickname', _nameController.text);
                                                             prefs.setString('jobTitle', _jobTitleController.text);
@@ -583,16 +589,6 @@ class _EditProfileState extends State<EditProfile> {
                                                             prefs.setString('university', _universityController.text);
                                                             readLocal();
                                                           }
-                                                        //print(_emailText);
-                                                        /* if (nameController.text == "" ||
-    emailController.text == "" ||
-    jobController.text == "" ||
-    numOfReadingController.text == "" ||
-    numOfPartsController.text == "" ||
-    educationController.text == "") {
-    showSnackBar("All Fields required", _scafoldKey);
-    return;
-    }*/
                                                       },
                                                     )),
                                               ),
