@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/UI/Pages/ChatPage.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
 import 'package:flutter_app/sevices/teacherManagement.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/sevices/teacherManagement.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetAllTeacher extends StatefulWidget {
   @override
@@ -13,7 +15,18 @@ class GetAllTeacher extends StatefulWidget {
 
 class _GetAllTeacherState extends State<GetAllTeacher> {
   TeacherManagement teacherManagement = new TeacherManagement();
+  SharedPreferences prefs;
   QuerySnapshot teachers;
+  String nickname = '';
+  String photoUrl = '';
+
+  void readLocal() async {
+    prefs = await SharedPreferences.getInstance();
+    nickname = prefs.getString('nickname') ?? '';
+    photoUrl = prefs.getString('photoUrl') ?? '';
+    // Force refresh input
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -22,6 +35,7 @@ class _GetAllTeacherState extends State<GetAllTeacher> {
         teachers = results;
       });
     });
+    readLocal();
     super.initState();
   }
 
@@ -103,8 +117,9 @@ class _GetAllTeacherState extends State<GetAllTeacher> {
                                                 ),
                                               ),
                                               Padding(
+                                                /*teachers.documents[i].data['email']*/
                                                 padding: const EdgeInsets.only(right: 60.0),
-                                                child: Text(teachers.documents[i].data['email'], style: TextStyle(fontSize: 17.0),),
+                                                child: Text('test email', style: TextStyle(fontSize: 17.0),),
                                               ),
                                               SizedBox(height: 7.0,),
                                               Padding(
@@ -115,7 +130,7 @@ class _GetAllTeacherState extends State<GetAllTeacher> {
                                                 (
                                                   trailing: OutlineButton(
                                                       child: Text(
-                                                        "Show Profile",
+                                                        "Chat",
                                                         style: TextStyle(
                                                             color: Colors.deepPurple,
                                                             letterSpacing: 0.2,
@@ -132,9 +147,9 @@ class _GetAllTeacherState extends State<GetAllTeacher> {
                                                           style: BorderStyle.solid,
                                                           width: 3.0),
                                                       onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pushReplacementNamed(
-                                                            '/homepage');
+                                                        Navigator.push(
+                                                            context, MaterialPageRoute(builder: (builder) => ChatPage(nickname, photoUrl)));
+
                                                       })),
                                             ],
                                           ),

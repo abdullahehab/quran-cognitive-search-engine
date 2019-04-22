@@ -107,7 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 90.0,
                             padding: EdgeInsets.all(20.0),
                           ),
-                          imageUrl: photoUrl,
+                          imageUrl: photoUrl == null ? 'https://cdn.iconscout.com/icon/free/png-256/avatar-380-456332.png' : photoUrl,
                           width: 100.0,
                           height: 100.0,
                           fit: BoxFit.cover,

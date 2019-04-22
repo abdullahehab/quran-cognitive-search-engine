@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/UI/Pages/ChatPage.dart';
 import 'package:flutter_app/UI/Pages/viewUserProfile.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_app/sevices/studentManagment.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //StudentManagement student = new StudentManagement();
 
@@ -14,8 +16,10 @@ class GetAllStudent extends StatefulWidget {
 
 class _GetAllStudentState extends State<GetAllStudent> {
   StudentManagement studentManagement = new StudentManagement();
+  SharedPreferences prefs;
   QuerySnapshot students;
-
+  String nickname = '';
+  String photoUrl = '';
 //  get studentManagement => null;
 
   @override
@@ -26,8 +30,18 @@ class _GetAllStudentState extends State<GetAllStudent> {
         print(results);
       });
     });
+    readLocal();
     super.initState();
   }
+
+  void readLocal() async {
+    prefs = await SharedPreferences.getInstance();
+    nickname = prefs.getString('nickname') ?? '';
+    photoUrl = prefs.getString('photoUrl') ?? '';
+    // Force refresh input
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +120,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(right: 60.0),
-                                              child: Text(students.documents[i].data['email'], style: TextStyle(fontSize: 17.0),),
+                                              child: Text('test email', style: TextStyle(fontSize: 17.0),),
                                             ),
                                             SizedBox(height: 7.0,),
                                             Padding(
@@ -117,7 +131,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
                                               (
                                                 trailing: OutlineButton(
                                                     child: Text(
-                                                      "Show Profile",
+                                                      "Chat",
                                                       style: TextStyle(
                                                           color: Colors.deepPurple,
                                                           letterSpacing: 0.2,
@@ -134,10 +148,10 @@ class _GetAllStudentState extends State<GetAllStudent> {
                                                         style: BorderStyle.solid,
                                                         width: 3.0),
                                                     onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pushReplacementNamed(
-                                                          '/homepage');
-                                                    })),
+                                                      Navigator.push(
+                                                          context, MaterialPageRoute(builder: (builder) => ChatPage(nickname, photoUrl)));
+                                                    })
+                                            ),
                                           ],
                                         ),
                                       ),

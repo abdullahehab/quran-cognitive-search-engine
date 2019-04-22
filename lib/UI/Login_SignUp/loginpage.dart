@@ -451,10 +451,13 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
         .signInWithEmailAndPassword(email: _email, password: _password)
         .then((FirebaseUser user) {
       SharedPrefs shared = SharedPrefs();
-      prefs.setString('nickname', user.displayName);
-      print(user.displayName);
-      prefs.setString('email', user.email);
-      print(user.email);
+      Firestore.instance
+          .collection('/students')
+          .document(user.email)
+          .get()
+          .then((DocumentSnapshot ds) {
+            print(ds.data.length);
+      });
       shared.saveUserData(user, "", "", "", "", "", "","","","","","","");
       //closeProgressDialog(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));

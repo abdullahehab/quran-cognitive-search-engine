@@ -142,7 +142,6 @@ class _EditProfileState extends State<EditProfile> {
 
   void readLocal() async {
     prefs = await SharedPreferences.getInstance();
-    print(id);
     nickname = prefs.getString('nickname');
     photoUrl = prefs.getString('photoUrl');
     email = prefs.getString('email');
@@ -255,7 +254,7 @@ class _EditProfileState extends State<EditProfile> {
                                                             height: 90.0,
                                                             padding: EdgeInsets.all(20.0),
                                                           ),
-                                                          imageUrl: photoUrl,
+                                                          imageUrl: photoUrl == null ? 'https://cdn.iconscout.com/icon/free/png-256/avatar-380-456332.png' : photoUrl,
                                                           width: 90.0,
                                                           height: 90.0,
                                                           fit: BoxFit.cover,
