@@ -26,10 +26,15 @@ class _SinhUpState extends State<SinhUp> {
   final _nameText = TextEditingController();
   final _passwordText = TextEditingController();
   final String _birthDate = null;
-  final String jobTitle = null;
-  final String education = null;
-  final int numOfReading = 0;
-  final int numOfParts = 0;
+  final String jobTitle = '';
+  final String education = '';
+  final String numOfReading = '';
+  final String numOfParts = '' ;
+  final String aboutMe = '';
+  final String gender = '';
+  final String igaza = '';
+  final String university = '';
+  String photoUrl = '';
   bool _validate = false;
 
   @override
@@ -493,12 +498,11 @@ class _SinhUpState extends State<SinhUp> {
           .createUserWithEmailAndPassword(email: _email, password: _password)
           .then((signedInUser) {
         if (_currentItemSelected == 'Student') {
-          StudentManagement().storeNewStudent(
-              signedInUser, context, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
-          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
+          StudentManagement().createNewStudent(signedInUser, context ,_name, _email, _currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, university);
+          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, "", university);
           } else if (_currentItemSelected == 'Teacher') {
-          TeacherManagement().storeNewTeacher(
-              signedInUser, context, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts);
+          TeacherManagement().createNewTeacher(signedInUser, context, _name, _email, _currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, igaza, university);
+          shared.saveUserData(signedInUser, _name, _currentItemSelected, _birthDate, education, numOfReading, numOfParts, jobTitle, photoUrl, aboutMe, gender, igaza, university);
         }
       }).catchError((e) {
         closeProgressDialog(context);
@@ -513,176 +517,5 @@ class _SinhUpState extends State<SinhUp> {
     setState(() {
       this._currentItemSelected = newValueSelected;
     });
-  }
-}
-
-class textFromField extends StatelessWidget {
-  bool password;
-  String email;
-  IconData icon;
-  TextInputType inputType;
-
-  textFromField({this.email, this.icon, this.inputType, this.password});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 0.0),
-      child: Container(
-        height: 60.0,
-        alignment: AlignmentDirectional.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            //color: Colors.white,
-            //boxShadow: [BoxShadow(blurRadius: 10.0, color: Colors.black12)]
-            border: Border(
-                top: BorderSide(color: Colors.teal),
-                bottom: BorderSide(color: Colors.teal),
-                right: BorderSide(color: Colors.teal),
-                left: BorderSide(color: Colors.teal))),
-        padding:
-            EdgeInsets.only(left: 20.0, right: 30.0, top: 0.0, bottom: 0.0),
-        child: Theme(
-          data: ThemeData(
-            hintColor: Colors.transparent,
-          ),
-          child: TextField(
-            onChanged: (String val) {
-              email = val;
-            },
-            decoration: InputDecoration(
-                labelText: 'Enter Email',
-                icon: Icon(
-                  Icons.email,
-                  color: Colors.white,
-                ),
-                labelStyle: TextStyle(
-                    fontSize: 15.0,
-                    fontFamily: 'Sans',
-                    letterSpacing: 0.3,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600)),
-            keyboardType: inputType,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class textFromFieldpass extends StatelessWidget {
-  String namee;
-  IconData icon;
-  TextInputType inputType;
-
-  textFromFieldpass({
-    this.namee,
-    this.icon,
-    this.inputType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 0.0),
-      child: Container(
-        height: 60.0,
-        alignment: AlignmentDirectional.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            //color: Colors.white,
-            //boxShadow: [BoxShadow(blurRadius: 10.0, color: Colors.black12)]
-            border: Border(
-                top: BorderSide(color: Colors.teal),
-                bottom: BorderSide(color: Colors.teal),
-                right: BorderSide(color: Colors.teal),
-                left: BorderSide(color: Colors.teal))),
-        padding:
-            EdgeInsets.only(left: 20.0, right: 30.0, top: 0.0, bottom: 0.0),
-        child: Theme(
-          data: ThemeData(
-            hintColor: Colors.transparent,
-          ),
-          child: TextFormField(
-            onSaved: (String val) {
-              namee = val;
-            },
-            validator: (val) => val.isEmpty ? 'Email required' : null,
-            decoration: InputDecoration(
-                labelText: 'Enter Full Name',
-                icon: Icon(
-                  Icons.account_circle,
-                  color: Colors.white,
-                ),
-                labelStyle: TextStyle(
-                    fontSize: 15.0,
-                    fontFamily: 'Sans',
-                    letterSpacing: 0.3,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600)),
-            keyboardType: inputType,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class textFromFieldtype extends StatelessWidget {
-  String namee;
-  IconData icon;
-  TextInputType inputType;
-
-  textFromFieldtype({
-    this.namee,
-    this.icon,
-    this.inputType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 0.0),
-      child: Container(
-        height: 60.0,
-        alignment: AlignmentDirectional.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            //color: Colors.white,
-            //boxShadow: [BoxShadow(blurRadius: 10.0, color: Colors.black12)]
-            border: Border(
-                top: BorderSide(color: Colors.teal),
-                bottom: BorderSide(color: Colors.teal),
-                right: BorderSide(color: Colors.teal),
-                left: BorderSide(color: Colors.teal))),
-        padding:
-            EdgeInsets.only(left: 20.0, right: 30.0, top: 0.0, bottom: 0.0),
-        child: Theme(
-          data: ThemeData(
-            hintColor: Colors.transparent,
-          ),
-          child: TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some password';
-              }
-            },
-            decoration: InputDecoration(
-                labelText: 'Enter password',
-                icon: Icon(
-                  Icons.vpn_key,
-                  color: Colors.white,
-                ),
-                labelStyle: TextStyle(
-                    fontSize: 15.0,
-                    fontFamily: 'Sans',
-                    letterSpacing: 0.3,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600)),
-            keyboardType: inputType,
-          ),
-        ),
-      ),
-    );
   }
 }

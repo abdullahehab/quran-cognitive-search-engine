@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Tools/const.dart';
 import 'package:flutter_app/Tools/snackBar.dart';
 import 'dart:async';
-//import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_app/sevices/studentManagment.dart';
+import 'package:flutter_app/sevices/teacherManagement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
@@ -16,11 +16,12 @@ class EditProfile extends StatefulWidget {
   @override
   _EditProfileState createState() => _EditProfileState();
 }
-
+StudentManagement s = new StudentManagement();
 class _EditProfileState extends State<EditProfile> {
   DateTime selectedDate = DateTime.now();
 
   StudentManagement student = StudentManagement();
+  TeacherManagement teacher = TeacherManagement();
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -34,6 +35,59 @@ class _EditProfileState extends State<EditProfile> {
       });
   }
 
+
+  Future getImage() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        avatarImageFile = image;
+        isLoading = true;
+      });
+    }
+    uploadFile();
+  }
+
+  Future uploadFile() async {
+    String fileName = email;
+    StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
+    StorageUploadTask uploadTask = reference.putFile(avatarImageFile);
+    StorageTaskSnapshot storageTaskSnapshot;
+    uploadTask.onComplete.then((value) {
+      if (value.error == null) {
+        storageTaskSnapshot = value;
+        storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
+          photoUrl = downloadUrl;
+          if (userType == 'Student') {
+            student.updateStudentData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController, gender, university);
+            prefs.setString('photoUrl', photoUrl);
+            readLocal();
+          } else if (userType == 'Teacher') {
+            teacher.updateTeacherData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController, gender, igaza, university);
+            prefs.setString('photoUrl', photoUrl);
+            readLocal();
+          }
+          }, onError: (err) {
+          setState(() {
+            isLoading = false;
+          });
+          Toast.show('This file is not an image', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+          });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        Toast.show('This file is not an image', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+       }
+    }, onError: (err) {
+      setState(() {
+        isLoading = false;
+      });
+      Toast.show(err.toString(), context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+      });
+  }
+
+
   SharedPreferences prefs;
 
   String id = '';
@@ -42,24 +96,34 @@ class _EditProfileState extends State<EditProfile> {
   String photoUrl = '';
   String email = '';
   String type = '';
-  String birthDate = '';
+  String birthDate ;
   String stuEducation = '';
-  int numOfReading = 0;
-  int numOfParts = 0;
+  String jobTitle = '';
+  String numOfReading = '' ;
+  String numOfParts = '';
+  String userType = '';
+  String gender = '';
+  String igaza = '';
+  String university = '';
 
   File avatarImageFile;
+  bool isLoading = false;
 
-  TextEditingController _nameText;
-  TextEditingController _emailText;
-  TextEditingController _jobText;
-  TextEditingController _numOfReadingText;
-  TextEditingController _numOfPartsText;
-  TextEditingController _educationText;
+  TextEditingController _nameController;
+  TextEditingController _jobTitleController;
+  TextEditingController _numOfReadingController;
+  TextEditingController _numOfPartsController;
+  TextEditingController _educationController;
+  TextEditingController _aboutMeController;
+  TextEditingController _universityController;
 
   final FocusNode focusNodeName = new FocusNode();
-  final FocusNode focusNodeEmail = new FocusNode();
-
-  String _name, _jobTitle, _numOfReading, _numOfParts, _education, _email;
+  final FocusNode focusNodeJobTitle = new FocusNode();
+  final FocusNode focusNodeNumOfReading = new FocusNode();
+  final FocusNode focusNodenumOfParts = new FocusNode();
+  final FocusNode focusNodeEducation = new FocusNode();
+  final FocusNode focusNodeAboutMe = new FocusNode();
+  final FocusNode focusNodeUniversity = new FocusNode();
 
   final nameIcon = Icons.person_pin;
   final emailIcon = Icons.email;
@@ -67,6 +131,8 @@ class _EditProfileState extends State<EditProfile> {
   final numOfPartIcons = Icons.person_outline;
   final educationIcon = Icons.school;
   final icon = Icons.work;
+  final aboutMeIcon = Icons.info;
+  final universityIcon = Icons.school;
 
   @override
   void initState() {
@@ -76,79 +142,53 @@ class _EditProfileState extends State<EditProfile> {
 
   void readLocal() async {
     prefs = await SharedPreferences.getInstance();
-    id = prefs.getString('id') ?? '';
-    //  print(id);
-    nickname = prefs.getString('nickname') ?? '';
-    //  print(nickname);
-    //  aboutMe = prefs.getString('aboutMe') ?? '';
-    photoUrl = prefs.getString('photoUrl') ?? '';
+    print(id);
+    nickname = prefs.getString('nickname');
+    photoUrl = prefs.getString('photoUrl');
     email = prefs.getString('email');
-    type = prefs.get('userType');
-    _education = prefs.get('education');
-    numOfReading = prefs.get('numOfReading');
-    numOfParts = prefs.get('numOfParts');
-    //print(photoUrl);
+    aboutMe = prefs.getString('aboutMe');
+    type = prefs.getString('userType');
+    stuEducation = prefs.getString('education');
+    numOfReading = prefs.getString('numOfReading');
+    numOfParts = prefs.getString('numOfParts');
+    jobTitle = prefs.getString('jobTitle');
+    birthDate = prefs.getString('birthdate');
+    userType = prefs.getString('userType');
+    gender = prefs.getString('gender');
+    igaza = prefs.getString('igaza');
+    university = prefs.getString('university');
 
-    _nameText = new TextEditingController(text: nickname);
-    _emailText = new TextEditingController(text: email);
-    /* _jobText = new TextEditingController(text: _jobTitle);
-    _numOfReadingText = new TextEditingController(text: _numOfReading);
-    _numOfPartsText = new TextEditingController(text: _numOfParts);
-    _educationText = new TextEditingController(text: _education);
-*/
-    // Force refresh input
+    _nameController = new TextEditingController(text: nickname);
+    _jobTitleController = new TextEditingController(text: jobTitle);
+    _numOfReadingController = new TextEditingController(text: numOfReading);
+    _numOfPartsController = new TextEditingController(text: numOfParts);
+    _educationController = new TextEditingController(text: stuEducation);
+    _aboutMeController = new TextEditingController(text: aboutMe);
+    birthDate = selectedDate.year.toString();
+    _universityController = new TextEditingController(text: university);
+    /*_currentItemSelectedGender = gender == '' ? 'male' : gender;
+    _currentItemSelected = igaza == '' ? 'لا' : igaza ;
+    */// Force refresh input
     setState(() {});
   }
 
   @override
   void dispose() {
-    _nameText.dispose();
-    _emailText.dispose();
-    _jobText.dispose();
-    _numOfReadingText.dispose();
-    _numOfPartsText.dispose();
-    _educationText.dispose();
+    _nameController.dispose();
+    _jobTitleController.dispose();
+    _numOfReadingController.dispose();
+    _numOfPartsController.dispose();
+    _educationController.dispose();
+    _aboutMeController.dispose();
     super.dispose();
   }
 
-  /*Future getImage() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    if (image != null) {
-      setState(() {
-        avatarImageFile = image;
-        //isLoading = true;
-      });
-    }
-    //uploadFile();
-  }*/
-
-  Future<void> handleUpdateData() async {
-    focusNodeName.unfocus();
-    focusNodeEmail.unfocus();
-
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    String userID = user.uid.toString();
-    Firestore.instance
-        .collection('students')
-        .document(id)
-        .updateData({'name': _name, 'email': _email}).then((data) async {
-      print(nickname);
-      print(email);
-      prefs.setString('nickname', _name);
-      prefs.setString('email', _email);
-
-      Toast.show('Update success', context,
-          duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
-    }).catchError((e) {
-      showSnackBar(e.toString(), _scafoldKey);
-      print(e.toString());
-    });
-  }
-
-  //
   var _currencies = ['نعم', 'لا'];
-  var _currentItemSelected = 'نعم';
+  var _currentItemSelected = 'لا';
+  var _currenciesGender = ['male', 'female'];
+  var _currentItemSelectedGender = 'male';
+
 
   final GlobalKey<FormState> _keyForm = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
@@ -204,72 +244,50 @@ class _EditProfileState extends State<EditProfile> {
                                                     children: <Widget>[
                                                       (avatarImageFile == null)
                                                           ? (photoUrl != ''
-                                                              ? Material(
-                                                                  child:
-                                                                      CachedNetworkImage(
-                                                                    placeholder:
-                                                                        (context,
-                                                                                url) =>
-                                                                            Container(
-                                                                              child: CircularProgressIndicator(
-                                                                                strokeWidth: 2.0,
-                                                                                valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-                                                                              ),
-                                                                              width: 90.0,
-                                                                              height: 90.0,
-                                                                              padding: EdgeInsets.all(20.0),
-                                                                            ),
-                                                                    imageUrl:
-                                                                        photoUrl,
-                                                                    width:
-                                                                        100.0,
-                                                                    height:
-                                                                        100.0,
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                  ),
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              50.0)),
-                                                                  clipBehavior:
-                                                                      Clip.hardEdge,
-                                                                )
-                                                              : Icon(
-                                                                  Icons
-                                                                      .account_circle,
-                                                                  size: 90.0,
-                                                                  color:
-                                                                      greyColor,
-                                                                ))
-                                                          : Material(
-                                                              child: Image.file(
-                                                                avatarImageFile,
-                                                                width: 90.0,
-                                                                height: 90.0,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          45.0)),
-                                                              clipBehavior:
-                                                                  Clip.hardEdge,
+                                                          ? Material(
+                                                        child: CachedNetworkImage(
+                                                          placeholder: (context, url) => Container(
+                                                            child: CircularProgressIndicator(
+                                                              strokeWidth: 2.0,
+                                                              valueColor: AlwaysStoppedAnimation<Color>(themeColor),
                                                             ),
+                                                            width: 90.0,
+                                                            height: 90.0,
+                                                            padding: EdgeInsets.all(20.0),
+                                                          ),
+                                                          imageUrl: photoUrl,
+                                                          width: 90.0,
+                                                          height: 90.0,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                                                        clipBehavior: Clip.hardEdge,
+                                                      )
+                                                          : Icon(
+                                                        Icons.account_circle,
+                                                        size: 90.0,
+                                                        color: greyColor,
+                                                      )
+                                                      )
+                                                          : Material(
+                                                        child: Image.file(
+                                                          avatarImageFile,
+                                                          width: 90.0,
+                                                          height: 90.0,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                                                        clipBehavior: Clip.hardEdge,
+                                                      ),
                                                       IconButton(
                                                         icon: Icon(
                                                           Icons.camera_alt,
-                                                          color: primaryColor
-                                                              .withOpacity(0.5),
+                                                          color: primaryColor.withOpacity(0.5),
                                                         ),
-                                                      //  onPressed: getImage,
-                                                        padding: EdgeInsets.all(
-                                                            30.0),
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        highlightColor:
-                                                            greyColor,
+                                                        onPressed: getImage,
+                                                        padding: EdgeInsets.all(30.0),
+                                                        splashColor: Colors.transparent,
+                                                        highlightColor: greyColor,
                                                         iconSize: 30.0,
                                                       ),
                                                     ],
@@ -286,68 +304,79 @@ class _EditProfileState extends State<EditProfile> {
                                                   'Enter your Name',
                                                   nameIcon,
                                                   TextInputType.text,
-                                                  _nameText,
-                                                  _name,
-                                                  focusNodeName),
+                                                  _nameController,
+                                                  nickname,
+                                                focusNodeName
+                                                  ),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
                                               TextFromField(
-                                                  'Enter your Email',
-                                                  emailIcon,
-                                                  TextInputType.emailAddress,
-                                                  _emailText,
-                                                  _email,
-                                                  focusNodeEmail),
-                                              SizedBox(
-                                                height: 15.0,
-                                              ),
-                                              /*TextFromField(
                                                   'job title',
                                                   icon,
                                                   TextInputType.text,
-                                                  _jobText,
-                                                  _jobTitle),
-                                              */
+                                                  _jobTitleController,
+                                                  jobTitle,
+                                              focusNodeJobTitle),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
                                               // Number OF Reading Text For Filed
-                                              /*TextFromField(
+                                              TextFromField(
                                                   'Number Of Reading',
                                                   numOfReadingIcon,
                                                   TextInputType.number,
-                                                  _numOfReadingText,
-                                                  _numOfReading),
-                                              */
+                                                  _numOfReadingController,
+                                                  numOfReading,
+                                              focusNodeNumOfReading),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
                                               // Number OF Parts Text Form Field
-                                              /*TextFromField(
+                                              TextFromField(
                                                   'Number Of Parts',
                                                   numOfPartIcons,
                                                   TextInputType.number,
-                                                  _numOfPartsText,
-                                                  _numOfParts),
-                                              */
+                                                  _numOfPartsController,
+                                                  numOfParts,
+                                              focusNodenumOfParts),
+                                              SizedBox(
+                                                height: 15.0,
+                                              ),
+                                              TextFromField(
+                                                  'University',
+                                                  universityIcon,
+                                                  TextInputType.text,
+                                                  _universityController,
+                                                  university,
+                                                  focusNodeUniversity),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
                                               // Education Text Form Field
-                                              /*TextFromField(
-                                                  'Education',
+                                              TextFromField(
+                                                  'Department',
                                                   educationIcon,
                                                   TextInputType.text,
-                                                  _educationText,
-                                                  _education),
-                                              */
+                                                  _educationController,
+                                                  stuEducation,
+                                              focusNodeEducation),
+                                              SizedBox(
+                                                height: 15.0,
+                                              ),
+                                              TextFromField(
+                                                  'About Me',
+                                                  aboutMeIcon,
+                                                  TextInputType.text,
+                                                  _aboutMeController,
+                                                  aboutMe,
+                                                  focusNodeAboutMe),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
                                               ListTile(
                                                 title: Text(
-                                                  "${selectedDate.day}-${selectedDate.month}-${selectedDate.year}",
+                                                  birthDate ?? 'test',
                                                   style: TextStyle(
                                                       color: Colors.white),
                                                 ),
@@ -369,10 +398,7 @@ class _EditProfileState extends State<EditProfile> {
                                                   ),
                                                 ),
                                               ),
-                                              /************************************************************/
-                                              SizedBox(
-                                                height: 10.0,
-                                              ),
+                                              userType == 'Teacher' ?
                                               ListTile(
                                                 title:
                                                     DropdownButtonHideUnderline(
@@ -430,10 +456,67 @@ class _EditProfileState extends State<EditProfile> {
                                                         color: Colors.white),
                                                   ),
                                                 ),
+                                              )
+                                                  : Container(),
+                                              ListTile(
+                                                title:
+                                                DropdownButtonHideUnderline(
+                                                  child: DropdownButton<String>(
+                                                    style: TextStyle(
+                                                      color: Colors.teal,
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                    ),
+                                                    items: _currenciesGender.map(
+                                                            (String
+                                                        dropDownStringItem) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value:
+                                                            dropDownStringItem,
+                                                            child: new Row(
+                                                              children: <Widget>[
+                                                                Padding(
+                                                                  padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      right:
+                                                                      30.0),
+                                                                ),
+                                                                new Text(
+                                                                    dropDownStringItem),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                    onChanged: (String
+                                                    newValueSelected) {
+                                                      //your code to execute , when a menu item is selected from drop down
+                                                      _onDropDownItemSelectedGender(
+                                                          newValueSelected);
+                                                    },
+                                                    value: _currentItemSelectedGender,
+                                                  ),
+                                                ),
+                                                leading: RaisedButton(
+                                                  color: Colors.transparent,
+                                                  shape: OutlineInputBorder(
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        10.0),
+                                                    borderSide: BorderSide(
+                                                        color: Colors.teal),
+                                                  ),
+                                                  onPressed: () => {},
+                                                  child: Text(
+                                                    ' Gender ',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
                                               ),
-                                              SizedBox(
-                                                height: 10.0,
-                                              ),
+                                              SizedBox(height: 10.0,),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     right: 30.0, left: 30.0),
@@ -469,31 +552,46 @@ class _EditProfileState extends State<EditProfile> {
                                                                 "UbuntuBold"),
                                                       ),
                                                       onPressed: () {
-                                                        print(_nameText);
-                                                        print(_emailText);
-                                                        /* if (nameController.text == "" ||
-    emailController.text == "" ||
-    jobController.text == "" ||
-    numOfReadingController.text == "" ||
-    numOfPartsController.text == "" ||
-    educationController.text == "") {
-    showSnackBar("All Fields required", _scafoldKey);
-    return;
-    }*/
-                                                        handleUpdateData();
-                                                        //print(nameController.text);
+                                                        if (_nameController.text == "" ||
+                                                            _jobTitleController.text == "" ||
+                                                            _numOfReadingController.text == "" ||
+                                                            _numOfPartsController.text == "" ||
+                                                            _educationController.text == "" ||
+                                                            _aboutMeController.text == "" ||
+                                                            _universityController.text == "" ) {
+                                                          showSnackBar("All Fields required", _scafoldKey);
+
+                                                        } else if ( userType == 'Student') {
+                                                            student.updateStudentData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController.text, _currentItemSelectedGender, _universityController.text);
+                                                            prefs.setString('nickname', _nameController.text);
+                                                            prefs.setString('jobTitle', _jobTitleController.text);
+                                                            prefs.setString('numOfReading', _numOfReadingController.text);
+                                                            prefs.setString('numOfParts', _numOfPartsController.text);
+                                                            prefs.setString('education', _educationController.text);
+                                                            prefs.setString('photoUrl', photoUrl);
+                                                            prefs.setString('birthdate', birthDate);
+                                                            prefs.setString('aboutMe', _aboutMeController.text);
+                                                            prefs.setString('gender', _currentItemSelectedGender);
+                                                            prefs.setString('university', _universityController.text);
+                                                            readLocal();
+                                                          } else if (userType == 'Teacher') {
+                                                            teacher.updateTeacherData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController.text, _currentItemSelectedGender, _currentItemSelected, _universityController.text);
+                                                            prefs.setString('nickname', _nameController.text);
+                                                            prefs.setString('jobTitle', _jobTitleController.text);
+                                                            prefs.setString('numOfReading', _numOfReadingController.text);
+                                                            prefs.setString('numOfParts', _numOfPartsController.text);
+                                                            prefs.setString('education', _educationController.text);
+                                                            prefs.setString('photoUrl', photoUrl);
+                                                            prefs.setString('birthdate', birthDate);
+                                                            prefs.setString('aboutMe', _aboutMeController.text);
+                                                            prefs.setString('gender', _currentItemSelectedGender);
+                                                            prefs.setString('igaza', _currentItemSelected);
+                                                            prefs.setString('university', _universityController.text);
+                                                            readLocal();
+                                                          }
                                                       },
                                                     )),
-                                              )
-                                              /*     GeneralButton(
-                                                  _nameText,
-                                                  _jobText,
-                                                  _numOfReadingText,
-                                                  _numOfPartsText,
-                                                  _educationText,
-                                                  _emailText,
-                                                  _scafoldKey),
-                                         */ //separator,
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -516,6 +614,12 @@ class _EditProfileState extends State<EditProfile> {
   void _onDropDownItemSelected(String newValueSelected) {
     setState(() {
       this._currentItemSelected = newValueSelected;
+    });
+  }
+
+  void _onDropDownItemSelectedGender(String newValueSelected) {
+    setState(() {
+      this._currentItemSelectedGender = newValueSelected;
     });
   }
 }
@@ -580,14 +684,14 @@ class GeneralButton extends StatelessWidget {
 
 class TextFromField extends StatelessWidget {
   TextFromField(this.name, this.icon, this.inputType, this.controller,
-      this.inputValue, this.focusNodeName);
+      this.inputValue, this.focusNode);
 
   String name;
   IconData icon;
   TextInputType inputType;
   TextEditingController controller;
-  String inputValue;
-  FocusNode focusNodeName;
+  var inputValue;
+  FocusNode focusNode;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -615,7 +719,6 @@ class TextFromField extends StatelessWidget {
             onSaved: (val) {
               inputValue = val;
             },
-            focusNode: focusNodeName,
             controller: controller,
             decoration: InputDecoration(
                 labelText: name,
