@@ -336,7 +336,8 @@ class _SinhUpState extends State<SinhUp> {
                                                             color: Colors.teal),
                                                         left: BorderSide(
                                                             color:
-                                                                Colors.teal))),
+                                                                Colors.teal))
+                                                ),
                                                 padding: EdgeInsets.only(
                                                     left: 20.0,
                                                     right: 30.0,
@@ -358,7 +359,7 @@ class _SinhUpState extends State<SinhUp> {
                                                     decoration: InputDecoration(
                                                         suffixIcon: IconButton(
                                                           onPressed: showHide,
-                                                          icon: Icon(_secureText ? Icons.visibility: Icons.visibility_off),
+                                                          icon: Icon(_secureText ? Icons.visibility: Icons.visibility_off , color: Colors.teal,),
                                                         ),
                                                         errorText: _validate
                                                             ? 'Password Can\'t Be Empty'

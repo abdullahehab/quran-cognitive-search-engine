@@ -109,9 +109,9 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
   final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
   TextEditingController emailController = new TextEditingController();
 
+// Comment by Gehad Abdelaziz 18/4/2019
 
-
-  final separator = Center(
+/*  final separator = Center(
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -144,7 +144,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
         ],
       ),
     ),
-  );
+  );*/
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +175,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                         begin: FractionalOffset.topCenter,
                         end: FractionalOffset.bottomCenter,
                       )),
-                  child: SafeArea(
+                  child: SingleChildScrollView(
                     child: Stack(
                       //alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
@@ -201,38 +201,42 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                         * shape: OutlineInputBorder(
                                                     borderRadius: BorderRadius.all(Radius.circular(20.0),)),*/
                                             children: <Widget>[
-                                              ListTile(
-                                                  trailing: OutlineButton(
-                                                      child: Text(
-                                                        "Skip",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            letterSpacing: 0.2,
-                                                            fontFamily: "Sans",
-                                                            fontSize: 15.0,
-                                                            fontWeight:
-                                                            FontWeight.w800),
-                                                      ),
-                                                      shape: OutlineInputBorder(
-                                                          borderRadius:
-                                                          BorderRadius.all(
-                                                            Radius.circular(20.0),
-                                                          )),
-                                                      borderSide: BorderSide(
-                                                          color: Colors.teal[400],
-                                                          style: BorderStyle
-                                                              .solid,
-                                                          width: 3.0),
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (
-                                                                    context) =>
-                                                                    AllQuran()));
-                                                      })),
+                                              SizedBox(height: 15.0,),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 45.0),
+                                                child: ListTile(
+                                                    trailing: OutlineButton(
+                                                        child: Text(
+                                                          "Skip",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              letterSpacing: 0.2,
+                                                              fontFamily: "Sans",
+                                                              fontSize: 15.0,
+                                                              fontWeight:
+                                                              FontWeight.w800),
+                                                        ),
+                                                        shape: OutlineInputBorder(
+                                                            borderRadius:
+                                                            BorderRadius.all(
+                                                              Radius.circular(20.0),
+                                                            )),
+                                                        borderSide: BorderSide(
+                                                            color: Colors.teal[400],
+                                                            style: BorderStyle
+                                                                .solid,
+                                                            width: 3.0),
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (
+                                                                      context) =>
+                                                                      AllQuran()));
+                                                        })),
+                                              ),
                                               SizedBox(
-                                                height: 20.0,
+                                                height: 80.0,
                                               ),
                                               new TextField(
                                                 style: TextStyle(
@@ -252,7 +256,8 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                                     border: OutlineInputBorder(
                                                       borderRadius:
                                                       BorderRadius.circular(20.0),
-                                                    )),
+                                                    ),
+                                                ),
                                                 keyboardType:
                                                 TextInputType.emailAddress,
                                               ),
@@ -273,7 +278,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                                       icon: Icon(
                                                           _secureText ? Icons
                                                               .visibility : Icons
-                                                              .visibility_off),
+                                                              .visibility_off , color: Colors.teal,),
                                                     ),
                                                     labelStyle:
                                                     TextStyle(color: Colors.teal),
@@ -299,7 +304,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                                             .bold,
                                                         fontFamily: 'Montserrat',
                                                         decoration:
-                                                        TextDecoration.underline),
+                                                        TextDecoration.underline,decorationColor: Colors.teal,),
                                                   ),
                                                 ),
                                               ),
@@ -365,32 +370,14 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                                       )),
                                                 ),
                                               ),
-                                              ListTile(
-                                                leading:
-                                                Text("Don't Have An Account?",
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
-                                                    )),
-                                                trailing: InkWell(
-                                                    child: Text(
-                                                      "Sign Up",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (
-                                                                  context) =>
-                                                                  SinhUp()));
-                                                    }),
-                                              ),
-                                              separator,
+
+
+                                              //******* comment by gehad Abdelaziz 18/4/2019
+
+                                              /*separator,
                                               SizedBox(
                                                 height: 10.0,
-                                              ),
+                                              ),*/
                                               /*InkWell(
                                             child: buttonCustomFacebook(),
                                             onTap: () {
@@ -400,9 +387,6 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                               }
                                             },
                                           ),*/
-                                              SizedBox(
-                                                height: 10.0,
-                                              ),
                                               Transform(
                                                 transform: Matrix4.translationValues(muchDelayedAnimation.value * width,0.0,0.0),
                                                 child: InkWell(
@@ -422,6 +406,33 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                                     }
                                                   },
                                                 ),
+                                              ),
+                                              SizedBox(height: 50.0,),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Text(
+                                                    'Dont\'n have an account ?',
+                                                    style: TextStyle(color: Colors.white70),
+                                                  ),
+                                                  SizedBox(width: 5.0),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      //Navigator.of(context).pushNamed('/signup');
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(builder: (context) => SinhUp()),
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      'Sing Up',
+                                                      style: TextStyle(
+                                                          color: Colors.teal,
+                                                          fontWeight: FontWeight.bold,
+                                                          decoration: TextDecoration.underline),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
                                             ],
                                           ),
