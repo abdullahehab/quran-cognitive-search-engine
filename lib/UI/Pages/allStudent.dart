@@ -188,7 +188,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
                           _searchResult[i]['photoUrl'],
                           _searchResult[i]['type'],
                           _searchResult[i]['education'],
-                          _searchResult[i]),
+                          students.documents[i]),
                       SizedBox(
                         height: 12.0,
                       ),
