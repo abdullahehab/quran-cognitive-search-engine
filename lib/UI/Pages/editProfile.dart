@@ -16,7 +16,9 @@ class EditProfile extends StatefulWidget {
   @override
   _EditProfileState createState() => _EditProfileState();
 }
+
 StudentManagement s = new StudentManagement();
+
 class _EditProfileState extends State<EditProfile> {
   DateTime selectedDate = DateTime.now();
 
@@ -34,7 +36,6 @@ class _EditProfileState extends State<EditProfile> {
         selectedDate = picked;
       });
   }
-
 
   Future getImage() async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -59,34 +60,61 @@ class _EditProfileState extends State<EditProfile> {
         storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
           photoUrl = downloadUrl;
           if (userType == 'Student') {
-            student.updateStudentData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController, gender, university);
+            student.updateStudentData(
+                context,
+                _nameController.text,
+                email,
+                _jobTitleController.text,
+                _numOfReadingController.text,
+                _numOfPartsController.text,
+                _educationController.text,
+                birthDate,
+                photoUrl,
+                _aboutMeController,
+                gender,
+                university);
             prefs.setString('photoUrl', photoUrl);
             readLocal();
           } else if (userType == 'Teacher') {
-            teacher.updateTeacherData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController, gender, igaza, university);
+            teacher.updateTeacherData(
+                context,
+                _nameController.text,
+                email,
+                _jobTitleController.text,
+                _numOfReadingController.text,
+                _numOfPartsController.text,
+                _educationController.text,
+                birthDate,
+                photoUrl,
+                _aboutMeController,
+                gender,
+                igaza,
+                university);
             prefs.setString('photoUrl', photoUrl);
             readLocal();
           }
-          }, onError: (err) {
+        }, onError: (err) {
           setState(() {
             isLoading = false;
           });
-          Toast.show('This file is not an image', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
-          });
+          Toast.show('This file is not an image', context,
+              duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+        });
       } else {
         setState(() {
           isLoading = false;
         });
-        Toast.show('This file is not an image', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
-       }
+        Toast.show('This file is not an image', context,
+            duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+      }
     }, onError: (err) {
       setState(() {
         isLoading = false;
       });
-      Toast.show(err.toString(), context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
-      });
+      Toast.show(err.toString(), context,
+          duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+    });
   }
-
 
   SharedPreferences prefs;
 
@@ -96,10 +124,10 @@ class _EditProfileState extends State<EditProfile> {
   String photoUrl = '';
   String email = '';
   String type = '';
-  String birthDate ;
+  String birthDate;
   String stuEducation = '';
   String jobTitle = '';
-  String numOfReading = '' ;
+  String numOfReading = '';
   String numOfParts = '';
   String userType = '';
   String gender = '';
@@ -167,7 +195,7 @@ class _EditProfileState extends State<EditProfile> {
     _universityController = new TextEditingController(text: university);
     /*_currentItemSelectedGender = gender == '' ? 'male' : gender;
     _currentItemSelected = igaza == '' ? 'لا' : igaza ;
-    */// Force refresh input
+    */ // Force refresh input
     setState(() {});
   }
 
@@ -182,12 +210,10 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
-
   var _currencies = ['نعم', 'لا'];
   var _currentItemSelected = 'لا';
   var _currenciesGender = ['male', 'female'];
   var _currentItemSelectedGender = 'male';
-
 
   final GlobalKey<FormState> _keyForm = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
@@ -243,50 +269,73 @@ class _EditProfileState extends State<EditProfile> {
                                                     children: <Widget>[
                                                       (avatarImageFile == null)
                                                           ? (photoUrl != ''
-                                                          ? Material(
-                                                        child: CachedNetworkImage(
-                                                          placeholder: (context, url) => Container(
-                                                            child: CircularProgressIndicator(
-                                                              strokeWidth: 2.0,
-                                                              valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-                                                            ),
-                                                            width: 90.0,
-                                                            height: 90.0,
-                                                            padding: EdgeInsets.all(20.0),
-                                                          ),
-                                                          imageUrl: photoUrl == null ? 'https://cdn.iconscout.com/icon/free/png-256/avatar-380-456332.png' : photoUrl,
-                                                          width: 90.0,
-                                                          height: 90.0,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                                                        clipBehavior: Clip.hardEdge,
-                                                      )
-                                                          : Icon(
-                                                        Icons.account_circle,
-                                                        size: 90.0,
-                                                        color: greyColor,
-                                                      )
-                                                      )
+                                                              ? Material(
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    placeholder:
+                                                                        (context,
+                                                                                url) =>
+                                                                            Container(
+                                                                              child: CircularProgressIndicator(
+                                                                                strokeWidth: 2.0,
+                                                                                valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+                                                                              ),
+                                                                              width: 90.0,
+                                                                              height: 90.0,
+                                                                              padding: EdgeInsets.all(20.0),
+                                                                            ),
+                                                                    imageUrl: photoUrl ==
+                                                                            null
+                                                                        ? 'https://bit.ly/2JKW8kR'
+                                                                        : photoUrl,
+                                                                    width: 90.0,
+                                                                    height:
+                                                                        90.0,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              45.0)),
+                                                                  clipBehavior:
+                                                                      Clip.hardEdge,
+                                                                )
+                                                              : Icon(
+                                                                  Icons
+                                                                      .account_circle,
+                                                                  size: 90.0,
+                                                                  color:
+                                                                      greyColor,
+                                                                ))
                                                           : Material(
-                                                        child: Image.file(
-                                                          avatarImageFile,
-                                                          width: 90.0,
-                                                          height: 90.0,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                                                        clipBehavior: Clip.hardEdge,
-                                                      ),
+                                                              child: Image.file(
+                                                                avatarImageFile,
+                                                                width: 90.0,
+                                                                height: 90.0,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          45.0)),
+                                                              clipBehavior:
+                                                                  Clip.hardEdge,
+                                                            ),
                                                       IconButton(
                                                         icon: Icon(
                                                           Icons.camera_alt,
-                                                          color: primaryColor.withOpacity(0.5),
+                                                          color: primaryColor
+                                                              .withOpacity(0.5),
                                                         ),
                                                         onPressed: getImage,
-                                                        padding: EdgeInsets.all(30.0),
-                                                        splashColor: Colors.transparent,
-                                                        highlightColor: greyColor,
+                                                        padding: EdgeInsets.all(
+                                                            30.0),
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            greyColor,
                                                         iconSize: 30.0,
                                                       ),
                                                     ],
@@ -305,8 +354,7 @@ class _EditProfileState extends State<EditProfile> {
                                                   TextInputType.text,
                                                   _nameController,
                                                   nickname,
-                                                focusNodeName
-                                                  ),
+                                                  focusNodeName),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
@@ -316,7 +364,7 @@ class _EditProfileState extends State<EditProfile> {
                                                   TextInputType.text,
                                                   _jobTitleController,
                                                   jobTitle,
-                                              focusNodeJobTitle),
+                                                  focusNodeJobTitle),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
@@ -327,7 +375,7 @@ class _EditProfileState extends State<EditProfile> {
                                                   TextInputType.number,
                                                   _numOfReadingController,
                                                   numOfReading,
-                                              focusNodeNumOfReading),
+                                                  focusNodeNumOfReading),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
@@ -338,7 +386,7 @@ class _EditProfileState extends State<EditProfile> {
                                                   TextInputType.number,
                                                   _numOfPartsController,
                                                   numOfParts,
-                                              focusNodenumOfParts),
+                                                  focusNodenumOfParts),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
@@ -359,7 +407,7 @@ class _EditProfileState extends State<EditProfile> {
                                                   TextInputType.text,
                                                   _educationController,
                                                   stuEducation,
-                                              focusNodeEducation),
+                                                  focusNodeEducation),
                                               SizedBox(
                                                 height: 15.0,
                                               ),
@@ -397,7 +445,74 @@ class _EditProfileState extends State<EditProfile> {
                                                   ),
                                                 ),
                                               ),
-                                              userType == 'Teacher' ?
+                                              userType == 'Teacher'
+                                                  ? ListTile(
+                                                      title:
+                                                          DropdownButtonHideUnderline(
+                                                        child: DropdownButton<
+                                                            String>(
+                                                          style: TextStyle(
+                                                            color: Colors.teal,
+                                                            fontSize: 20.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          items: _currencies
+                                                              .map((String
+                                                                  dropDownStringItem) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value:
+                                                                  dropDownStringItem,
+                                                              child: new Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            30.0),
+                                                                  ),
+                                                                  new Text(
+                                                                      dropDownStringItem),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                          onChanged: (String
+                                                              newValueSelected) {
+                                                            //your code to execute , when a menu item is selected from drop down
+                                                            _onDropDownItemSelected(
+                                                                newValueSelected);
+                                                          },
+                                                          value:
+                                                              _currentItemSelected,
+                                                        ),
+                                                      ),
+                                                      leading: RaisedButton(
+                                                        color:
+                                                            Colors.transparent,
+                                                        shape:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .teal),
+                                                        ),
+                                                        onPressed: () => {},
+                                                        child: Text(
+                                                          ' ايجازه ',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Container(),
                                               ListTile(
                                                 title:
                                                     DropdownButtonHideUnderline(
@@ -408,8 +523,8 @@ class _EditProfileState extends State<EditProfile> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     ),
-                                                    items: _currencies.map(
-                                                        (String
+                                                    items: _currenciesGender
+                                                        .map((String
                                                             dropDownStringItem) {
                                                       return DropdownMenuItem<
                                                           String>(
@@ -433,10 +548,11 @@ class _EditProfileState extends State<EditProfile> {
                                                     onChanged: (String
                                                         newValueSelected) {
                                                       //your code to execute , when a menu item is selected from drop down
-                                                      _onDropDownItemSelected(
+                                                      _onDropDownItemSelectedGender(
                                                           newValueSelected);
                                                     },
-                                                    value: _currentItemSelected,
+                                                    value:
+                                                        _currentItemSelectedGender,
                                                   ),
                                                 ),
                                                 leading: RaisedButton(
@@ -450,72 +566,15 @@ class _EditProfileState extends State<EditProfile> {
                                                   ),
                                                   onPressed: () => {},
                                                   child: Text(
-                                                    ' ايجازه ',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              )
-                                                  : Container(),
-                                              ListTile(
-                                                title:
-                                                DropdownButtonHideUnderline(
-                                                  child: DropdownButton<String>(
-                                                    style: TextStyle(
-                                                      color: Colors.teal,
-                                                      fontSize: 20.0,
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                    ),
-                                                    items: _currenciesGender.map(
-                                                            (String
-                                                        dropDownStringItem) {
-                                                          return DropdownMenuItem<
-                                                              String>(
-                                                            value:
-                                                            dropDownStringItem,
-                                                            child: new Row(
-                                                              children: <Widget>[
-                                                                Padding(
-                                                                  padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right:
-                                                                      30.0),
-                                                                ),
-                                                                new Text(
-                                                                    dropDownStringItem),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        }).toList(),
-                                                    onChanged: (String
-                                                    newValueSelected) {
-                                                      //your code to execute , when a menu item is selected from drop down
-                                                      _onDropDownItemSelectedGender(
-                                                          newValueSelected);
-                                                    },
-                                                    value: _currentItemSelectedGender,
-                                                  ),
-                                                ),
-                                                leading: RaisedButton(
-                                                  color: Colors.transparent,
-                                                  shape: OutlineInputBorder(
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        10.0),
-                                                    borderSide: BorderSide(
-                                                        color: Colors.teal),
-                                                  ),
-                                                  onPressed: () => {},
-                                                  child: Text(
                                                     ' Gender ',
                                                     style: TextStyle(
                                                         color: Colors.white),
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(height: 10.0,),
+                                              SizedBox(
+                                                height: 10.0,
+                                              ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     right: 30.0, left: 30.0),
@@ -551,43 +610,154 @@ class _EditProfileState extends State<EditProfile> {
                                                                 "UbuntuBold"),
                                                       ),
                                                       onPressed: () {
-                                                        if (_nameController.text == "" ||
-                                                            _jobTitleController.text == "" ||
-                                                            _numOfReadingController.text == "" ||
-                                                            _numOfPartsController.text == "" ||
-                                                            _educationController.text == "" ||
-                                                            _aboutMeController.text == "" ||
-                                                            _universityController.text == "" ) {
-                                                          showSnackBar("All Fields required", _scafoldKey);
-
-                                                        } else if ( userType == 'Student') {
-                                                            student.updateStudentData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController.text, _currentItemSelectedGender, _universityController.text);
-                                                            prefs.setString('nickname', _nameController.text);
-                                                            prefs.setString('jobTitle', _jobTitleController.text);
-                                                            prefs.setString('numOfReading', _numOfReadingController.text);
-                                                            prefs.setString('numOfParts', _numOfPartsController.text);
-                                                            prefs.setString('education', _educationController.text);
-                                                            prefs.setString('photoUrl', photoUrl);
-                                                            prefs.setString('birthdate', birthDate);
-                                                            prefs.setString('aboutMe', _aboutMeController.text);
-                                                            prefs.setString('gender', _currentItemSelectedGender);
-                                                            prefs.setString('university', _universityController.text);
-                                                            readLocal();
-                                                          } else if (userType == 'Teacher') {
-                                                            teacher.updateTeacherData(context, _nameController.text, email, _jobTitleController.text, _numOfReadingController.text, _numOfPartsController.text, _educationController.text, birthDate, photoUrl, _aboutMeController.text, _currentItemSelectedGender, _currentItemSelected, _universityController.text);
-                                                            prefs.setString('nickname', _nameController.text);
-                                                            prefs.setString('jobTitle', _jobTitleController.text);
-                                                            prefs.setString('numOfReading', _numOfReadingController.text);
-                                                            prefs.setString('numOfParts', _numOfPartsController.text);
-                                                            prefs.setString('education', _educationController.text);
-                                                            prefs.setString('photoUrl', photoUrl);
-                                                            prefs.setString('birthdate', birthDate);
-                                                            prefs.setString('aboutMe', _aboutMeController.text);
-                                                            prefs.setString('gender', _currentItemSelectedGender);
-                                                            prefs.setString('igaza', _currentItemSelected);
-                                                            prefs.setString('university', _universityController.text);
-                                                            readLocal();
-                                                          }
+                                                        if (_nameController
+                                                                    .text ==
+                                                                "" ||
+                                                            _jobTitleController
+                                                                    .text ==
+                                                                "" ||
+                                                            _numOfReadingController.text ==
+                                                                "" ||
+                                                            _numOfPartsController
+                                                                    .text ==
+                                                                "" ||
+                                                            _educationController
+                                                                    .text ==
+                                                                "" ||
+                                                            _aboutMeController
+                                                                    .text ==
+                                                                "" ||
+                                                            _universityController
+                                                                    .text ==
+                                                                "") {
+                                                          showSnackBar(
+                                                              "All Fields required",
+                                                              _scafoldKey);
+                                                        } else if (userType ==
+                                                            'Student') {
+                                                          student.updateStudentData(
+                                                              context,
+                                                              _nameController
+                                                                  .text,
+                                                              email,
+                                                              _jobTitleController
+                                                                  .text,
+                                                              _numOfReadingController
+                                                                  .text,
+                                                              _numOfPartsController
+                                                                  .text,
+                                                              _educationController
+                                                                  .text,
+                                                              birthDate,
+                                                              photoUrl,
+                                                              _aboutMeController
+                                                                  .text,
+                                                              _currentItemSelectedGender,
+                                                              _universityController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'nickname',
+                                                              _nameController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'jobTitle',
+                                                              _jobTitleController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'numOfReading',
+                                                              _numOfReadingController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'numOfParts',
+                                                              _numOfPartsController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'education',
+                                                              _educationController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'photoUrl',
+                                                              photoUrl);
+                                                          prefs.setString(
+                                                              'birthdate',
+                                                              birthDate);
+                                                          prefs.setString(
+                                                              'aboutMe',
+                                                              _aboutMeController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'gender',
+                                                              _currentItemSelectedGender);
+                                                          prefs.setString(
+                                                              'university',
+                                                              _universityController
+                                                                  .text);
+                                                          readLocal();
+                                                        } else if (userType ==
+                                                            'Teacher') {
+                                                          teacher.updateTeacherData(
+                                                              context,
+                                                              _nameController
+                                                                  .text,
+                                                              email,
+                                                              _jobTitleController
+                                                                  .text,
+                                                              _numOfReadingController
+                                                                  .text,
+                                                              _numOfPartsController
+                                                                  .text,
+                                                              _educationController
+                                                                  .text,
+                                                              birthDate,
+                                                              photoUrl,
+                                                              _aboutMeController
+                                                                  .text,
+                                                              _currentItemSelectedGender,
+                                                              _currentItemSelected,
+                                                              _universityController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'nickname',
+                                                              _nameController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'jobTitle',
+                                                              _jobTitleController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'numOfReading',
+                                                              _numOfReadingController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'numOfParts',
+                                                              _numOfPartsController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'education',
+                                                              _educationController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'photoUrl',
+                                                              photoUrl);
+                                                          prefs.setString(
+                                                              'birthdate',
+                                                              birthDate);
+                                                          prefs.setString(
+                                                              'aboutMe',
+                                                              _aboutMeController
+                                                                  .text);
+                                                          prefs.setString(
+                                                              'gender',
+                                                              _currentItemSelectedGender);
+                                                          prefs.setString(
+                                                              'igaza',
+                                                              _currentItemSelected);
+                                                          prefs.setString(
+                                                              'university',
+                                                              _universityController
+                                                                  .text);
+                                                          readLocal();
+                                                        }
                                                       },
                                                     )),
                                               ),

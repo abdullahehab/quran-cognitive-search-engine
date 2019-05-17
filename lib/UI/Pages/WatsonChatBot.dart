@@ -5,11 +5,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/sevices/quran.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-
+import 'package:http/http.dart';
 
 final ThemeData kIOSTheme = new ThemeData(
   primarySwatch: Colors.orange,
@@ -38,16 +38,15 @@ class FriendlychatApp extends StatelessWidget {
 }
 
 class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text, this.animationController});
+  ChatMessage({this.text, this.animationController, this.id});
   final String text;
+  final String id;
   final AnimationController animationController;
   @override
   Widget build(BuildContext context) {
     return new SizeTransition(
         sizeFactor: new CurvedAnimation(
-            parent: animationController,
-            curve: Curves.easeOut
-        ),
+            parent: animationController, curve: Curves.easeOut),
         axisAlignment: 0.0,
         child: new Container(
           margin: const EdgeInsets.symmetric(vertical: 10.0),
@@ -56,7 +55,10 @@ class ChatMessage extends StatelessWidget {
             children: <Widget>[
               new Container(
                 margin: const EdgeInsets.only(right: 16.0),
-                child: new CircleAvatar(backgroundImage: AssetImage('images/watson_logo.png'),backgroundColor: Colors.transparent,),
+                child: new CircleAvatar(
+                  backgroundImage: AssetImage('images/watson_logo.png'),
+                  backgroundColor: Colors.transparent,
+                ),
               ),
               new Expanded(
                 child: new Column(
@@ -72,8 +74,7 @@ class ChatMessage extends StatelessWidget {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }
 
@@ -83,23 +84,46 @@ class ChatScreen extends StatefulWidget {
 }
 
 class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
-
+  List quran;
   _makeGetRequest(String text) async {
     var input = text;
     _handleSubmitted(text);
-    var url = _localhost()+"/api/message";
-    Map data =  {"input": {"text": input}};
-    var body = json.encode(data);
-    var header = {"Content-Type": "application/json"};
-    var response = await http.post(url, headers: header, body: body);
+
+    String username = 'apikey';
+    String password = 'jw4oSc5KLgobQN93TGS8xPhNMpuSWCJTlRH20Z1Xu3xq';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    const String DISCOVERY_ENVIRONMENT_ID =
+        'da1cb970-9f9c-4a83-8f26-6e1d9ef0d1d2';
+    const String DISCOVERY_COLLECTION_ID =
+        '8f408c86-b798-4fb7-9904-27822a0f2dbe';
+    String version = '2018-12-03';
+    print(basicAuth);
+
+    Response response = await get(
+        'https://gateway-lon.watsonplatform.net/discovery/api/v1/environments/$DISCOVERY_ENVIRONMENT_ID/collections/$DISCOVERY_COLLECTION_ID/query?version=2018-12-03&deduplicate=false&highlight=true&passages=true&passages.count=5&natural_language_query=$input',
+        headers: {'authorization': basicAuth});
+
     if (response.statusCode == 200) {
-      print(response.body);
-      Map<String, dynamic> res = jsonDecode(response.body);
-      print(res['output']['text']);
-      //serverResponse = response.body;
-      setState(() {
-        _handleSubmitted(res['output']['text']);
-      });
+      quran = (json.decode(response.body)['results'] as List)
+          .map((data) => new Quran.fromJson(data))
+          .toList();
+
+      for (var q in quran) {
+        print(q.id);
+        print(q.name);
+      }
+    }
+
+    if (response.statusCode == 200) {
+      for (var q in quran) {
+        print(q.id);
+        print(q.name);
+
+        setState(() {
+          _handleSubmitted(q.name);
+        });
+      }
     }
   }
 
@@ -109,6 +133,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     else // for iOS simulator
       return 'http://localhost:3000';
   }
+
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = new TextEditingController();
   bool _isComposing = false;
@@ -153,30 +178,30 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 },
                 onSubmitted: _handleSubmitted,
                 decoration:
-                new InputDecoration.collapsed(hintText: "Send a message"),
+                    new InputDecoration.collapsed(hintText: "Send a message"),
               ),
             ),
             new Container(
                 margin: new EdgeInsets.symmetric(horizontal: 4.0),
                 child: Theme.of(context).platform == TargetPlatform.iOS
                     ? new CupertinoButton(
-                  child: new Text("Send"),
-                  onPressed: _isComposing
-                      ? () => _handleSubmitted(_textController.text)
-                      : null,
-                )
+                        child: new Text("Send"),
+                        onPressed: _isComposing
+                            ? () => _handleSubmitted(_textController.text)
+                            : null,
+                      )
                     : new IconButton(
-                  icon: new Icon(Icons.send),
-                  onPressed: _isComposing
-                      ? () => _makeGetRequest(_textController.text)
-                  //_handleSubmitted(_textController.text)
-                      : null,
-                )),
+                        icon: new Icon(Icons.send),
+                        onPressed: _isComposing
+                            ? () => _makeGetRequest(_textController.text)
+                            //_handleSubmitted(_textController.text)
+                            : null,
+                      )),
           ]),
           decoration: Theme.of(context).platform == TargetPlatform.iOS
               ? new BoxDecoration(
-              border:
-              new Border(top: new BorderSide(color: Colors.grey[200])))
+                  border:
+                      new Border(top: new BorderSide(color: Colors.grey[200])))
               : null),
     );
   }
@@ -186,28 +211,27 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       appBar: new AppBar(
           title: new Text("Watson ChatBot"),
           elevation:
-          Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0
-      ),
+              Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0),
       body: new Container(
-          child: new Column(
-              children: <Widget>[
-                new Flexible(
-                    child: new ListView.builder(
-                      padding: new EdgeInsets.all(8.0),
-                      reverse: true,
-                      itemBuilder: (_, int index) => _messages[index],
-                      itemCount: _messages.length,
-                    )
-                ),
-                new Divider(height: 1.0),
-                new Container(
-                  decoration: new BoxDecoration(
-                      color: Theme.of(context).cardColor),
-                  child: _buildTextComposer(),
-                ),
-              ]
-          ),
-          decoration: Theme.of(context).platform == TargetPlatform.iOS ? new BoxDecoration(border: new Border(top: new BorderSide(color: Colors.grey[200]))) : null),//new
+          child: new Column(children: <Widget>[
+            new Flexible(
+                child: new ListView.builder(
+              padding: new EdgeInsets.all(8.0),
+              reverse: true,
+              itemBuilder: (_, int index) => _messages[index],
+              itemCount: _messages.length,
+            )),
+            new Divider(height: 1.0),
+            new Container(
+              decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+              child: _buildTextComposer(),
+            ),
+          ]),
+          decoration: Theme.of(context).platform == TargetPlatform.iOS
+              ? new BoxDecoration(
+                  border:
+                      new Border(top: new BorderSide(color: Colors.grey[200])))
+              : null), //new
     );
   }
 }

@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/UI/Pages/ChatPage.dart';
-import 'package:flutter_app/UI/Pages/viewUserProfile.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/UI/Test.dart';
 import 'package:flutter_app/sevices/studentManagment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-//StudentManagement student = new StudentManagement();
 
 class GetAllStudent extends StatefulWidget {
   @override
@@ -15,22 +11,48 @@ class GetAllStudent extends StatefulWidget {
 }
 
 class _GetAllStudentState extends State<GetAllStudent> {
+  Widget appBarTitle = new Text(
+    "All Teacher",
+    style: new TextStyle(color: Colors.white),
+  );
+  Icon actionIcon = new Icon(
+    Icons.search,
+    color: Colors.white,
+  );
+
   StudentManagement studentManagement = new StudentManagement();
+  final TextEditingController _searchQuery = new TextEditingController();
   SharedPreferences prefs;
   QuerySnapshot students;
   String nickname = '';
   String photoUrl = '';
-//  get studentManagement => null;
+  bool _isSearching;
+  String _searchText = "";
+
+  List _searchResult = [];
+  List _userDetails = [];
+
+  _GetAllStudentState() {
+    _searchQuery.addListener(() {
+      if (_searchQuery.text.isEmpty) {
+        setState(() {
+          _isSearching = false;
+          _searchText = "";
+        });
+      } else {
+        setState(() {
+          _isSearching = true;
+          _searchText = _searchQuery.text;
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
-    studentManagement.getAllStudent().then((results) {
-      setState(() {
-        students = results;
-        print(results);
-      });
-    });
+    _isSearching = false;
     readLocal();
+    getUserDetails();
     super.initState();
   }
 
@@ -42,28 +64,141 @@ class _GetAllStudentState extends State<GetAllStudent> {
     setState(() {});
   }
 
+  Future<Null> getUserDetails() async {
+    studentManagement.getAllStudent().then((results) {
+      setState(() {
+        students = results;
+        print('results');
+        print(results);
+      });
+
+      setState(() {
+        for (int i = 0; i < students.documents.length; i++) {
+          _userDetails.add(students.documents[i].data);
+        }
+      });
+    });
+  }
+
+  Widget buildBar(BuildContext context) {
+    return new AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.deepPurple,
+        title: appBarTitle,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => AllQuran()));
+            }),
+        actions: <Widget>[
+          new IconButton(
+            icon: actionIcon,
+            onPressed: () {
+              setState(() {
+                if (this.actionIcon.icon == Icons.search) {
+                  this.actionIcon = new Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  );
+                  this.appBarTitle = new TextField(
+                    onChanged: onSearchTextChanged,
+                    controller: _searchQuery,
+                    style: new TextStyle(
+                      color: Colors.white,
+                    ),
+                    decoration: new InputDecoration(
+                        prefixIcon: new Icon(Icons.search, color: Colors.white),
+                        hintText: "Search...",
+                        hintStyle: new TextStyle(color: Colors.white)),
+                  );
+                  _handleSearchStart();
+                } else {
+                  _handleSearchEnd();
+                }
+              });
+            },
+          ),
+        ]);
+  }
+
+  onSearchTextChanged(String text) async {
+    print(text);
+    _searchResult.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
+
+    for (int i = 0; i < _userDetails.length; i++) {
+      if (_userDetails[i]['name'].toString().toLowerCase().contains(text)) {
+        _searchResult.add(_userDetails[i]);
+        print(_userDetails[i]['name']);
+      }
+    }
+    setState(() {});
+  }
+
+  void _handleSearchStart() {
+    setState(() {
+      _isSearching = true;
+    });
+  }
+
+  void _handleSearchEnd() {
+    setState(() {
+      this.actionIcon = new Icon(
+        Icons.search,
+        color: Colors.white,
+      );
+      this.appBarTitle = new Text(
+        "All teachers",
+        style: new TextStyle(color: Colors.white),
+      );
+      _isSearching = false;
+      _searchQuery.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
-              }
-          ),
-          title: Text("All students"),
-          backgroundColor: Colors.deepPurple,
-        ),
+        appBar: buildBar(context),
         body: Container(
           color: Colors.deepPurple,
-          child: _studentList(),
+          child: _isSearching ? _studentSearchResult() : _studentList(),
         ));
+  }
+
+  Widget _studentSearchResult() {
+    if (_searchResult != null) {
+      return ListView.builder(
+          itemCount: _searchResult.length,
+          itemBuilder: (context, i) {
+            return new Column(
+              children: <Widget>[
+                SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      menuCard(
+                          _searchResult[i]['name'],
+                          _searchResult[i]['photoUrl'],
+                          _searchResult[i]['type'],
+                          _searchResult[i]['education'],
+                          _searchResult[i]),
+                      SizedBox(
+                        height: 12.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          });
+    }
   }
 
   Widget _studentList() {
@@ -76,92 +211,14 @@ class _GetAllStudentState extends State<GetAllStudent> {
                 SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Card(
-                              elevation: 3.0,
-                              shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  borderSide: BorderSide(color: Colors.white)),
-                              color: Colors.white,
-                              child: Container(
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      width: 120.0,
-                                      child: Column(
-                                        children: <Widget>[
-                                          CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                'https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916__340.png'),
-                                            radius: 57.0,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 220.0,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 10.0),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.only(bottom: 6.0),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Text(students.documents[i].data['name'], style: TextStyle(color: Colors.blue,fontSize: 25.0,fontWeight: FontWeight.bold),),
-                                                  SizedBox(width: 10.0,),
-                                                  Text(' 23 age', style: TextStyle(fontSize: 17.0),)
-                                                ],
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(right: 60.0),
-                                              child: Text('test email', style: TextStyle(fontSize: 17.0),),
-                                            ),
-                                            SizedBox(height: 7.0,),
-                                            Padding(
-                                              padding: const EdgeInsets.only(right: 160.0),
-                                              child: Text(students.documents[i].data['type']),
-                                            ),
-                                            ListTile
-                                              (
-                                                trailing: OutlineButton(
-                                                    child: Text(
-                                                      "Chat",
-                                                      style: TextStyle(
-                                                          color: Colors.deepPurple,
-                                                          letterSpacing: 0.2,
-                                                          fontFamily: "Sans",
-                                                          fontSize: 15.0,
-                                                          fontWeight: FontWeight.w900),
-                                                    ),
-                                                    shape: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.all(
-                                                          Radius.circular(20.0),
-                                                        )),
-                                                    borderSide: BorderSide(
-                                                        color: Colors.deepPurple[400],
-                                                        style: BorderStyle.solid,
-                                                        width: 3.0),
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                          context, MaterialPageRoute(builder: (builder) => ChatPage(nickname, photoUrl)));
-                                                    })
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                      menuCard(
+                          students.documents[i].data['name'],
+                          students.documents[i].data['photoUrl'],
+                          students.documents[i].data['type'],
+                          students.documents[i].data['education'],
+                          students.documents[i]),
+                      SizedBox(
+                        height: 12.0,
                       ),
                     ],
                   ),
@@ -173,36 +230,95 @@ class _GetAllStudentState extends State<GetAllStudent> {
       return Center(child: Text('loading data'));
     }
   }
-}
 
-/*
-*
-* Column(
-                          children: <Widget>[
-                               Padding(
-                                 padding: const EdgeInsets.all(8.0),
-                                 child: const ListTile(
-                                  leading: Padding(
-                                    padding: const EdgeInsets.only(top: 40.0),
-                                    child: CircleAvatar(
-                                      backgroundImage: NetworkImage('https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916__340.png'),
-                                      radius: 50.0,
-                                    ),
-                                  ),
-                              ),
-                               ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: const ListTile(
-                                title: Text(
-                                  "s",
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )*/
+  Widget menuCard(String title, String imgPath, String type, String education,
+      DocumentSnapshot selected) {
+    return Padding(
+      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Material(
+        borderRadius: BorderRadius.circular(7.0),
+        elevation: 4.0,
+        child: Container(
+          height: 125.0,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(7.0), color: Colors.white),
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                width: 10.0,
+              ),
+              Container(
+                height: 100.0,
+                width: 100.0,
+                decoration: BoxDecoration(
+                    //hena bya5od el path bta3 el-image wy7tha 3la el-4mal
+                    image: DecorationImage(
+                        image: NetworkImage(imgPath == null
+                            ? 'https://bit.ly/2UBROqC'
+                            : imgPath),
+                        fit: BoxFit.cover),
+                    borderRadius: BorderRadius.circular(7.0)),
+              ),
+              SizedBox(
+                width: 20.0,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 7.0,
+                  ),
+                  Text(
+                    type,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(education),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 7.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      InkWell(
+                        child: Text("show Profile"),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (builder) => Test(
+                                        snapshot: selected,
+                                      )));
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

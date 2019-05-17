@@ -9,7 +9,7 @@ import 'package:flutter_app/UI/QuranWidgets.dart';
 import 'package:flutter_app/UI/SplashScreen.dart';
 
 void main() => runApp(MaterialApp(
-  home: logInPage(),
+  home: GetAllStudent(),
   //home: AllQuran(),
   //home: EditProfile(),
   debugShowCheckedModeBanner: false,

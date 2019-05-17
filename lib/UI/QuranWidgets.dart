@@ -4,6 +4,7 @@ import 'package:flutter_app/UI/Pages/WatsonChatBot.dart';
 import 'package:flutter_app/UI/Pages/allStudent.dart';
 import 'package:flutter_app/UI/Pages/allTeacher.dart';
 import 'package:flutter_app/UI/Pages/profilePage.dart';
+import 'package:flutter_app/helpers/Heplers.dart';
 import 'package:flutter_app/quranList.dart';
 import 'package:flutter_app/sevices/studentManagment.dart';
 import 'package:flutter_app/sevices/teacherManagement.dart';
@@ -22,8 +23,7 @@ class AllQuran extends StatefulWidget {
 class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> gKey = new GlobalKey<ScaffoldState>();
 
-  int pageNumber = 9;
-
+  int pageNumber = 0;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
@@ -46,6 +46,15 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
   }
   // End Speed Radial
 
+  int pageNumberFunction(int num) {
+      pageNumber = num;
+//      setState(() {});
+  }
+  @override
+  void setState(fn) {
+    //pageNumberFunction();
+    super.setState(fn);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,10 +67,11 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
                   length: quran_imgs.length,
                   child: PageView.builder(
                     controller: PageController(
-                        initialPage: pageNumber
+                        initialPage: 0
                     ),
                     reverse: true,
                     itemBuilder: (context, index) {
+                      pageNumberFunction(index);
                       try {
                         return
                           Image.asset(
@@ -83,20 +93,20 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
             },
           ),
           /* Edit By Gehad Adelaziz 4/3/2019 1:20 pm*/
-          /*Container(
+          Container(
               height: 70.0,
               color: Colors.black.withOpacity(0.7),
             child: Column(
               children: <Widget>[
-                *//* Edit By Gehad Adelaziz 13/4/2019 3:14 pm*//*
+                // Edit By Gehad Adelaziz 13/4/2019 3:14 pm
                 ListTile(
                   leading:Text(" سوره البقرة ",style: TextStyle(color: Colors.white,fontSize: 20.0),),
-                  title: Center(child: Text(" 10 ",style: TextStyle(color: Colors.white,fontSize: 20.0),)),
+                  title: Center(child: Text("$pageNumber",style: TextStyle(color: Colors.white,fontSize: 20.0),)),
                   trailing: Text(" الجزء الاول",style: TextStyle(color: Colors.white,fontSize: 20.0),),
                 ),
               ],
             ),
-          ),*/
+          ),
         ],
       ),
       floatingActionButton: SpeedDial(
@@ -166,7 +176,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
             child: InkWell(
               child: Icon(Icons.exit_to_app),
               onTap: () {
-                handleSignOut();
+                _logOut();
                 },
             ),
             backgroundColor: Colors.green,
@@ -178,7 +188,9 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
             child: InkWell(
               child: Icon(Icons.bubble_chart),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FriendlychatApp()));
+                Helper help = new Helper();
+                help.loggedin();
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => FriendlychatApp()));
               },
             ),
             backgroundColor: Colors.green,
@@ -198,10 +210,18 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
     );
   }
 
-  Future<Null> handleSignOut() async {
+  _logOut() async{
+    await _auth.signOut().then((_){
+      Navigator.of(context).pushNamedAndRemoveUntil("/login", ModalRoute.withName("/home"));
+    });
+  }
+/*  Future<void> handleSignOut() async {
+    FirebaseAuth.instance.signOut();
+    FirebaseUser user = FirebaseAuth.instance.currentUser();
+    print(user);
     await _auth.signOut();
     await googleSignIn.signOut();
-    if(googleSignIn.currentUser == null) {
+    if(user == null) {
       Toast.show('Sign Out success', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
       Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -210,6 +230,6 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
       Toast.show('Faild to Sign Out', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.red);
       Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
     }
-    }
+    }*/
 }
 

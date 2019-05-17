@@ -128,7 +128,8 @@ class _GetAllTeacherState extends State<GetAllTeacher> {
                                               ),
                                               ListTile
                                                 (
-                                                  trailing: OutlineButton(
+                                                  trailing:
+                                                  OutlineButton(
                                                       child: Text(
                                                         "Chat",
                                                         style: TextStyle(
@@ -149,8 +150,8 @@ class _GetAllTeacherState extends State<GetAllTeacher> {
                                                       onPressed: () {
                                                         Navigator.push(
                                                             context, MaterialPageRoute(builder: (builder) => ChatPage(nickname, photoUrl)));
-
-                                                      })),
+                                                      })
+                                              ),
                                             ],
                                           ),
                                         ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Tools/const.dart';
 import 'package:flutter_app/Tools/progress_dialog.dart';
 import 'package:flutter_app/Tools/snackBar.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
@@ -386,7 +387,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                               }
                                             },
                                           ),*/
-                                              Transform(
+                                              /*Transform(
                                                 transform: Matrix4.translationValues(muchDelayedAnimation.value * width,0.0,0.0),
                                                 child: InkWell(
                                                   child: buttonCustomGoogle(),
@@ -405,8 +406,8 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                                     }
                                                   },
                                                 ),
-                                              ),
-                                              SizedBox(height: 50.0,),
+                                              ),*/
+                                              SizedBox(height: 20.0,),
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: <Widget>[
@@ -449,9 +450,22 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                     ),
                   )),
             ),
+            Positioned(
+              child: isLoading
+                  ? Container(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+                  ),
+                ),
+                color: Colors.white.withOpacity(0.8),
+              )
+                  : Container(),
+            ),
           ],
-        )
+        ),
     );
+
   });
   }
 
@@ -577,6 +591,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
 
 }
 ///buttonCustomGoogle class
+/*
 class buttonCustomGoogle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -613,6 +628,7 @@ class buttonCustomGoogle extends StatelessWidget {
     );
   }
 }
+*/
 
 ///buttonCustomFacebook class
 /*

@@ -88,55 +88,77 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _ownMessage(String message, String userName) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50.0),
+          color: Colors.grey[300]
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            SizedBox(height: 10.0,),
-            Text(userName),
-            Text(message),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 10.0,),
+                Text(userName),
+                Text(message),
+
+              ],
+            ),
+            Material(
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Container(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1.0,
+                    valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+                  ),
+                  width: 35.0,
+                  height: 35.0,
+                  padding: EdgeInsets.all(10.0),
+                ),
+                imageUrl: widget._avatar,
+                width: 35.0,
+                height: 35.0,
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(18.0),
+              ),
+              clipBehavior: Clip.hardEdge,
+            )
           ],
         ),
-        Material(
-          child: CachedNetworkImage(
-            placeholder: (context, url) => Container(
-              child: CircularProgressIndicator(
-                strokeWidth: 1.0,
-                valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-              ),
-              width: 35.0,
-              height: 35.0,
-              padding: EdgeInsets.all(10.0),
-            ),
-            imageUrl: widget._avatar,
-            width: 35.0,
-            height: 35.0,
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(18.0),
-          ),
-          clipBehavior: Clip.hardEdge,
-        )
-      ],
-    );
+      );
   }
 
   Widget _message(String message, String userName) {
-    return Row(
-      children: <Widget>[
-        Icon(Icons.person),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(height: 10.0,),
-            Text(userName),
-            Text(message),
-          ],
-        )
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(50.0),
+      ),
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 6.0),
+            child: Icon(Icons.person),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 10.0,),
+                Text(userName),
+                Text(message),
+              ],
+            ),
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(5.0),
+      margin: EdgeInsets.all(5.0),
     );
   }
 
