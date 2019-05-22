@@ -25,31 +25,39 @@ class logInPage extends StatefulWidget {
   _logInPageState createState() => _logInPageState();
 }
 
-class _logInPageState extends State<logInPage> with SingleTickerProviderStateMixin{
+class _logInPageState extends State<logInPage>
+    with SingleTickerProviderStateMixin {
   String _email, _password;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  SharedPrefs shared = SharedPrefs();
+//  SharedPreferences prefs = new
+
   /* Google signIn*/
   // GoogleSignIn googleAuth = new GoogleSignIn();
   //GoogleSignIn googleAuth = new GoogleSignIn();
-  Animation animation,delayedAnimation, muchDelayedAnimation;
+  Animation animation, delayedAnimation, muchDelayedAnimation;
   AnimationController animationController;
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    animationController = AnimationController(duration: Duration(seconds: 3),vsync: this);
+    animationController =
+        AnimationController(duration: Duration(seconds: 3), vsync: this);
     animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
       parent: animationController,
-      curve: Curves.fastOutSlowIn,));
+      curve: Curves.fastOutSlowIn,
+    ));
 
-    delayedAnimation= Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
+    delayedAnimation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
       parent: animationController,
-      curve: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn),));
+      curve: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn),
+    ));
 
-    muchDelayedAnimation= Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
+    muchDelayedAnimation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
       parent: animationController,
-      curve: Interval(0.8, 1.0, curve: Curves.fastOutSlowIn),));
-
+      curve: Interval(0.8, 1.0, curve: Curves.fastOutSlowIn),
+    ));
   }
+
   SharedPreferences prefs;
 
   bool isLoading = false;
@@ -149,25 +157,26 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    
     final double width = MediaQuery.of(context).size.width;
     animationController.forward();
-    return AnimatedBuilder(animation: animationController, builder: (BuildContext context , Widget child){
-      return Scaffold(
-        key: _scafoldKey,
-        body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            new Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                        'images/test.jpeg',
-                      ),
-                      fit: BoxFit.fill)),
-              child: Container(
+    return AnimatedBuilder(
+        animation: animationController,
+        builder: (BuildContext context, Widget child) {
+          return Scaffold(
+            key: _scafoldKey,
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                new Container(
                   decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      image: DecorationImage(
+                          image: AssetImage(
+                            'images/test.jpeg',
+                          ),
+                          fit: BoxFit.fill)),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
                         colors: [
                           Color.fromRGBO(0, 0, 0, 0.0),
                           Color.fromRGBO(0, 0, 0, 0.3)
@@ -175,210 +184,275 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                         begin: FractionalOffset.topCenter,
                         end: FractionalOffset.bottomCenter,
                       )),
-                  child: SingleChildScrollView(
-                    child: Stack(
-                      //alignment: AlignmentDirectional.bottomCenter,
-                      children: <Widget>[
-                        Column(
+                      child: SingleChildScrollView(
+                        child: Stack(
+                          //alignment: AlignmentDirectional.bottomCenter,
                           children: <Widget>[
-                            Transform(
-                              transform:Matrix4.translationValues(animation.value * width, 0.0, 0.0),
-                              child: Container(
-                                //alignment: AlignmentDirectional.topCenter,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Form(
-                                        key: _keyForm,
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10.0, vertical: 50.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                            /*
+                            Column(
+                              children: <Widget>[
+                                Transform(
+                                  transform: Matrix4.translationValues(
+                                      animation.value * width, 0.0, 0.0),
+                                  child: Container(
+                                    //alignment: AlignmentDirectional.topCenter,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Form(
+                                            key: _keyForm,
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.0,
+                                                  vertical: 50.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                /*
                                         * shape: OutlineInputBorder(
                                                     borderRadius: BorderRadius.all(Radius.circular(20.0),)),*/
-                                            children: <Widget>[
-                                              SizedBox(height: 15.0,),
-                                              Padding(
-                                                padding: const EdgeInsets.only(right: 45.0),
-                                                child: ListTile(
-                                                    trailing: OutlineButton(
-                                                        child: Text(
-                                                          "Skip",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              letterSpacing: 0.2,
-                                                              fontFamily: "Sans",
-                                                              fontSize: 15.0,
-                                                              fontWeight:
-                                                              FontWeight.w800),
-                                                        ),
-                                                        shape: OutlineInputBorder(
-                                                            borderRadius:
-                                                            BorderRadius.all(
-                                                              Radius.circular(20.0),
-                                                            )),
-                                                        borderSide: BorderSide(
-                                                            color: Colors.teal[400],
-                                                            style: BorderStyle
-                                                                .solid,
-                                                            width: 3.0),
-                                                        onPressed: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (
-                                                                      context) =>
-                                                                      AllQuran()));
-                                                        })),
-                                              ),
-                                              SizedBox(
-                                                height: 80.0,
-                                              ),
-                                              new TextField(
-                                                style: TextStyle(
-                                                    color: Colors.white
-                                                ),
-                                                controller: _emailText,
-                                                onChanged: (String val) =>
-                                                _email = val,
-                                                maxLength: 30,
-                                                decoration: new InputDecoration(
-                                                    labelText: "Enter Email",
-                                                    labelStyle:
-                                                    TextStyle(color: Colors.teal),
-                                                    contentPadding:
-                                                    EdgeInsets.fromLTRB(
-                                                        20.0, 20.0, 20.0, 20.0),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(20.0),
-                                                    ),
-                                                ),
-                                                keyboardType:
-                                                TextInputType.emailAddress,
-                                              ),
-                                              SizedBox(
-                                                height: 5.0,
-                                              ),
-                                              new TextField(
-                                                style: TextStyle(
-                                                    color: Colors.white
-                                                ),
-                                                controller: _passwordText,
-                                                onChanged: (String val) =>
-                                                _password = val,
-                                                decoration: new InputDecoration(
-                                                    labelText: "Password",
-                                                    suffixIcon: IconButton(
-                                                      onPressed: showHide,
-                                                      icon: Icon(
-                                                          _secureText ? Icons
-                                                              .visibility : Icons
-                                                              .visibility_off , color: Colors.teal,),
-                                                    ),
-                                                    labelStyle:
-                                                    TextStyle(color: Colors.teal),
-                                                    contentPadding:
-                                                    EdgeInsets.fromLTRB(
-                                                        20.0, 20.0, 20.0, 20.0),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(20.0),
-                                                    )),
-                                                obscureText: _secureText,
-                                              ),
-                                              Container(
-                                                alignment: Alignment(1.0, 0.0),
-                                                padding: EdgeInsets.only(
-                                                    top: 15.0, left: 10.0),
-                                                child: InkWell(
-                                                  child: Text(
-                                                    'Forgot Password',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight: FontWeight
-                                                            .bold,
-                                                        fontFamily: 'Montserrat',
-                                                        decoration:
-                                                        TextDecoration.underline,decorationColor: Colors.teal,),
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    height: 15.0,
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                    30.0),
-                                                child:Transform(
-                                                  transform: Matrix4.translationValues(delayedAnimation.value * width, 0.0,0.0),
-                                                  child: new Container(
-                                                      height: 55.0,
-                                                      width: 600.0,
-                                                      decoration: BoxDecoration(
-                                                          boxShadow: [
-                                                            BoxShadow(color: Colors
-                                                                .black38,
-                                                                blurRadius: 15.0)
-                                                          ],
-                                                          gradient: LinearGradient(
-                                                              colors: [
-                                                                Colors.teal[400],
-                                                                Colors.teal[400]
-                                                              ]),
-                                                          borderRadius: BorderRadius
-                                                              .circular(30.0)),
-                                                      child: FlatButton(
-                                                        child: Text(
-                                                          "Login",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontSize: 22.0,
-                                                              fontWeight: FontWeight
-                                                                  .w600,
-                                                              fontFamily: "UbuntuBold"),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 45.0),
+                                                    child: ListTile(
+                                                        trailing: OutlineButton(
+                                                            child: Text(
+                                                              "Skip",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  letterSpacing:
+                                                                      0.2,
+                                                                  fontFamily:
+                                                                      "Sans",
+                                                                  fontSize:
+                                                                      15.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w800),
+                                                            ),
+                                                            shape:
+                                                                OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .all(
+                                                              Radius.circular(
+                                                                  20.0),
+                                                            )),
+                                                            borderSide: BorderSide(
+                                                                color: Colors
+                                                                    .teal[400],
+                                                                style:
+                                                                    BorderStyle
+                                                                        .solid,
+                                                                width: 3.0),
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              AllQuran()));
+                                                            })),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 80.0,
+                                                  ),
+                                                  new TextField(
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                    controller: _emailText,
+                                                    onChanged: (String val) =>
+                                                        _email = val,
+                                                    maxLength: 30,
+                                                    decoration:
+                                                        new InputDecoration(
+                                                      labelText: "Enter Email",
+                                                      labelStyle: TextStyle(
+                                                          color: Colors.teal),
+                                                      contentPadding:
+                                                          EdgeInsets.fromLTRB(
+                                                              20.0,
+                                                              20.0,
+                                                              20.0,
+                                                              20.0),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                      ),
+                                                    ),
+                                                    keyboardType: TextInputType
+                                                        .emailAddress,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  new TextField(
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                    controller: _passwordText,
+                                                    onChanged: (String val) =>
+                                                        _password = val,
+                                                    decoration:
+                                                        new InputDecoration(
+                                                            labelText:
+                                                                "Password",
+                                                            suffixIcon:
+                                                                IconButton(
+                                                              onPressed:
+                                                                  showHide,
+                                                              icon: Icon(
+                                                                _secureText
+                                                                    ? Icons
+                                                                        .visibility
+                                                                    : Icons
+                                                                        .visibility_off,
+                                                                color:
+                                                                    Colors.teal,
+                                                              ),
+                                                            ),
+                                                            labelStyle:
+                                                                TextStyle(
+                                                                    color: Colors
+                                                                        .teal),
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .fromLTRB(
+                                                                        20.0,
+                                                                        20.0,
+                                                                        20.0,
+                                                                        20.0),
+                                                            border:
+                                                                OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.0),
+                                                            )),
+                                                    obscureText: _secureText,
+                                                  ),
+                                                  Container(
+                                                    alignment:
+                                                        Alignment(1.0, 0.0),
+                                                    padding: EdgeInsets.only(
+                                                        top: 15.0, left: 10.0),
+                                                    child: InkWell(
+                                                      child: Text(
+                                                        'Forgot Password',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                          decorationColor:
+                                                              Colors.teal,
                                                         ),
-                                                        onPressed: () {
-                                                          if (_emailText.text ==
-                                                              "" &&
-                                                              _passwordText.text ==
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            30.0),
+                                                    child: Transform(
+                                                      transform: Matrix4
+                                                          .translationValues(
+                                                              delayedAnimation
+                                                                      .value *
+                                                                  width,
+                                                              0.0,
+                                                              0.0),
+                                                      child: new Container(
+                                                          height: 55.0,
+                                                          width: 600.0,
+                                                          decoration: BoxDecoration(
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                    color: Colors
+                                                                        .black38,
+                                                                    blurRadius:
+                                                                        15.0)
+                                                              ],
+                                                              gradient:
+                                                                  LinearGradient(
+                                                                      colors: [
+                                                                    Colors.teal[
+                                                                        400],
+                                                                    Colors.teal[
+                                                                        400]
+                                                                  ]),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          30.0)),
+                                                          child: FlatButton(
+                                                            child: Text(
+                                                              "Login",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      22.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontFamily:
+                                                                      "UbuntuBold"),
+                                                            ),
+                                                            onPressed: () {
+                                                              if (_emailText
+                                                                          .text ==
+                                                                      "" &&
+                                                                  _passwordText
+                                                                          .text ==
+                                                                      "") {
+                                                                showSnackBar(
+                                                                    "Email & Password required!",
+                                                                    _scafoldKey);
+                                                                return;
+                                                              }
+                                                              if (_emailText
+                                                                      .text ==
                                                                   "") {
-                                                            showSnackBar(
-                                                                "Email & Password required!",
-                                                                _scafoldKey);
-                                                            return;
-                                                          }
-                                                          if (_emailText.text ==
-                                                              "") {
-                                                            showSnackBar(
-                                                                "Email Cannot Be Empty!",
-                                                                _scafoldKey);
-                                                            return;
-                                                          }
-                                                          if (_passwordText.text ==
-                                                              "") {
-                                                            showSnackBar(
-                                                                "Password Cannot Be Empty",
-                                                                _scafoldKey);
-                                                            return;
-                                                          }
-                                                          displayProgressDialog(
-                                                              context);
-                                                          logIn();
-                                                        },
-                                                      )),
-                                                ),
-                                              ),
+                                                                showSnackBar(
+                                                                    "Email Cannot Be Empty!",
+                                                                    _scafoldKey);
+                                                                return;
+                                                              }
+                                                              if (_passwordText
+                                                                      .text ==
+                                                                  "") {
+                                                                showSnackBar(
+                                                                    "Password Cannot Be Empty",
+                                                                    _scafoldKey);
+                                                                return;
+                                                              }
+                                                              displayProgressDialog(
+                                                                  context);
+                                                              logIn();
+                                                            },
+                                                          )),
+                                                    ),
+                                                  ),
 
+                                                  //******* comment by gehad Abdelaziz 18/4/2019
 
-                                              //******* comment by gehad Abdelaziz 18/4/2019
-
-                                              /*separator,
+                                                  /*separator,
                                               SizedBox(
                                                 height: 10.0,
                                               ),*/
-                                              /*InkWell(
+                                                  /*InkWell(
                                             child: buttonCustomFacebook(),
                                             onTap: () {
                                               if (_keyForm.currentState
@@ -387,7 +461,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                               }
                                             },
                                           ),*/
-                                              /*Transform(
+                                                  /*Transform(
                                                 transform: Matrix4.translationValues(muchDelayedAnimation.value * width,0.0,0.0),
                                                 child: InkWell(
                                                   child: buttonCustomGoogle(),
@@ -407,66 +481,80 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
                                                   },
                                                 ),
                                               ),*/
-                                              SizedBox(height: 20.0,),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Text(
-                                                    'Dont\'n have an account ?',
-                                                    style: TextStyle(color: Colors.white70),
+                                                  SizedBox(
+                                                    height: 20.0,
                                                   ),
-                                                  SizedBox(width: 5.0),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      //Navigator.of(context).pushNamed('/signup');
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) => SinhUp()),
-                                                      );
-                                                    },
-                                                    child: Text(
-                                                      'Sing Up',
-                                                      style: TextStyle(
-                                                          color: Colors.teal,
-                                                          fontWeight: FontWeight.bold,
-                                                          decoration: TextDecoration.underline),
-                                                    ),
-                                                  )
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'Dont\'n have an account ?',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white70),
+                                                      ),
+                                                      SizedBox(width: 5.0),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          //Navigator.of(context).pushNamed('/signup');
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        SinhUp()),
+                                                          );
+                                                        },
+                                                        child: Text(
+                                                          'Sing Up',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.teal,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .underline),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
+                            // Loading
                           ],
                         ),
-                        // Loading
-                      ],
-                    ),
-                  )),
-            ),
-            Positioned(
-              child: isLoading
-                  ? Container(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-                  ),
+                      )),
                 ),
-                color: Colors.white.withOpacity(0.8),
-              )
-                  : Container(),
+                Positioned(
+                  child: isLoading
+                      ? Container(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(themeColor),
+                            ),
+                          ),
+                          color: Colors.white.withOpacity(0.8),
+                        )
+                      : Container(),
+                ),
+              ],
             ),
-          ],
-        ),
-    );
-
-  });
+          );
+        });
   }
 
   /*Handle Firebase SignIn*/
@@ -478,14 +566,59 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
       SharedPrefs shared = SharedPrefs();
       Firestore.instance
           .collection('/students')
-          .document(user.email)
+          .document(_email)
           .get()
           .then((DocumentSnapshot ds) {
-            print(ds.data.length);
+//        print( "student name " + ds.data['name']);
+        print('data length');
+        print(ds.data);
+        if (ds.data == null) {
+          Firestore.instance
+              .collection('/teacher')
+              .document(_email)
+              .get()
+              .then((DocumentSnapshot teacherDate) {
+            print( "Teacher name " + teacherDate.data['name']);
+            print('teacher data');
+            print(teacherDate.data);
+            shared.saveUserData(
+                user,
+                teacherDate.data['name'],
+                teacherDate.data['type'],
+                teacherDate.data['birth'],
+                teacherDate.data['education'],
+                teacherDate.data['numberOfReading'],
+                teacherDate.data['numberOfParts'],
+                teacherDate.data['jobTitle'],
+                teacherDate.data['photoUrl'],
+                teacherDate.data['aboutMe'],
+                teacherDate.data['gender'],
+                teacherDate.data['igaza'],
+                teacherDate.data['university']);
+          });
+        } else {
+          shared.saveUserData(
+              user,
+              ds.data['name'],
+              ds.data['type'],
+              ds.data['birth'],
+              ds.data['education'],
+              ds.data['numberOfReading'],
+              ds.data['numberOfParts'],
+              ds.data['jobTitle'],
+              ds.data['photoUrl'],
+              ds.data['aboutMe'],
+              ds.data['gender'],
+              '',
+              ds.data['university']);
+        }
+      }).catchError((e) {
+        print(e);
       });
-      shared.saveUserData(user, "", "", "", "", "", "","","","","","","");
+      shared.saveUserData(user, "", "", "", "", "", "", "", "", "", "", "", "");
       //closeProgressDialog(context);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => AllQuran()));
     }).catchError((e) {
       closeProgressDialog(context);
       showSnackBar(e.toString(), _scafoldKey);
@@ -502,7 +635,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
 
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
-    await googleUser.authentication;
+        await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -516,8 +649,10 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
     final FirebaseUser currentUser = await _auth.currentUser();
     if (currentUser != null) {
       // check if already sign up
-      final QuerySnapshot result =
-      await Firestore.instance.collection('users').where('id', isEqualTo: currentUser.uid).getDocuments();
+      final QuerySnapshot result = await Firestore.instance
+          .collection('users')
+          .where('id', isEqualTo: currentUser.uid)
+          .getDocuments();
       final List<DocumentSnapshot> documents = result.documents;
       if (documents.length == 0) {
         // Update data to server if new user
@@ -525,11 +660,17 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
         Firestore.instance
             .collection('users')
             .document(currentUser.uid)
-            .setData({'nickname': currentUser.displayName, 'email': currentUser.email, 'photoUrl': currentUser.photoUrl, 'id': currentUser.uid});
+            .setData({
+          'nickname': currentUser.displayName,
+          'email': currentUser.email,
+          'photoUrl': currentUser.photoUrl,
+          'id': currentUser.uid
+        });
 
         // Write data to local
         SharedPrefs s = SharedPrefs();
-        s.saveUserData(currentUser, "", "", "", "", "", "","", "","","","","");
+        s.saveUserData(
+            currentUser, "", "", "", "", "", "", "", "", "", "", "", "");
         print(currentUser.displayName);
         print(currentUser.email);
         print(currentUser.photoUrl);
@@ -544,14 +685,16 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
         await prefs.setString('email', documents[0]['email']);
         print(documents[0]['email']);
       }
-      Toast.show('Sign in success', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+      Toast.show('Sign in success', context,
+          duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
       this.setState(() {
         isLoading = false;
       });
 
-    //  ProfilePage(currentUserId: currentUser.uid);
-    }else {
-      Toast.show('Sign in fail', context,duration: Toast.LENGTH_LONG, backgroundColor: Colors.red);
+      //  ProfilePage(currentUserId: currentUser.uid);
+    } else {
+      Toast.show('Sign in fail', context,
+          duration: Toast.LENGTH_LONG, backgroundColor: Colors.red);
       this.setState(() {
         isLoading = false;
       });
@@ -590,6 +733,7 @@ class _logInPageState extends State<logInPage> with SingleTickerProviderStateMix
   }*/
 
 }
+
 ///buttonCustomGoogle class
 /*
 class buttonCustomGoogle extends StatelessWidget {
