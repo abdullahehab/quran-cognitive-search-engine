@@ -13,7 +13,7 @@ import 'package:toast/toast.dart';
 
 /*Google provider*/
 //import 'package:google_sign_in/google_sign_in.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+//import 'package:google_sign_in/google_sign_in.dart';
 /*Facebook provider*/
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
@@ -71,7 +71,7 @@ class _logInPageState extends State<logInPage>
     super.initState();
   }*/
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+//  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance; // No errors so far
   void isSignedIn() async {
     this.setState(() {
@@ -80,18 +80,11 @@ class _logInPageState extends State<logInPage>
 
     prefs = await SharedPreferences.getInstance();
 
-    isLoggedIn = await _googleSignIn.isSignedIn();
-    if (isLoggedIn) {
-      /*Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ProfilePage(currentUserId: prefs.getString('id'))),
-      );*/
-    }
-
     this.setState(() {
       isLoading = false;
     });
   }
+
   /*Facebook signIn*/
   // FacebookLogin fbLogin = new FacebookLogin();
 
@@ -194,7 +187,6 @@ class _logInPageState extends State<logInPage>
                                   transform: Matrix4.translationValues(
                                       animation.value * width, 0.0, 0.0),
                                   child: Container(
-                                    //alignment: AlignmentDirectional.topCenter,
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: Column(
@@ -208,9 +200,6 @@ class _logInPageState extends State<logInPage>
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.stretch,
-                                                /*
-                                        * shape: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.all(Radius.circular(20.0),)),*/
                                                 children: <Widget>[
                                                   SizedBox(
                                                     height: 15.0,
@@ -445,42 +434,6 @@ class _logInPageState extends State<logInPage>
                                                           )),
                                                     ),
                                                   ),
-
-                                                  //******* comment by gehad Abdelaziz 18/4/2019
-
-                                                  /*separator,
-                                              SizedBox(
-                                                height: 10.0,
-                                              ),*/
-                                                  /*InkWell(
-                                            child: buttonCustomFacebook(),
-                                            onTap: () {
-                                              if (_keyForm.currentState
-                                                  .validate()) {
-                                                //facebookSignIn();
-                                              }
-                                            },
-                                          ),*/
-                                                  /*Transform(
-                                                transform: Matrix4.translationValues(muchDelayedAnimation.value * width,0.0,0.0),
-                                                child: InkWell(
-                                                  child: buttonCustomGoogle(),
-                                                  onTap: () {
-                                                    if (_keyForm.currentState
-                                                        .validate()) {
-                                                      _testSignInWithGoogle()
-                                                          .whenComplete(() {
-                                                        Navigator.push(context,
-                                                            MaterialPageRoute(
-                                                                builder: (
-                                                                    context) =>
-                                                                    AllQuran()));
-                                                      });
-                                                      //  googleSignIn();
-                                                    }
-                                                  },
-                                                ),
-                                              ),*/
                                                   SizedBox(
                                                     height: 20.0,
                                                   ),
@@ -569,18 +522,12 @@ class _logInPageState extends State<logInPage>
           .document(_email)
           .get()
           .then((DocumentSnapshot ds) {
-//        print( "student name " + ds.data['name']);
-        print('data length');
-        print(ds.data);
         if (ds.data == null) {
           Firestore.instance
               .collection('/teacher')
               .document(_email)
               .get()
               .then((DocumentSnapshot teacherDate) {
-            print( "Teacher name " + teacherDate.data['name']);
-            print('teacher data');
-            print(teacherDate.data);
             shared.saveUserData(
                 user,
                 teacherDate.data['name'],
@@ -615,94 +562,99 @@ class _logInPageState extends State<logInPage>
       }).catchError((e) {
         print(e);
       });
-      shared.saveUserData(user, "", "", "", "", "", "", "", "", "", "", "", "");
-      //closeProgressDialog(context);
+
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => AllQuran()));
     }).catchError((e) {
       closeProgressDialog(context);
-      showSnackBar(e.toString(), _scafoldKey);
-      print(e);
-    });
-  }
-
-  Future<String> _testSignInWithGoogle() async {
-    prefs = await SharedPreferences.getInstance();
-
-    this.setState(() {
-      isLoading = true;
-    });
-
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    final FirebaseUser user = await _auth.signInWithCredential(credential);
-    assert(user.email != null);
-    assert(user.displayName != null);
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
-
-    final FirebaseUser currentUser = await _auth.currentUser();
-    if (currentUser != null) {
-      // check if already sign up
-      final QuerySnapshot result = await Firestore.instance
-          .collection('users')
-          .where('id', isEqualTo: currentUser.uid)
-          .getDocuments();
-      final List<DocumentSnapshot> documents = result.documents;
-      if (documents.length == 0) {
-        // Update data to server if new user
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => SinhUp()));
-        Firestore.instance
-            .collection('users')
-            .document(currentUser.uid)
-            .setData({
-          'nickname': currentUser.displayName,
-          'email': currentUser.email,
-          'photoUrl': currentUser.photoUrl,
-          'id': currentUser.uid
-        });
-
-        // Write data to local
-        SharedPrefs s = SharedPrefs();
-        s.saveUserData(
-            currentUser, "", "", "", "", "", "", "", "", "", "", "", "");
-        print(currentUser.displayName);
-        print(currentUser.email);
-        print(currentUser.photoUrl);
+      if (e.toString().contains("ERROR_USER_NOT_FOUND")) {
+        showSnackBar("User Not Found", _scafoldKey);
+      } else if (e.toString().contains("ERROR_WRONG_PASSWORD")) {
+        showSnackBar("The password is invalid", _scafoldKey);
       } else {
-        // Write data to local
-        await prefs.setString('id', documents[0]['id']);
-        await prefs.setString('nickname', documents[0]['nickname']);
-        //print(documents[0]['nickname']);
-        await prefs.setString('photoUrl', documents[0]['photoUrl']);
-        //print(documents[0]['photoUrl']);
-        await prefs.setString('aboutMe', documents[0]['aboutMe']);
-        await prefs.setString('email', documents[0]['email']);
-        print(documents[0]['email']);
+        showSnackBar(e.toString(), _scafoldKey);
+        print(e);
       }
-      Toast.show('Sign in success', context,
-          duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
-      this.setState(() {
-        isLoading = false;
-      });
-
-      //  ProfilePage(currentUserId: currentUser.uid);
-    } else {
-      Toast.show('Sign in fail', context,
-          duration: Toast.LENGTH_LONG, backgroundColor: Colors.red);
-      this.setState(() {
-        isLoading = false;
-      });
-    }
-    print(user.displayName);
-    assert(user.uid == currentUser.uid);
-    return 'signInWithGoogle succeeded: $user';
+    });
   }
+
+//  Future<String> _testSignInWithGoogle() async {
+//    prefs = await SharedPreferences.getInstance();
+//
+//    this.setState(() {
+//      isLoading = true;
+//    });
+//
+//    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+//    final GoogleSignInAuthentication googleAuth =
+//        await googleUser.authentication;
+//    final AuthCredential credential = GoogleAuthProvider.getCredential(
+//      accessToken: googleAuth.accessToken,
+//      idToken: googleAuth.idToken,
+//    );
+//    final FirebaseUser user = await _auth.signInWithCredential(credential);
+//    assert(user.email != null);
+//    assert(user.displayName != null);
+//    assert(!user.isAnonymous);
+//    assert(await user.getIdToken() != null);
+//
+//    final FirebaseUser currentUser = await _auth.currentUser();
+//    if (currentUser != null) {
+//      // check if already sign up
+//      final QuerySnapshot result = await Firestore.instance
+//          .collection('users')
+//          .where('id', isEqualTo: currentUser.uid)
+//          .getDocuments();
+//      final List<DocumentSnapshot> documents = result.documents;
+//      if (documents.length == 0) {
+//        // Update data to server if new user
+//        //Navigator.push(context, MaterialPageRoute(builder: (context) => SinhUp()));
+//        Firestore.instance
+//            .collection('users')
+//            .document(currentUser.uid)
+//            .setData({
+//          'nickname': currentUser.displayName,
+//          'email': currentUser.email,
+//          'photoUrl': currentUser.photoUrl,
+//          'id': currentUser.uid
+//        });
+//
+//        // Write data to local
+//        SharedPrefs s = SharedPrefs();
+//        s.saveUserData(
+//            currentUser, "", "", "", "", "", "", "", "", "", "", "", "");
+//        print(currentUser.displayName);
+//        print(currentUser.email);
+//        print(currentUser.photoUrl);
+//      } else {
+//        // Write data to local
+//        await prefs.setString('id', documents[0]['id']);
+//        await prefs.setString('nickname', documents[0]['nickname']);
+//        //print(documents[0]['nickname']);
+//        await prefs.setString('photoUrl', documents[0]['photoUrl']);
+//        //print(documents[0]['photoUrl']);
+//        await prefs.setString('aboutMe', documents[0]['aboutMe']);
+//        await prefs.setString('email', documents[0]['email']);
+//        print(documents[0]['email']);
+//      }
+//      Toast.show('Sign in success', context,
+//          duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+//      this.setState(() {
+//        isLoading = false;
+//      });
+//
+//      //  ProfilePage(currentUserId: currentUser.uid);
+//    } else {
+//      Toast.show('Sign in fail', context,
+//          duration: Toast.LENGTH_LONG, backgroundColor: Colors.red);
+//      this.setState(() {
+//        isLoading = false;
+//      });
+//    }
+//    print(user.displayName);
+//    assert(user.uid == currentUser.uid);
+//    return 'signInWithGoogle succeeded: $user';
+//  }
 
 /*Handle facebook ligIn*/
   /*Future<void> facebookSignIn() async {
