@@ -29,11 +29,12 @@ class _EditProfileState extends State<EditProfile> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime(1970, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
+        print(selectedDate);
       });
   }
 
@@ -284,10 +285,7 @@ class _EditProfileState extends State<EditProfile> {
                                                                               height: 90.0,
                                                                               padding: EdgeInsets.all(20.0),
                                                                             ),
-                                                                    imageUrl: photoUrl ==
-                                                                            null
-                                                                        ? 'https://bit.ly/2JKW8kR'
-                                                                        : photoUrl,
+                                                                    imageUrl: photoUrl,
                                                                     width: 90.0,
                                                                     height:
                                                                         90.0,
@@ -610,6 +608,11 @@ class _EditProfileState extends State<EditProfile> {
                                                                 "UbuntuBold"),
                                                       ),
                                                       onPressed: () {
+                                                        print('selected date');
+                                                        print(
+                                                            selectedDate.year);
+                                                        print(
+                                                            'end selected date');
                                                         if (_nameController
                                                                     .text ==
                                                                 "" ||
@@ -648,7 +651,8 @@ class _EditProfileState extends State<EditProfile> {
                                                                   .text,
                                                               _educationController
                                                                   .text,
-                                                              birthDate,
+                                                              selectedDate.year
+                                                                  .toString(),
                                                               photoUrl,
                                                               _aboutMeController
                                                                   .text,
@@ -680,7 +684,8 @@ class _EditProfileState extends State<EditProfile> {
                                                               photoUrl);
                                                           prefs.setString(
                                                               'birthdate',
-                                                              birthDate);
+                                                              selectedDate.year
+                                                                  .toString());
                                                           prefs.setString(
                                                               'aboutMe',
                                                               _aboutMeController
@@ -708,7 +713,8 @@ class _EditProfileState extends State<EditProfile> {
                                                                   .text,
                                                               _educationController
                                                                   .text,
-                                                              birthDate,
+                                                              selectedDate.year
+                                                                  .toString(),
                                                               photoUrl,
                                                               _aboutMeController
                                                                   .text,
@@ -741,7 +747,8 @@ class _EditProfileState extends State<EditProfile> {
                                                               photoUrl);
                                                           prefs.setString(
                                                               'birthdate',
-                                                              birthDate);
+                                                              selectedDate.year
+                                                                  .toString());
                                                           prefs.setString(
                                                               'aboutMe',
                                                               _aboutMeController
