@@ -1,18 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/UI/Pages/WatsonChatBot.dart';
 import 'package:flutter_app/UI/Pages/allStudent.dart';
 import 'package:flutter_app/UI/Pages/allTeacher.dart';
 import 'package:flutter_app/UI/Pages/profilePage.dart';
 import 'package:flutter_app/helpers/Heplers.dart';
 import 'package:flutter_app/quranList.dart';
-import 'package:flutter_app/sevices/studentManagment.dart';
-import 'package:flutter_app/sevices/teacherManagement.dart';
 import 'package:flutter_app/speed%20radial/speed_dial.dart';
 import 'package:flutter_app/speed%20radial/speed_dial_child.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
+
 
 
 class AllQuran extends StatefulWidget {
@@ -24,7 +19,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> gKey = new GlobalKey<ScaffoldState>();
 
   int pageNumber = 0;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+//  final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void initState() {
@@ -93,20 +88,20 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
             },
           ),
           /* Edit By Gehad Adelaziz 4/3/2019 1:20 pm*/
-          Container(
-              height: 70.0,
-              color: Colors.black.withOpacity(0.7),
-            child: Column(
-              children: <Widget>[
-                // Edit By Gehad Adelaziz 13/4/2019 3:14 pm
-                ListTile(
-                  leading:Text(" سوره البقرة ",style: TextStyle(color: Colors.white,fontSize: 20.0),),
-                  title: Center(child: Text("$pageNumber",style: TextStyle(color: Colors.white,fontSize: 20.0),)),
-                  trailing: Text(" الجزء الاول",style: TextStyle(color: Colors.white,fontSize: 20.0),),
-                ),
-              ],
-            ),
-          ),
+//          Container(
+//              height: 70.0,
+//              color: Colors.black.withOpacity(0.7),
+//            child: Column(
+//              children: <Widget>[
+//                // Edit By Gehad Adelaziz 13/4/2019 3:14 pm
+//                ListTile(
+//                  leading:Text(" سوره البقرة ",style: TextStyle(color: Colors.white,fontSize: 20.0),),
+//                  title: Center(child: Text("$pageNumber",style: TextStyle(color: Colors.white,fontSize: 20.0),)),
+//                  trailing: Text(" الجزء الاول",style: TextStyle(color: Colors.white,fontSize: 20.0),),
+//                ),
+//              ],
+//            ),
+//          ),
         ],
       ),
       floatingActionButton: SpeedDial(
@@ -116,10 +111,6 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
         marginBottom: 20,
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22.0),
-        // this is ignored if animatedIcon is non null
-        // child: Icon(Icons.add),
-        //  visible: _dialVisible,
-
         curve: Curves.bounceIn,
         overlayColor: Colors.black,
         overlayOpacity: 0.5,
@@ -146,11 +137,11 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
               onPressed: () {
                 },
             ),
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.green,
             label: 'All Teachers',),
           SpeedDialChild(
             child: InkWell(
-              child: Icon(Icons.person),
+              child: Icon(Icons.chat),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => GetAllStudent()));
               },
@@ -174,37 +165,37 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
           ),
           SpeedDialChild(
             child: InkWell(
+              child: Icon(Icons.chat),
+              onTap: () {
+                Helper help = new Helper();
+//                help.loggedin();
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => FriendlychatApp()));
+              },
+            ),
+            backgroundColor: Colors.green,
+            label: 'Chat-Bot',
+            //    labelStyle: TextTheme(fontSize: 18.0),
+            onTap: () => print('THIRD CHILD'),
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.keyboard_voice),
+            backgroundColor: Colors.green,
+            label: 'Voice Search',
+            //    labelStyle: TextTheme(fontSize: 18.0),
+            onTap: () => print('THIRD CHILD'),
+          ),
+          SpeedDialChild(
+            child: InkWell(
               child: Icon(Icons.exit_to_app),
               onTap: () {
                 _logOut();
-                },
+              },
             ),
             backgroundColor: Colors.green,
             label: 'LogOut',
             //    labelStyle: TextTheme(fontSize: 18.0),
             onTap: () => print('THIRD CHILD'),
           ),
-          SpeedDialChild(
-            child: InkWell(
-              child: Icon(Icons.bubble_chart),
-              onTap: () {
-                Helper help = new Helper();
-                help.loggedin();
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => FriendlychatApp()));
-              },
-            ),
-            backgroundColor: Colors.green,
-            label: 'Chat Bot',
-            //    labelStyle: TextTheme(fontSize: 18.0),
-            onTap: () => print('THIRD CHILD'),
-          ),
-          /*SpeedDialChild(
-            child: Icon(Icons.keyboard_voice),
-            backgroundColor: Colors.green,
-            label: 'Third',
-            //    labelStyle: TextTheme(fontSize: 18.0),
-            onTap: () => print('THIRD CHILD'),
-          ),*/
         ],
       ),
     );
@@ -215,6 +206,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
       Navigator.of(context).pushNamedAndRemoveUntil("/login", ModalRoute.withName("/home"));
     });
   }
+
 /*  Future<void> handleSignOut() async {
     FirebaseAuth.instance.signOut();
     FirebaseUser user = FirebaseAuth.instance.currentUser();
