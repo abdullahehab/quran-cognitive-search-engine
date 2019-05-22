@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Tools/const.dart';
+import 'package:flutter_app/UI/Pages/UserDetails.dart';
+import 'package:flutter_app/UI/Pages/viewUserProfile.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
-import 'package:flutter_app/UI/Test.dart';
 import 'package:flutter_app/sevices/studentManagment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,7 +14,7 @@ class GetAllStudent extends StatefulWidget {
 
 class _GetAllStudentState extends State<GetAllStudent> {
   Widget appBarTitle = new Text(
-    "All Teacher",
+    "All Student",
     style: new TextStyle(color: Colors.white),
   );
   Icon actionIcon = new Icon(
@@ -24,11 +26,12 @@ class _GetAllStudentState extends State<GetAllStudent> {
   final TextEditingController _searchQuery = new TextEditingController();
   SharedPreferences prefs;
   QuerySnapshot students;
+  QuerySnapshot searchResult;
   String nickname = '';
   String photoUrl = '';
+  String birthDate = '';
   bool _isSearching;
   String _searchText = "";
-
   List _searchResult = [];
   List _userDetails = [];
 
@@ -60,6 +63,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
     prefs = await SharedPreferences.getInstance();
     nickname = prefs.getString('nickname') ?? '';
     photoUrl = prefs.getString('photoUrl') ?? '';
+    birthDate = prefs.getString('birthdate') ?? '';
     // Force refresh input
     setState(() {});
   }
@@ -75,6 +79,8 @@ class _GetAllStudentState extends State<GetAllStudent> {
       setState(() {
         for (int i = 0; i < students.documents.length; i++) {
           _userDetails.add(students.documents[i].data);
+          final user = UserDetails();
+
         }
       });
     });
@@ -188,7 +194,8 @@ class _GetAllStudentState extends State<GetAllStudent> {
                           _searchResult[i]['photoUrl'],
                           _searchResult[i]['type'],
                           _searchResult[i]['education'],
-                          students.documents[i]),
+                          _searchResult[i],
+                          _userDetails[i]['birth']),
                       SizedBox(
                         height: 12.0,
                       ),
@@ -216,7 +223,8 @@ class _GetAllStudentState extends State<GetAllStudent> {
                           students.documents[i].data['photoUrl'],
                           students.documents[i].data['type'],
                           students.documents[i].data['education'],
-                          students.documents[i]),
+                          students.documents[i],
+                          _userDetails[i]['birth'],),
                       SizedBox(
                         height: 12.0,
                       ),
@@ -227,19 +235,29 @@ class _GetAllStudentState extends State<GetAllStudent> {
             );
           });
     } else {
-      return Center(child: Text('loading data'));
+      return Center(
+        child: Container(
+          child: CircularProgressIndicator(
+            strokeWidth: 2.0,
+            valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+          ),
+          width: 90.0,
+          height: 90.0,
+          padding: EdgeInsets.all(20.0),
+        ),
+      );
     }
   }
 
-  Widget menuCard(String title, String imgPath, String type, String education,
-      DocumentSnapshot selected) {
+  Widget menuCard(String name, String imgPath, String type, String education,
+      var selected, String birthDate) {
     return Padding(
       padding: EdgeInsets.only(left: 10.0, right: 10.0),
       child: Material(
         borderRadius: BorderRadius.circular(7.0),
         elevation: 4.0,
         child: Container(
-          height: 125.0,
+          height: 150.0,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(7.0), color: Colors.white),
@@ -255,7 +273,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
                     //hena bya5od el path bta3 el-image wy7tha 3la el-4mal
                     image: DecorationImage(
                         image: NetworkImage(imgPath == null
-                            ? 'https://bit.ly/2UBROqC'
+                            ? 'https://bit.ly/2JLl7EM'
                             : imgPath),
                         fit: BoxFit.cover),
                     borderRadius: BorderRadius.circular(7.0)),
@@ -270,7 +288,7 @@ class _GetAllStudentState extends State<GetAllStudent> {
                     height: 15.0,
                   ),
                   Text(
-                    title,
+                    name,
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
@@ -291,30 +309,56 @@ class _GetAllStudentState extends State<GetAllStudent> {
                     height: 10.0,
                   ),
                   Row(
-                    children: <Widget>[
-                      Text(education),
-                    ],
+                    children: <Widget>[Text('${type}')],
                   ),
                   SizedBox(
                     height: 7.0,
                   ),
                   Row(
                     children: <Widget>[
-                      InkWell(
-                        child: Text("show Profile"),
-                        onTap: () {
+                      FlatButton(
+                        shape: BeveledRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        color: Color(0xFFFA624F),
+                        onPressed: () {},
+                        child: Text(
+                          'Message',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                              color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      FlatButton(
+                        shape: BeveledRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        color: Colors.grey,
+                        onPressed: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (builder) => Test(
+                                  builder: (context) => ViewUserProfile(
                                         snapshot: selected,
+                                        birthDate: int.parse(birthDate),
                                       )));
                         },
-                      ),
+                        child: Text(
+                          'Profile',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                              color: Colors.white),
+                        ),
+                      )
                     ],
-                  ),
+                  )
                 ],
-              ),
+              )
             ],
           ),
         ),
