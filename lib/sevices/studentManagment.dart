@@ -23,7 +23,6 @@ class StudentManagement {
     DocumentReference ds =
         Firestore.instance.collection('/students').document(email);
     Map<String, dynamic> user = {
-//      'uid': user.uid,
       'name': name,
       'type': currentItemSelected,
       'birth': _birthDate,
@@ -76,26 +75,4 @@ class StudentManagement {
   getAllStudent() async {
     return await Firestore.instance.collection('/students').getDocuments();
   }
-  /*getAllStudent() async {
-    return await Firestore.instance.collection('students').snapshots();
-  }
-  SharedPreferences prefs;
-  updateStudent(selectedDoc, String name, String email, context) {
-    Firestore.instance
-        .collection('students')
-        .document(selectedDoc)
-        .updateData({'name': name, 'email': email}).then((data) async {
-      print(name);
-      print(email);
-      prefs.setString('nickname', name);
-      prefs.setString('email', email);
-
-      Toast.show('Update success', context,
-          duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
-        //.catchError((e) {
-        //print(e);
-    }).catchError((e) {
-      print(e);
-    });
-  }*/
 }
