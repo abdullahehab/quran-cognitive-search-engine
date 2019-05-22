@@ -19,18 +19,9 @@ class SharedPrefs {
       igaza,
       university) async {
     prefs = await SharedPreferences.getInstance();
-    prefs.setString('id', user.uid);
-    prefs.setString(
-        'nickname', user.displayName == null ? name : user.displayName);
-    print(user.displayName);
-    print(name);
+    prefs.setString('nickname', name);
     prefs.setString('email', user.email);
-    print(user.email);
-    prefs.setString(
-        'photourl',
-        user.photoUrl == null
-            ? photoUrl == null ? null : photoUrl
-            : user.photoUrl);
+    prefs.setString('photoUrl', photoUrl);
     prefs.setString(
         "userType", currentItemSelected == null ? null : currentItemSelected);
     prefs.setString('birthdate', birthdate == null ? null : birthdate);
