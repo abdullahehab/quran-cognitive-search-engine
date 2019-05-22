@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 final FirebaseAuth _auth = FirebaseAuth.instance;
 class Helper {
 
-  loggedin() {
+  isLoggedIn() {
     if (_auth.currentUser() == null) {
-      print('no user');
+      return true;
     }else
-      print ('user here');
+      return false;
   }
 }
