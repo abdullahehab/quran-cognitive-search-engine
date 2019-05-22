@@ -34,7 +34,7 @@ class _SinhUpState extends State<SinhUp> {
   final String gender = '';
   final String igaza = '';
   final String university = '';
-  String photoUrl = '';
+  final String photoUrl = '';
   bool _validate = false;
 
   @override
@@ -506,7 +506,11 @@ class _SinhUpState extends State<SinhUp> {
         }
       }).catchError((e) {
         closeProgressDialog(context);
-        showSnackBar(e.toString(), _scafoldKey);
+        if (e.toString().contains("ERROR_EMAIL_ALREADY_IN_USE")) {
+          showSnackBar('ERROR EMAIL ALREADY EXIST'.toLowerCase(), _scafoldKey);
+        } else {
+          showSnackBar(e.toString(), _scafoldKey);
+        }
         print(e);
       });
 
