@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_app/UI/Pages/quran.dart';
+import 'package:QCSE/UI/Pages/quran.dart';
+import 'package:QCSE/UI/QuranWidgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_app/UI/Pages/speechToText.dart';
-import 'package:flutter_app/UI/QuranWidgets.dart';
 import 'package:http/http.dart';
 import 'package:medcorder_audio/medcorder_audio.dart';
 import 'package:dio/dio.dart';

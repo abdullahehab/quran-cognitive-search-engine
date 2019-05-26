@@ -1,7 +1,6 @@
+import 'package:QCSE/UI/QuranWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_app/UI/QuranWidgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 class StudentManagement {

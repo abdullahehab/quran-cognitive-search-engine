@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'package:QCSE/UI/Login_SignUp/loginpage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/UI/Login_SignUp/loginpage.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

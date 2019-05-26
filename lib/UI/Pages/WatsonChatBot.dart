@@ -1,7 +1,6 @@
 import 'dart:convert';
-
+import 'package:QCSE/UI/Pages/quran.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/UI/Pages/quran.dart';
 import 'package:http/http.dart';
 import 'package:watson_assistant/watson_assistant.dart';
 

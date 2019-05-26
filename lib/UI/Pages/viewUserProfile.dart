@@ -1,8 +1,8 @@
+import 'package:QCSE/Tools/const.dart';
+import 'package:QCSE/UI/Pages/allStudent.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/Tools/const.dart';
-import 'package:flutter_app/UI/Pages/allStudent.dart';
 
 class ViewUserProfile extends StatelessWidget {
   ViewUserProfile({Key key, @required this.snapshot, this.birthDate, this.user})

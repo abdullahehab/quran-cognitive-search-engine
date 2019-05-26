@@ -1,10 +1,10 @@
+import 'package:QCSE/Tools/progress_dialog.dart';
+import 'package:QCSE/Tools/snackBar.dart';
+import 'package:QCSE/sevices/Shared.dart';
+import 'package:QCSE/sevices/studentManagment.dart';
+import 'package:QCSE/sevices/teacherManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_app/Tools/progress_dialog.dart';
-import 'package:flutter_app/Tools/snackBar.dart';
-import 'package:flutter_app/sevices/Shared.dart';
-import 'package:flutter_app/sevices/studentManagment.dart';
-import 'package:flutter_app/sevices/teacherManagement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SinhUp extends StatefulWidget {

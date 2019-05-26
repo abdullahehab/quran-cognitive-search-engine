@@ -1,13 +1,12 @@
+import 'package:QCSE/UI/Pages/allStudent.dart';
+import 'package:QCSE/UI/Pages/allTeacher.dart';
+import 'package:QCSE/UI/Pages/profilePage.dart';
+import 'package:QCSE/helpers/Heplers.dart';
+import 'package:QCSE/quranList.dart';
+import 'package:QCSE/speed%20radial/speed_dial.dart';
+import 'package:QCSE/speed%20radial/speed_dial_child.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/UI/Pages/allStudent.dart';
-import 'package:flutter_app/UI/Pages/allTeacher.dart';
-import 'package:flutter_app/UI/Pages/profilePage.dart';
-import 'package:flutter_app/helpers/Heplers.dart';
-import 'package:flutter_app/quranList.dart';
-import 'package:flutter_app/sevices/QuranBookMark.dart';
-import 'package:flutter_app/speed%20radial/speed_dial.dart';
-import 'package:flutter_app/speed%20radial/speed_dial_child.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AllQuran extends StatefulWidget {

@@ -1,7 +1,7 @@
+import 'package:QCSE/Tools/const.dart';
+import 'package:QCSE/UI/Pages/editProfile.dart';
+import 'package:QCSE/UI/QuranWidgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/Tools/const.dart';
-import 'package:flutter_app/UI/Pages/editProfile.dart';
-import 'package:flutter_app/UI/QuranWidgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

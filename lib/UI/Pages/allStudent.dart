@@ -1,11 +1,11 @@
+import 'package:QCSE/Tools/const.dart';
+import 'package:QCSE/UI/Pages/ChatPage.dart';
+import 'package:QCSE/UI/Pages/UserDetails.dart';
+import 'package:QCSE/UI/Pages/viewUserProfile.dart';
+import 'package:QCSE/UI/QuranWidgets.dart';
+import 'package:QCSE/sevices/studentManagment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/Tools/const.dart';
-import 'package:flutter_app/UI/Pages/ChatPage.dart';
-import 'package:flutter_app/UI/Pages/UserDetails.dart';
-import 'package:flutter_app/UI/Pages/viewUserProfile.dart';
-import 'package:flutter_app/UI/QuranWidgets.dart';
-import 'package:flutter_app/sevices/studentManagment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetAllStudent extends StatefulWidget {
