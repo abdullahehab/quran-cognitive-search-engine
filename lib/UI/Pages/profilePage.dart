@@ -4,6 +4,7 @@ import 'package:flutter_app/UI/Pages/editProfile.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -22,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String stuEducation = '';
   String numOfReading = '';
   String numOfParts = '';
-  String gender ='';
+  String gender = '';
   String igaza = '';
   String university = '';
   var date = new DateTime.now().year;
@@ -96,30 +97,33 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      photoUrl != '' ? Material(
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => Container(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.0,
-                              valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-
-                            ),
-                            width: 90.0,
-                            height: 90.0,
-                            padding: EdgeInsets.all(20.0),
-                          ),
-                          imageUrl: photoUrl,
-                          width: 100.0,
-                          height: 100.0,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                        clipBehavior: Clip.hardEdge,
-                      ):
-                       CircleAvatar(
-                         backgroundImage: AssetImage('images/man.png'),
-                         radius: 50.0,
-                       )
+                      photoUrl != ''
+                          ? Material(
+                              child: CachedNetworkImage(
+                                placeholder: (context, url) => Container(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.0,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                themeColor),
+                                      ),
+                                      width: 90.0,
+                                      height: 90.0,
+                                      padding: EdgeInsets.all(20.0),
+                                    ),
+                                imageUrl: photoUrl,
+                                width: 100.0,
+                                height: 100.0,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(45.0)),
+                              clipBehavior: Clip.hardEdge,
+                            )
+                          : CircleAvatar(
+                              backgroundImage: AssetImage('images/man.png'),
+                              radius: 50.0,
+                            )
                     ],
                   ),
                 ),
@@ -163,13 +167,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: TabBarView(
                         children: [
                           new ListView(
-                            children: basicInfo(birthDate, aboutMe, date, gender),
+                            children:
+                                basicInfo(birthDate, aboutMe, date, gender),
                           ),
                           new ListView(
-                            children: education(stuEducation, university, numOfParts, numOfReading, type, igaza),
+                            children: education(stuEducation, university,
+                                numOfParts, numOfReading, type, igaza),
                           ),
                           Center(child: Text('Education here')),
-                        //  Center(child: Text('Experience here')),
+                          //  Center(child: Text('Experience here')),
                         ],
                       ))
                 ],
@@ -180,384 +186,390 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-List<Widget> basicInfo(String birthDate, String aboutMe, var date, String gender) => <Widget>[
-  Column(
-    children: <Widget>
-    [
-      SingleChildScrollView(
-        child: Column
-          (
-            children: <Widget>[
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 3.0,
-                  shape: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide(color: Colors.white)),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Column(
+List<Widget> basicInfo(
+        String birthDate, String aboutMe, var date, String gender) =>
+    <Widget>[
+      Column(
+        children: <Widget>[
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 3.0,
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: Colors.white)),
+                      color: Colors.white,
+                      child: Column(
                         children: <Widget>[
-                          const ListTile(
-                            subtitle: Text(
-                              'Personal Info.',
-                              style: TextStyle(fontSize: 25.0),
-                            ),
-                          ),
-                          Row(
+                          Column(
                             children: <Widget>[
+                              const ListTile(
+                                subtitle: Text(
+                                  'Personal Info.',
+                                  style: TextStyle(fontSize: 25.0),
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 19.0),
+                                    child: Text(
+                                      birthDate == null ? "Age : $birthDate" :
+                                      "Age: ${date - int.parse(birthDate)}",
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 30.0,
+                                  ),
+                                  Text(
+                                    "Gender: $gender",
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 15.0,
+                              ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 19.0),
-                                child: Text(
-                                  "Age: ${birthDate}",
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold),
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 19.0),
+                                      child: Text(
+                                        "Nationality: Egyption",
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 3.0,
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: Colors.white)),
+                      color: Colors.white,
+                      child: Column(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              const ListTile(
+                                subtitle: Text(
+                                  'About Me',
+                                  style: TextStyle(fontSize: 25.0),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 19.0),
+                                      child: Text(
+                                        "$aboutMe",
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      )
+    ];
+
+List<Widget> education(String education, String university, String numOfParts,
+        String numOfReading, String userType, String igaza) =>
+    <Widget>[
+      Column(
+        children: <Widget>[
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 3.0,
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: Colors.white)),
+                      color: Colors.white,
+                      child: Column(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              const ListTile(
+                                subtitle: Text(
+                                  "Academic Education",
+                                  style: TextStyle(fontSize: 22.0),
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 25.0),
+                                    child: Icon(Icons.school),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Text(
+                                      "$university University",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 22.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 65.0, top: 3.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "$education",
+                                      style: TextStyle(
+                                          fontSize: 18.0, color: Colors.blue),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 65.0, top: 3.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "$university",
+                                      style: TextStyle(fontSize: 18.0),
+                                    )
+                                  ],
                                 ),
                               ),
                               SizedBox(
-                                width: 30.0,
+                                height: 30.0,
                               ),
-                              Text(
-                                "Gender: $gender",
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 15.0,),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child:
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 19.0),
-                                  child: Text(
-                                    "Nationality: 23 Years Old",
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold),
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 25.0),
+                                    child: Icon(Icons.school),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 3.0,
-                  shape: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide(color: Colors.white)),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          const ListTile(
-                            subtitle: Text(
-                              'About Me',
-                              style: TextStyle(fontSize: 25.0),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child:
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 19.0),
-                                  child: Text(
-                                    "$aboutMe",
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Text(
+                                      "Number Of Reading : $numOfReading",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 22.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 65.0, top: 3.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "Number Of Parts : $numOfParts",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 22.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 65.0, top: 3.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    userType == "Teacher"
+                                        ? Text(
+                                            "Igaza : $igaza",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 22.0,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        : Container()
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ],
-  )
-];
-
-
-List<Widget> education(String education, String university, String numOfParts, String numOfReading, String userType, String igaza) => <Widget>[
-  Column(
-    children: <Widget>[
-      SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 3.0,
-                  shape: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide(color: Colors.white)),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Column(
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 3.0,
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: Colors.white)),
+                      color: Colors.white,
+                      child: Column(
                         children: <Widget>[
-                          const ListTile(
-                            subtitle: Text(
-                              "Academic Education",
-                              style: TextStyle(fontSize: 22.0),
-                            ),
-                          ),
-                          Row(
+                          Column(
                             children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25.0),
-                                child: Icon(Icons.school),
+                              const ListTile(
+                                subtitle: Text(
+                                  "Cources & Workshops",
+                                  style: TextStyle(fontSize: 22.0),
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 25.0),
+                                    child: Icon(Icons.school),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Text(
+                                      "English School",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 22.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 15.0),
-                                child: Text(
-                                  "$university University",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22.0,
-                                      fontWeight: FontWeight.bold),
+                                padding:
+                                    const EdgeInsets.only(left: 65.0, top: 3.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "Thanawya amma (Egyption)",
+                                      style: TextStyle(
+                                          fontSize: 18.0, color: Colors.blue),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 65.0, top: 3.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "High Graduation School",
+                                      style: TextStyle(fontSize: 18.0),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 25.0),
+                                    child: Icon(Icons.school),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Text(
+                                      "Helwan University",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 22.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 65.0, top: 3.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "Fine Arts- Decor Department",
+                                      style: TextStyle(
+                                          fontSize: 18.0, color: Colors.blue),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 65.0, top: 3.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    userType == "Teacher"
+                                        ? Text(
+                                            "Igaza $igaza",
+                                            style: TextStyle(fontSize: 18.0),
+                                          )
+                                        : Container()
+                                  ],
                                 ),
                               ),
                             ],
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 65.0, top: 3.0),
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  "$education",
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.blue),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 65.0, top: 3.0),
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  "$university",
-                                  style: TextStyle(fontSize: 18.0),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25.0),
-                                child: Icon(Icons.school),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15.0),
-                                child: Text(
-                                  "Number Of Reading : $numOfReading",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 65.0, top: 3.0),
-                            child: Row(
-                              children: <Widget>[
-                                 Text(
-                                "Number Of Parts : $numOfParts",
-                                style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 22.0,
-                                fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 65.0, top: 3.0),
-                            child: Row(
-                              children: <Widget>[
-                                userType == "Teacher" ?
-Text(
-"Igaza : $igaza",
-style: TextStyle(
-color: Colors.black,
-fontSize: 22.0,
-fontWeight: FontWeight.bold),
-): Container()
-                              ],
-                            ),
-                          ),
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                )
+              ],
             ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 3.0,
-                  shape: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide(color: Colors.white)),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          const ListTile(
-                            subtitle: Text(
-                              "Cources & Workshops",
-                              style: TextStyle(fontSize: 22.0),
-                            ),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25.0),
-                                child: Icon(Icons.school),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15.0),
-                                child: Text(
-                                  "English School",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 65.0, top: 3.0),
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  "Thanawya amma (Egyption)",
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.blue),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 65.0, top: 3.0),
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  "High Graduation School",
-                                  style: TextStyle(fontSize: 18.0),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25.0),
-                                child: Icon(Icons.school),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15.0),
-                                child: Text(
-                                  "Helwan University",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 65.0, top: 3.0),
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  "Fine Arts- Decor Department",
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.blue),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 65.0, top: 3.0),
-                            child: Row(
-                              children: <Widget>[
-                                userType == "Teacher" ?
-                                Text(
-                                  "Igaza $igaza",
-                                  style: TextStyle(fontSize: 18.0),
-                                ): Container()
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    ],
-  )
-];
+          ),
+        ],
+      )
+    ];
 // Our top level main function
 //void main() => runApp(new ProfilePage());
 //end

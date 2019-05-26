@@ -285,7 +285,7 @@ class _EditProfileState extends State<EditProfile> {
                                                                               height: 90.0,
                                                                               padding: EdgeInsets.all(20.0),
                                                                             ),
-                                                                    imageUrl: photoUrl,
+                                                                    imageUrl: photoUrl == null ? "" : photoUrl,
                                                                     width: 90.0,
                                                                     height:
                                                                         90.0,
@@ -859,7 +859,7 @@ class GeneralButton extends StatelessWidget {
 }
 
 class TextFromField extends StatelessWidget {
-  TextFromField(this.name, this.icon, this.inputType, this.controller,
+  TextFromField(this.name, this.icon, this.inputType, this. controller,
       this.inputValue, this.focusNode);
 
   String name;

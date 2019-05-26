@@ -411,7 +411,7 @@ class _SinhUpState extends State<SinhUp> {
                                                       borderRadius: BorderRadius.circular(30.0)),
                                                   child: FlatButton(
                                                     child: Text(
-                                                      "Login",
+                                                      "Sign Up",
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 22.0,

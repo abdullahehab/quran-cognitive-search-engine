@@ -571,6 +571,10 @@ class _logInPageState extends State<logInPage>
         showSnackBar("User Not Found", _scafoldKey);
       } else if (e.toString().contains("ERROR_WRONG_PASSWORD")) {
         showSnackBar("The password is invalid", _scafoldKey);
+      }else if (e.toString().contains("ERROR_INVALID_EMAIL")) {
+        showSnackBar("The email address is badly formatted", _scafoldKey);
+      }else if (e.toString().contains("ERROR_NETWORK_REQUEST_FAILED")) {
+        showSnackBar("Network error", _scafoldKey);
       } else {
         showSnackBar(e.toString(), _scafoldKey);
         print(e);

@@ -16,6 +16,7 @@ class ViewUserProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      debugShowCheckedModeBanner: false,
         theme: ThemeData(brightness: Brightness.light),
         home: Scaffold(body: _viewProfile(context, snapshot, birthDate, now)));
   }

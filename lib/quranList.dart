@@ -1,7 +1,7 @@
 List quran_imgs = [
 "1.png",
 "2.png",
-"3.jpg",
+"3.png",
 "4.jpg",
 "5.jpg",
 "6.jpg",

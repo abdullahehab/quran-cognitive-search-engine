@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Tools/const.dart';
+import 'package:flutter_app/UI/Pages/ChatPage.dart';
 import 'package:flutter_app/UI/Pages/UserDetails.dart';
 import 'package:flutter_app/UI/Pages/viewUserProfile.dart';
 import 'package:flutter_app/UI/QuranWidgets.dart';
@@ -321,7 +322,9 @@ class _GetAllStudentState extends State<GetAllStudent> {
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                         color: Color(0xFFFA624F),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(name, imgPath)));
+                        },
                         child: Text(
                           'Message',
                           style: TextStyle(
