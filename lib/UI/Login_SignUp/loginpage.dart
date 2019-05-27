@@ -428,7 +428,7 @@ class _logInPageState extends State<logInPage>
                                                                 return;
                                                               }
                                                               displayProgressDialog(
-                                                                  context);
+                                                                  context, "Loading Insha'llah");
                                                               logIn();
                                                             },
                                                           )),

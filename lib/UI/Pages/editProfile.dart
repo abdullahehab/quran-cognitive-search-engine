@@ -222,569 +222,567 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          key: _scafoldKey,
-          body: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              new Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(
-                          'images/test.jpeg',
-                        ),
-                        fit: BoxFit.fill)),
-                child: Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                      colors: [
-                        Color.fromRGBO(0, 0, 0, 0.0),
-                        Color.fromRGBO(0, 0, 0, 0.3)
-                      ],
-                      begin: FractionalOffset.topCenter,
-                      end: FractionalOffset.bottomCenter,
-                    )),
-                    child: SingleChildScrollView(
-                      child: Stack(
-                        //alignment: AlignmentDirectional.bottomCenter,
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                //alignment: AlignmentDirectional.topCenter,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Form(
-                                        key: _keyForm,
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10.0, vertical: 16.0),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Container(
-                                                child: Center(
-                                                  child: Stack(
-                                                    children: <Widget>[
-                                                      (avatarImageFile == null)
-                                                          ? (photoUrl != ''
-                                                              ? Material(
-                                                                  child:
-                                                                      CachedNetworkImage(
-                                                                    placeholder:
-                                                                        (context,
-                                                                                url) =>
-                                                                            Container(
-                                                                              child: CircularProgressIndicator(
-                                                                                strokeWidth: 2.0,
-                                                                                valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-                                                                              ),
-                                                                              width: 90.0,
-                                                                              height: 90.0,
-                                                                              padding: EdgeInsets.all(20.0),
-                                                                            ),
-                                                                    imageUrl: photoUrl == null ? "" : photoUrl,
-                                                                    width: 90.0,
-                                                                    height:
-                                                                        90.0,
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  ),
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              45.0)),
-                                                                  clipBehavior:
-                                                                      Clip.hardEdge,
-                                                                )
-                                                              : Icon(
-                                                                  Icons
-                                                                      .account_circle,
-                                                                  size: 90.0,
-                                                                  color:
-                                                                      greyColor,
-                                                                ))
-                                                          : Material(
-                                                              child: Image.file(
-                                                                avatarImageFile,
-                                                                width: 90.0,
-                                                                height: 90.0,
-                                                                fit: BoxFit
-                                                                    .cover,
+    return Scaffold(
+        key: _scafoldKey,
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            new Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                        'images/test.jpeg',
+                      ),
+                      fit: BoxFit.fill)),
+              child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromRGBO(0, 0, 0, 0.0),
+                          Color.fromRGBO(0, 0, 0, 0.3)
+                        ],
+                        begin: FractionalOffset.topCenter,
+                        end: FractionalOffset.bottomCenter,
+                      )),
+                  child: SingleChildScrollView(
+                    child: Stack(
+                      //alignment: AlignmentDirectional.bottomCenter,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              //alignment: AlignmentDirectional.topCenter,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    Form(
+                                      key: _keyForm,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10.0, vertical: 16.0),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Container(
+                                              child: Center(
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    (avatarImageFile == null)
+                                                        ? (photoUrl != ''
+                                                        ? Material(
+                                                      child:
+                                                      CachedNetworkImage(
+                                                        placeholder:
+                                                            (context,
+                                                            url) =>
+                                                            Container(
+                                                              child: CircularProgressIndicator(
+                                                                strokeWidth: 2.0,
+                                                                valueColor: AlwaysStoppedAnimation<Color>(themeColor),
                                                               ),
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          45.0)),
-                                                              clipBehavior:
-                                                                  Clip.hardEdge,
+                                                              width: 90.0,
+                                                              height: 90.0,
+                                                              padding: EdgeInsets.all(20.0),
                                                             ),
-                                                      IconButton(
-                                                        icon: Icon(
-                                                          Icons.camera_alt,
-                                                          color: primaryColor
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                        onPressed: getImage,
-                                                        padding: EdgeInsets.all(
-                                                            30.0),
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        highlightColor:
-                                                            greyColor,
-                                                        iconSize: 30.0,
+                                                        imageUrl: photoUrl == null ? "" : photoUrl,
+                                                        width: 90.0,
+                                                        height:
+                                                        90.0,
+                                                        fit: BoxFit
+                                                            .cover,
                                                       ),
-                                                    ],
-                                                  ),
+                                                      borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              45.0)),
+                                                      clipBehavior:
+                                                      Clip.hardEdge,
+                                                    )
+                                                        : Icon(
+                                                      Icons
+                                                          .account_circle,
+                                                      size: 90.0,
+                                                      color:
+                                                      greyColor,
+                                                    ))
+                                                        : Material(
+                                                      child: Image.file(
+                                                        avatarImageFile,
+                                                        width: 90.0,
+                                                        height: 90.0,
+                                                        fit: BoxFit
+                                                            .cover,
+                                                      ),
+                                                      borderRadius: BorderRadius
+                                                          .all(Radius
+                                                          .circular(
+                                                          45.0)),
+                                                      clipBehavior:
+                                                      Clip.hardEdge,
+                                                    ),
+                                                    IconButton(
+                                                      icon: Icon(
+                                                        Icons.camera_alt,
+                                                        color: primaryColor
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                      onPressed: getImage,
+                                                      padding: EdgeInsets.all(
+                                                          30.0),
+                                                      splashColor:
+                                                      Colors.transparent,
+                                                      highlightColor:
+                                                      greyColor,
+                                                      iconSize: 30.0,
+                                                    ),
+                                                  ],
                                                 ),
-                                                width: double.infinity,
-                                                margin: EdgeInsets.all(20.0),
                                               ),
-                                              SizedBox(
-                                                height: 8.0,
+                                              width: double.infinity,
+                                              margin: EdgeInsets.all(20.0),
+                                            ),
+                                            SizedBox(
+                                              height: 8.0,
+                                            ),
+                                            //Name Text Form Filed
+                                            TextFromField(
+                                                'Enter your Name',
+                                                nameIcon,
+                                                TextInputType.text,
+                                                _nameController,
+                                                nickname,
+                                                focusNodeName),
+                                            SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            TextFromField(
+                                                'job title',
+                                                icon,
+                                                TextInputType.text,
+                                                _jobTitleController,
+                                                jobTitle,
+                                                focusNodeJobTitle),
+                                            SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            // Number OF Reading Text For Filed
+                                            TextFromField(
+                                                'Number Of Reading',
+                                                numOfReadingIcon,
+                                                TextInputType.number,
+                                                _numOfReadingController,
+                                                numOfReading,
+                                                focusNodeNumOfReading),
+                                            SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            // Number OF Parts Text Form Field
+                                            TextFromField(
+                                                'Number Of Parts',
+                                                numOfPartIcons,
+                                                TextInputType.number,
+                                                _numOfPartsController,
+                                                numOfParts,
+                                                focusNodenumOfParts),
+                                            SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            TextFromField(
+                                                'University',
+                                                universityIcon,
+                                                TextInputType.text,
+                                                _universityController,
+                                                university,
+                                                focusNodeUniversity),
+                                            SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            // Education Text Form Field
+                                            TextFromField(
+                                                'Department',
+                                                educationIcon,
+                                                TextInputType.text,
+                                                _educationController,
+                                                stuEducation,
+                                                focusNodeEducation),
+                                            SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            TextFromField(
+                                                'About Me',
+                                                aboutMeIcon,
+                                                TextInputType.text,
+                                                _aboutMeController,
+                                                aboutMe,
+                                                focusNodeAboutMe),
+                                            SizedBox(
+                                              height: 15.0,
+                                            ),
+                                            ListTile(
+                                              title: Text(
+                                                birthDate ?? 'test',
+                                                style: TextStyle(
+                                                    color: Colors.white),
                                               ),
-                                              //Name Text Form Filed
-                                              TextFromField(
-                                                  'Enter your Name',
-                                                  nameIcon,
-                                                  TextInputType.text,
-                                                  _nameController,
-                                                  nickname,
-                                                  focusNodeName),
-                                              SizedBox(
-                                                height: 15.0,
-                                              ),
-                                              TextFromField(
-                                                  'job title',
-                                                  icon,
-                                                  TextInputType.text,
-                                                  _jobTitleController,
-                                                  jobTitle,
-                                                  focusNodeJobTitle),
-                                              SizedBox(
-                                                height: 15.0,
-                                              ),
-                                              // Number OF Reading Text For Filed
-                                              TextFromField(
-                                                  'Number Of Reading',
-                                                  numOfReadingIcon,
-                                                  TextInputType.number,
-                                                  _numOfReadingController,
-                                                  numOfReading,
-                                                  focusNodeNumOfReading),
-                                              SizedBox(
-                                                height: 15.0,
-                                              ),
-                                              // Number OF Parts Text Form Field
-                                              TextFromField(
-                                                  'Number Of Parts',
-                                                  numOfPartIcons,
-                                                  TextInputType.number,
-                                                  _numOfPartsController,
-                                                  numOfParts,
-                                                  focusNodenumOfParts),
-                                              SizedBox(
-                                                height: 15.0,
-                                              ),
-                                              TextFromField(
-                                                  'University',
-                                                  universityIcon,
-                                                  TextInputType.text,
-                                                  _universityController,
-                                                  university,
-                                                  focusNodeUniversity),
-                                              SizedBox(
-                                                height: 15.0,
-                                              ),
-                                              // Education Text Form Field
-                                              TextFromField(
-                                                  'Department',
-                                                  educationIcon,
-                                                  TextInputType.text,
-                                                  _educationController,
-                                                  stuEducation,
-                                                  focusNodeEducation),
-                                              SizedBox(
-                                                height: 15.0,
-                                              ),
-                                              TextFromField(
-                                                  'About Me',
-                                                  aboutMeIcon,
-                                                  TextInputType.text,
-                                                  _aboutMeController,
-                                                  aboutMe,
-                                                  focusNodeAboutMe),
-                                              SizedBox(
-                                                height: 15.0,
-                                              ),
-                                              ListTile(
-                                                title: Text(
-                                                  birthDate ?? 'test',
+                                              leading: RaisedButton(
+                                                color: Colors.transparent,
+                                                shape: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      10.0),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.teal),
+                                                ),
+                                                onPressed: () =>
+                                                    _selectDate(context),
+                                                child: Text(
+                                                  'Birthday',
                                                   style: TextStyle(
                                                       color: Colors.white),
                                                 ),
-                                                leading: RaisedButton(
-                                                  color: Colors.transparent,
-                                                  shape: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    borderSide: BorderSide(
-                                                        color: Colors.teal),
-                                                  ),
-                                                  onPressed: () =>
-                                                      _selectDate(context),
-                                                  child: Text(
-                                                    'Birthday',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
                                               ),
-                                              userType == 'Teacher'
-                                                  ? ListTile(
-                                                      title:
-                                                          DropdownButtonHideUnderline(
-                                                        child: DropdownButton<
-                                                            String>(
-                                                          style: TextStyle(
-                                                            color: Colors.teal,
-                                                            fontSize: 20.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                            ),
+                                            userType == 'Teacher'
+                                                ? ListTile(
+                                              title:
+                                              DropdownButtonHideUnderline(
+                                                child: DropdownButton<
+                                                    String>(
+                                                  style: TextStyle(
+                                                    color: Colors.teal,
+                                                    fontSize: 20.0,
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                  ),
+                                                  items: _currencies
+                                                      .map((String
+                                                  dropDownStringItem) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value:
+                                                      dropDownStringItem,
+                                                      child: new Row(
+                                                        children: <
+                                                            Widget>[
+                                                          Padding(
+                                                            padding: const EdgeInsets
+                                                                .only(
+                                                                right:
+                                                                30.0),
                                                           ),
-                                                          items: _currencies
-                                                              .map((String
-                                                                  dropDownStringItem) {
-                                                            return DropdownMenuItem<
-                                                                String>(
-                                                              value:
-                                                                  dropDownStringItem,
-                                                              child: new Row(
-                                                                children: <
-                                                                    Widget>[
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        right:
-                                                                            30.0),
-                                                                  ),
-                                                                  new Text(
-                                                                      dropDownStringItem),
-                                                                ],
-                                                              ),
-                                                            );
-                                                          }).toList(),
-                                                          onChanged: (String
-                                                              newValueSelected) {
-                                                            //your code to execute , when a menu item is selected from drop down
-                                                            _onDropDownItemSelected(
-                                                                newValueSelected);
-                                                          },
-                                                          value:
-                                                              _currentItemSelected,
-                                                        ),
-                                                      ),
-                                                      leading: RaisedButton(
-                                                        color:
-                                                            Colors.transparent,
-                                                        shape:
-                                                            OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0),
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  color: Colors
-                                                                      .teal),
-                                                        ),
-                                                        onPressed: () => {},
-                                                        child: Text(
-                                                          ' ايجازه ',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : Container(),
-                                              ListTile(
-                                                title:
-                                                    DropdownButtonHideUnderline(
-                                                  child: DropdownButton<String>(
-                                                    style: TextStyle(
-                                                      color: Colors.teal,
-                                                      fontSize: 20.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                    items: _currenciesGender
-                                                        .map((String
-                                                            dropDownStringItem) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value:
-                                                            dropDownStringItem,
-                                                        child: new Row(
-                                                          children: <Widget>[
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      right:
-                                                                          30.0),
-                                                            ),
-                                                            new Text(
-                                                                dropDownStringItem),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (String
-                                                        newValueSelected) {
-                                                      //your code to execute , when a menu item is selected from drop down
-                                                      _onDropDownItemSelectedGender(
-                                                          newValueSelected);
-                                                    },
-                                                    value:
-                                                        _currentItemSelectedGender,
-                                                  ),
-                                                ),
-                                                leading: RaisedButton(
-                                                  color: Colors.transparent,
-                                                  shape: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    borderSide: BorderSide(
-                                                        color: Colors.teal),
-                                                  ),
-                                                  onPressed: () => {},
-                                                  child: Text(
-                                                    ' Gender ',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10.0,
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 30.0, left: 30.0),
-                                                child: new Container(
-                                                    height: 55.0,
-                                                    width: 600.0,
-                                                    decoration: BoxDecoration(
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                              color: Colors
-                                                                  .black38,
-                                                              blurRadius: 15.0)
+                                                          new Text(
+                                                              dropDownStringItem),
                                                         ],
-                                                        gradient:
-                                                            LinearGradient(
-                                                                colors: [
-                                                              Colors.teal[400],
-                                                              Colors.teal[400]
-                                                            ]),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    30.0)),
-                                                    child: FlatButton(
-                                                      child: Text(
-                                                        "Update",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 22.0,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontFamily:
-                                                                "UbuntuBold"),
                                                       ),
-                                                      onPressed: () {
-                                                        print('selected date');
-                                                        print(
-                                                            selectedDate.year);
-                                                        print(
-                                                            'end selected date');
-                                                        if (_nameController
-                                                                    .text ==
-                                                                "" ||
-                                                            _jobTitleController
-                                                                    .text ==
-                                                                "" ||
-                                                            _numOfReadingController.text ==
-                                                                "" ||
-                                                            _numOfPartsController
-                                                                    .text ==
-                                                                "" ||
-                                                            _educationController
-                                                                    .text ==
-                                                                "" ||
-                                                            _aboutMeController
-                                                                    .text ==
-                                                                "" ||
-                                                            _universityController
-                                                                    .text ==
-                                                                "") {
-                                                          showSnackBar(
-                                                              "All Fields required",
-                                                              _scafoldKey);
-                                                        } else if (userType ==
-                                                            'Student') {
-                                                          student.updateStudentData(
-                                                              context,
-                                                              _nameController
-                                                                  .text,
-                                                              email,
-                                                              _jobTitleController
-                                                                  .text,
-                                                              _numOfReadingController
-                                                                  .text,
-                                                              _numOfPartsController
-                                                                  .text,
-                                                              _educationController
-                                                                  .text,
-                                                              selectedDate.year
-                                                                  .toString(),
-                                                              photoUrl,
-                                                              _aboutMeController
-                                                                  .text,
-                                                              _currentItemSelectedGender,
-                                                              _universityController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'nickname',
-                                                              _nameController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'jobTitle',
-                                                              _jobTitleController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'numOfReading',
-                                                              _numOfReadingController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'numOfParts',
-                                                              _numOfPartsController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'education',
-                                                              _educationController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'photoUrl',
-                                                              photoUrl);
-                                                          prefs.setString(
-                                                              'birthdate',
-                                                              selectedDate.year
-                                                                  .toString());
-                                                          prefs.setString(
-                                                              'aboutMe',
-                                                              _aboutMeController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'gender',
-                                                              _currentItemSelectedGender);
-                                                          prefs.setString(
-                                                              'university',
-                                                              _universityController
-                                                                  .text);
-                                                          readLocal();
-                                                        } else if (userType ==
-                                                            'Teacher') {
-                                                          teacher.updateTeacherData(
-                                                              context,
-                                                              _nameController
-                                                                  .text,
-                                                              email,
-                                                              _jobTitleController
-                                                                  .text,
-                                                              _numOfReadingController
-                                                                  .text,
-                                                              _numOfPartsController
-                                                                  .text,
-                                                              _educationController
-                                                                  .text,
-                                                              selectedDate.year
-                                                                  .toString(),
-                                                              photoUrl,
-                                                              _aboutMeController
-                                                                  .text,
-                                                              _currentItemSelectedGender,
-                                                              _currentItemSelected,
-                                                              _universityController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'nickname',
-                                                              _nameController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'jobTitle',
-                                                              _jobTitleController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'numOfReading',
-                                                              _numOfReadingController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'numOfParts',
-                                                              _numOfPartsController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'education',
-                                                              _educationController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'photoUrl',
-                                                              photoUrl);
-                                                          prefs.setString(
-                                                              'birthdate',
-                                                              selectedDate.year
-                                                                  .toString());
-                                                          prefs.setString(
-                                                              'aboutMe',
-                                                              _aboutMeController
-                                                                  .text);
-                                                          prefs.setString(
-                                                              'gender',
-                                                              _currentItemSelectedGender);
-                                                          prefs.setString(
-                                                              'igaza',
-                                                              _currentItemSelected);
-                                                          prefs.setString(
-                                                              'university',
-                                                              _universityController
-                                                                  .text);
-                                                          readLocal();
-                                                        }
-                                                      },
-                                                    )),
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (String
+                                                  newValueSelected) {
+                                                    //your code to execute , when a menu item is selected from drop down
+                                                    _onDropDownItemSelected(
+                                                        newValueSelected);
+                                                  },
+                                                  value:
+                                                  _currentItemSelected,
+                                                ),
                                               ),
-                                            ],
-                                          ),
+                                              leading: RaisedButton(
+                                                color:
+                                                Colors.transparent,
+                                                shape:
+                                                OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(
+                                                      10.0),
+                                                  borderSide:
+                                                  BorderSide(
+                                                      color: Colors
+                                                          .teal),
+                                                ),
+                                                onPressed: () => {},
+                                                child: Text(
+                                                  ' ايجازه ',
+                                                  style: TextStyle(
+                                                      color:
+                                                      Colors.white),
+                                                ),
+                                              ),
+                                            )
+                                                : Container(),
+                                            ListTile(
+                                              title:
+                                              DropdownButtonHideUnderline(
+                                                child: DropdownButton<String>(
+                                                  style: TextStyle(
+                                                    color: Colors.teal,
+                                                    fontSize: 20.0,
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                  ),
+                                                  items: _currenciesGender
+                                                      .map((String
+                                                  dropDownStringItem) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value:
+                                                      dropDownStringItem,
+                                                      child: new Row(
+                                                        children: <Widget>[
+                                                          Padding(
+                                                            padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right:
+                                                                30.0),
+                                                          ),
+                                                          new Text(
+                                                              dropDownStringItem),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (String
+                                                  newValueSelected) {
+                                                    //your code to execute , when a menu item is selected from drop down
+                                                    _onDropDownItemSelectedGender(
+                                                        newValueSelected);
+                                                  },
+                                                  value:
+                                                  _currentItemSelectedGender,
+                                                ),
+                                              ),
+                                              leading: RaisedButton(
+                                                color: Colors.transparent,
+                                                shape: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      10.0),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.teal),
+                                                ),
+                                                onPressed: () => {},
+                                                child: Text(
+                                                  ' Gender ',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 10.0,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 30.0, left: 30.0),
+                                              child: new Container(
+                                                  height: 55.0,
+                                                  width: 600.0,
+                                                  decoration: BoxDecoration(
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color: Colors
+                                                                .black38,
+                                                            blurRadius: 15.0)
+                                                      ],
+                                                      gradient:
+                                                      LinearGradient(
+                                                          colors: [
+                                                            Colors.teal[400],
+                                                            Colors.teal[400]
+                                                          ]),
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(
+                                                          30.0)),
+                                                  child: FlatButton(
+                                                    child: Text(
+                                                      "Update",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 22.0,
+                                                          fontWeight:
+                                                          FontWeight.w600,
+                                                          fontFamily:
+                                                          "UbuntuBold"),
+                                                    ),
+                                                    onPressed: () {
+                                                      print('selected date');
+                                                      print(
+                                                          selectedDate.year);
+                                                      print(
+                                                          'end selected date');
+                                                      if (_nameController
+                                                          .text ==
+                                                          "" ||
+                                                          _jobTitleController
+                                                              .text ==
+                                                              "" ||
+                                                          _numOfReadingController.text ==
+                                                              "" ||
+                                                          _numOfPartsController
+                                                              .text ==
+                                                              "" ||
+                                                          _educationController
+                                                              .text ==
+                                                              "" ||
+                                                          _aboutMeController
+                                                              .text ==
+                                                              "" ||
+                                                          _universityController
+                                                              .text ==
+                                                              "") {
+                                                        showSnackBar(
+                                                            "All Fields required",
+                                                            _scafoldKey);
+                                                      } else if (userType ==
+                                                          'Student') {
+                                                        student.updateStudentData(
+                                                            context,
+                                                            _nameController
+                                                                .text,
+                                                            email,
+                                                            _jobTitleController
+                                                                .text,
+                                                            _numOfReadingController
+                                                                .text,
+                                                            _numOfPartsController
+                                                                .text,
+                                                            _educationController
+                                                                .text,
+                                                            selectedDate.year
+                                                                .toString(),
+                                                            photoUrl,
+                                                            _aboutMeController
+                                                                .text,
+                                                            _currentItemSelectedGender,
+                                                            _universityController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'nickname',
+                                                            _nameController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'jobTitle',
+                                                            _jobTitleController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'numOfReading',
+                                                            _numOfReadingController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'numOfParts',
+                                                            _numOfPartsController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'education',
+                                                            _educationController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'photoUrl',
+                                                            photoUrl);
+                                                        prefs.setString(
+                                                            'birthdate',
+                                                            selectedDate.year
+                                                                .toString());
+                                                        prefs.setString(
+                                                            'aboutMe',
+                                                            _aboutMeController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'gender',
+                                                            _currentItemSelectedGender);
+                                                        prefs.setString(
+                                                            'university',
+                                                            _universityController
+                                                                .text);
+                                                        readLocal();
+                                                      } else if (userType ==
+                                                          'Teacher') {
+                                                        teacher.updateTeacherData(
+                                                            context,
+                                                            _nameController
+                                                                .text,
+                                                            email,
+                                                            _jobTitleController
+                                                                .text,
+                                                            _numOfReadingController
+                                                                .text,
+                                                            _numOfPartsController
+                                                                .text,
+                                                            _educationController
+                                                                .text,
+                                                            selectedDate.year
+                                                                .toString(),
+                                                            photoUrl,
+                                                            _aboutMeController
+                                                                .text,
+                                                            _currentItemSelectedGender,
+                                                            _currentItemSelected,
+                                                            _universityController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'nickname',
+                                                            _nameController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'jobTitle',
+                                                            _jobTitleController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'numOfReading',
+                                                            _numOfReadingController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'numOfParts',
+                                                            _numOfPartsController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'education',
+                                                            _educationController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'photoUrl',
+                                                            photoUrl);
+                                                        prefs.setString(
+                                                            'birthdate',
+                                                            selectedDate.year
+                                                                .toString());
+                                                        prefs.setString(
+                                                            'aboutMe',
+                                                            _aboutMeController
+                                                                .text);
+                                                        prefs.setString(
+                                                            'gender',
+                                                            _currentItemSelectedGender);
+                                                        prefs.setString(
+                                                            'igaza',
+                                                            _currentItemSelected);
+                                                        prefs.setString(
+                                                            'university',
+                                                            _universityController
+                                                                .text);
+                                                        readLocal();
+                                                      }
+                                                    },
+                                                  )),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    )),
-              ),
-            ],
-          )),
-    );
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          ],
+        ));
   }
 
   void _onDropDownItemSelected(String newValueSelected) {

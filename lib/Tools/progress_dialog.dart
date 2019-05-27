@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ProgressDialog extends StatelessWidget {
+  String message;
+
+  ProgressDialog(this.message);
+
   @override
   Widget build(BuildContext context) {
     return new Material(
@@ -18,7 +22,7 @@ class ProgressDialog extends StatelessWidget {
                   SizedBox(
                     height: 15.0,
                   ),
-                  Text("Loading Insha'llah",
+                  Text(message,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 25.0,
@@ -33,10 +37,9 @@ class ProgressDialog extends StatelessWidget {
   }
 }
 
-
-displayProgressDialog(BuildContext context) {
+displayProgressDialog(BuildContext context, String message) {
   Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext, _, __) {
-    return ProgressDialog();
+    return ProgressDialog(message);
   }));
 }
 

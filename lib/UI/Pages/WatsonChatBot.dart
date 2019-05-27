@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     watsonAssistantResponse = await watsonAssistant.sendMessage(
         myController.text, watsonAssistantContext);
     print(watsonAssistantResponse.resultText);
-    if (watsonAssistantResponse.resultText == "Testing Discovery...") {
+    if (watsonAssistantResponse.resultText == "Testing") {
       setState(() {
         String requestText = myController.text;
         print(requestText);
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const String DISCOVERY_ENVIRONMENT_ID =
         'da1cb970-9f9c-4a83-8f26-6e1d9ef0d1d2';
     const String DISCOVERY_COLLECTION_ID =
-        '8f408c86-b798-4fb7-9904-27822a0f2dbe';
+        'e1034a1c-b741-442e-a400-ff0ea07cd667';
     String version = '2018-12-03';
     print(basicAuth);
 
@@ -116,16 +116,25 @@ class _MyHomePageState extends State<MyHomePage> {
 //    print("matching_results" + matching_results.toString());
 
     if (response.statusCode == 200) {
-      print(response.statusCode);
-      print(response.body);
+//      print(response.statusCode);
+//      print(response.body);
       quran = (json.decode(response.body)['results'] as List)
           .map((data) => new Quran.fromJson(data))
           .toList();
-
+      print(json.decode(response.body)['results']);
+      print('verse');
+//      print(json.decode(response.body)['results']['verses']);
 
       for (var q in quran) {
-        print(q.id);
-        print(q.name);
+        print(q.verse.runtimeType);
+        List test = q.highlight.toString().split(":");
+        List t = test[0].toString().split("{");
+        var v = t[1];
+//        for (int x=0 ; x< t.length; x++) {
+//          print(t[x]);
+//        }
+        print(v);
+
         setState(() {
           _messages.add(" اسم الصوره : " +
               q.name +
@@ -303,26 +312,37 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 } else {
                   return
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        avatar,
-                        Expanded(
-                          child: SizedBox(
-                            height: 250.0,
-                            child: ListView.builder(
-                              physics: ClampingScrollPhysics(),
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: quran.length,
-                              itemBuilder: (BuildContext context, int index) => Card(
-                                child: menuCard(quran[index].name, quran[index].name, quran[index].count, quran[index].type,quran[index].juz),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    );
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: message,
+                      ),
+                      avatar,
+                    ],
+                  );
+//                    Row(
+//                      crossAxisAlignment: CrossAxisAlignment.end,
+//                      children: <Widget>[
+//                        avatar,
+//                        Expanded(
+//                          child: SizedBox(
+//                            height: 250.0,
+//                            child: ListView.builder(
+//                              physics: ClampingScrollPhysics(),
+//                              shrinkWrap: true,
+//                              scrollDirection: Axis.horizontal,
+//                              itemCount: quran.length,
+//                              itemBuilder: (BuildContext context, int index) => Card(
+//                                child: menuCard(quran[index].name, quran[index].name, quran[index].count, quran[index].type,quran[index].juz),
+//                              ),
+//                            ),
+//                          ),
+//                        )
+//                      ],
+//                    );
                 }
               },
             ),

@@ -45,7 +45,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
     const String DISCOVERY_ENVIRONMENT_ID =
         'da1cb970-9f9c-4a83-8f26-6e1d9ef0d1d2';
     const String DISCOVERY_COLLECTION_ID =
-        '8f408c86-b798-4fb7-9904-27822a0f2dbe';
+        'e1034a1c-b741-442e-a400-ff0ea07cd667';
     String version = '2018-12-03';
     print(basicAuth);
 
@@ -75,7 +75,9 @@ class _VoiceSearchState extends State<VoiceSearch> {
     await convertFileActionApi(fileUrl).then((response) {
       Map<String, dynamic> result = json.decode(response.toString());
 
-      voiceResult = result['results'][0];
+      setState(() {
+        voiceResult = result['results'][0];
+      });
       print(voiceResult);
       if (voiceResult != null) {
         _makeDiscoveryRequest(voiceResult);
@@ -150,6 +152,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
       setState(() {
         isRecord = false;
       });
+      fetchData();
     } catch (e) {
       print('stopRecord: fail');
       setState(() {
@@ -171,7 +174,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
         "position": 0.0,
       });
       if (fileUrl.length > 0) {
-        fetchData();
+//        fetchData();
       } else {
         print("invalid length");
       }
@@ -218,126 +221,140 @@ class _VoiceSearchState extends State<VoiceSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: new Scaffold(
-          appBar: new AppBar(
-            leading: InkWell(
-              child: Icon(Icons.arrow_back),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AllQuran()));
+    return Scaffold(
+        appBar: new AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.restore,
+              ),
+              onPressed: () {
+                quran.clear();
+                setState(() {
+                  voiceResult = '';
+                });
               },
-            ),
-            elevation: 0.0,
-            backgroundColor: Colors.deepPurple,
-            title: new Text(
-              'Voice Search',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            )
+          ],
+          leading: InkWell(
+            child: Icon(Icons.arrow_back),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AllQuran()));
+            },
           ),
-          body: Column(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Center(
+          elevation: 0.0,
+          centerTitle: true,
+          backgroundColor: Colors.deepPurple,
+          title: new Text(
+            voiceResult == '' ? 'Voice Search' : voiceResult,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        body: Column(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Center(
+                  child: Center(
                     child: canRecord
                         ? new Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              quran.length != 0
-                                  ? Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 420.0,
-                                            child: ListView.builder(
-                                              reverse: true,
-                                              padding:
-                                                  EdgeInsets.only(right: 38.0),
-                                              physics: ClampingScrollPhysics(),
-                                              shrinkWrap: true,
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: quran.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                          int index) =>
-                                                      Card(
-                                                        child: menuCard(
-                                                            quran[index].name,
-                                                            quran[index].count,
-                                                            quran[index].juz,
-                                                            quran[index].place,
-                                                            quran[index].type,
-                                                            quran[index].index,
-                                                            '',
-                                                            context,
-                                                            quran[index].order,
-                                                            quran[index]
-                                                                .prostration,
-                                                            quran[index]
-                                                                .subject),
-                                                      ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  : Container(
-                                      child: SizedBox(
-                                        height: 300.0,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        quran.length != 0
+                            ? Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: SizedBox(
+                                height: 420.0,
+                                child: ListView.builder(
+                                  reverse: true,
+                                  padding:
+                                  EdgeInsets.only(right: 38.0),
+                                  physics: ClampingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: quran.length,
+                                  itemBuilder:
+                                      (BuildContext context,
+                                      int index) =>
+                                      Card(
+                                        child: menuCard(
+                                            quran[index].name,
+                                            quran[index].count,
+                                            quran[index].juz,
+                                            quran[index].place,
+                                            quran[index].type,
+                                            quran[index].index,
+                                            '',
+                                            context,
+                                            quran[index].order,
+                                            quran[index]
+                                                .prostration,
+                                            quran[index]
+                                                .subject),
                                       ),
-                                    ),
-                            ],
-                          )
-                        : new Text(
-                            'Microphone Access Disabled.\nYou can enable access in Settings',
-                            textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                            : Container(
+                          child: SizedBox(
+                            height: 300.0,
                           ),
-                  )
-                ],
-              ),
-              Expanded(
-                  child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      FloatingActionButton(
-                          child: isRecord
-                              ? new Icon(Icons.mic_off)
-                              : Icon(Icons.mic),
-                          onPressed: () {
-                            if (isRecord) {
-                              _stopRecord();
-                            } else {
-                              _startRecord();
-                            }
-                          }),
-                      SizedBox(
-                        width: 19.0,
-                      ),
+                        ),
+                      ],
+                    )
+                        : new Text(
+                      'Microphone Access Disabled.\nYou can enable access in Settings',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Expanded(
+                child: Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        FloatingActionButton(
+                            child: isRecord
+                                ? new Icon(Icons.mic_off)
+                                : Icon(Icons.mic),
+                            onPressed: () {
+                              if (isRecord) {
+                                _stopRecord();
+                              } else {
+                                _startRecord();
+                              }
+                            }),
+                        SizedBox(
+                          width: 19.0,
+                        ),
 //              new Text('recording: ' + recordPosition.toString()),
 //              new Text('power: ' + recordPower.toString()),
-                      FloatingActionButton(
-                          child: isPlay
-                              ? new Icon(Icons.play_circle_filled)
-                              : Icon(Icons.pause_circle_filled),
-                          onPressed: () {
-                            if (!isRecord && file.length > 0) {
-                              _startStopPlay();
-                            }
-                          }),
+                        FloatingActionButton(
+                            child: isPlay
+                                ? new Icon(Icons.play_circle_filled)
+                                : Icon(Icons.pause_circle_filled),
+                            onPressed: () {
+                              if (!isRecord && file.length > 0) {
+                                _startStopPlay();
+                              }
+                            }),
 //              new Text('playing: ' + playPosition.toString()),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ))
-            ],
-          )),
+                ))
+          ],
+        )
     );
   }
 

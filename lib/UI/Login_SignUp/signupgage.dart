@@ -447,7 +447,7 @@ class _SinhUpState extends State<SinhUp> {
                                                         showSnackBar("Password Cannot Be Empty", _scafoldKey);
                                                         return;
                                                       }
-                                                      displayProgressDialog(context);
+                                                      displayProgressDialog(context, 'Signing Up Insha\'llah');
                                                       signIn();
                                                     },
                                                   )),
