@@ -30,6 +30,9 @@ class _VoiceSearchState extends State<VoiceSearch> {
   List quran = [];
   bool isGettingResul = false;
 
+  bool visibilityDesc = false;
+  bool visibilityReco = false;
+
   TextEditingController myController = new TextEditingController();
 
   _makeDiscoveryRequest(String text) async {
@@ -63,21 +66,18 @@ class _VoiceSearchState extends State<VoiceSearch> {
       for (var q in quran) {
         print(q.id);
         print(q.name);
-
       }
       setState(() {});
     }
   }
 
   Future<void> fetchData() async {
-
     await convertFileActionApi(fileUrl).then((response) {
-
       Map<String, dynamic> result = json.decode(response.toString());
 
       voiceResult = result['results'][0];
       print(voiceResult);
-      if ( voiceResult != null) {
+      if (voiceResult != null) {
         _makeDiscoveryRequest(voiceResult);
       } else {
         print('no result to search');
@@ -104,8 +104,6 @@ class _VoiceSearchState extends State<VoiceSearch> {
       return response;
     }).catchError((error) => print(error));
   }
-
-
 
   @override
   initState() {
@@ -207,101 +205,154 @@ class _VoiceSearchState extends State<VoiceSearch> {
   }
 
   @override
+  void _changed(bool visibility, String field) {
+    setState(() {
+      if (field == "obs") {
+        visibilityDesc = visibility;
+      }
+      if (field == "tag") {
+        visibilityReco = visibility;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       home: new Scaffold(
-        appBar: new AppBar(
-          leading: InkWell(
-            child: Icon(Icons.arrow_back),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => AllQuran()));
-            },
+          appBar: new AppBar(
+            leading: InkWell(
+              child: Icon(Icons.arrow_back),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllQuran()));
+              },
+            ),
+            elevation: 0.0,
+            backgroundColor: Colors.deepPurple,
+            title: new Text(
+              'Voice Search',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-          elevation: 0.0,
-          backgroundColor: Colors.deepPurple,
-          title: new Text(
-            'Voice Search',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        body: Center(
-          child:
-          canRecord
-              ? new Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          body: Column(
             children: <Widget>[
-              quran.length != 0 ?
-              Padding(
-                padding: const EdgeInsets.only(bottom: 200.0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: SizedBox(
-                        height: 250.0,
-                        child: ListView.builder(
-                          reverse: true,
-                          padding: EdgeInsets.only(right: 38.0),
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: quran.length,
-                          itemBuilder: (BuildContext context, int index) => Card(
-                            child: menuCard(quran[index].name, quran[index].count, quran[index].juz, quran[index].place, quran[index].type, quran[index].index),
+              Column(
+                children: <Widget>[
+                  Center(
+                    child: canRecord
+                        ? new Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              quran.length != 0
+                                  ? Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: SizedBox(
+                                            height: 420.0,
+                                            child: ListView.builder(
+                                              reverse: true,
+                                              padding:
+                                                  EdgeInsets.only(right: 38.0),
+                                              physics: ClampingScrollPhysics(),
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: quran.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                          int index) =>
+                                                      Card(
+                                                        child: menuCard(
+                                                            quran[index].name,
+                                                            quran[index].count,
+                                                            quran[index].juz,
+                                                            quran[index].place,
+                                                            quran[index].type,
+                                                            quran[index].index,
+                                                            '',
+                                                            context,
+                                                            quran[index].order,
+                                                            quran[index]
+                                                                .prostration,
+                                                            quran[index]
+                                                                .subject),
+                                                      ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : Container(
+                                      child: SizedBox(
+                                        height: 300.0,
+                                      ),
+                                    ),
+                            ],
+                          )
+                        : new Text(
+                            'Microphone Access Disabled.\nYou can enable access in Settings',
+                            textAlign: TextAlign.center,
                           ),
-                        ),
+                  )
+                ],
+              ),
+              Expanded(
+                  child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FloatingActionButton(
+                          child: isRecord
+                              ? new Icon(Icons.mic_off)
+                              : Icon(Icons.mic),
+                          onPressed: () {
+                            if (isRecord) {
+                              _stopRecord();
+                            } else {
+                              _startRecord();
+                            }
+                          }),
+                      SizedBox(
+                        width: 19.0,
                       ),
-                    )
-                  ],
-                ),
-              ):Container(),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    FloatingActionButton(
-                        child: isRecord
-                            ? new Icon(Icons.mic_off)
-                            : Icon(Icons.mic),
-                        onPressed: () {
-                          if (isRecord) {
-                            _stopRecord();
-                          } else {
-                            _startRecord();
-                          }
-                        }),
-                    SizedBox(
-                      width: 19.0,
-                    ),
 //              new Text('recording: ' + recordPosition.toString()),
 //              new Text('power: ' + recordPower.toString()),
-                    FloatingActionButton(
-                        child: isPlay
-                            ? new Icon(Icons.play_circle_filled)
-                            : Icon(Icons.pause_circle_filled),
-                        onPressed: () {
-                          if (!isRecord && file.length > 0) {
-                            _startStopPlay();
-                          }
-                        }),
+                      FloatingActionButton(
+                          child: isPlay
+                              ? new Icon(Icons.play_circle_filled)
+                              : Icon(Icons.pause_circle_filled),
+                          onPressed: () {
+                            if (!isRecord && file.length > 0) {
+                              _startStopPlay();
+                            }
+                          }),
 //              new Text('playing: ' + playPosition.toString()),
-                  ],
+                    ],
+                  ),
                 ),
-              )
+              ))
             ],
-          )
-              : new Text(
-            'Microphone Access Disabled.\nYou can enable access in Settings',
-            textAlign: TextAlign.center,
-          ),
-        )
-      ),
+          )),
     );
   }
-  Widget menuCard(String name,  String count, String juz , String place ,String type, String index){
+
+  Widget menuCard(
+      String name,
+      String count,
+      String juz,
+      String place,
+      String type,
+      String index,
+      String description,
+      BuildContext context,
+      String order,
+      String prostration,
+      String subject) {
     return Padding(
       padding: EdgeInsets.only(left: 0.0, right: 0.0),
       child: Material(
@@ -331,7 +382,8 @@ class _VoiceSearchState extends State<VoiceSearch> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(name,
+                                child: Text(
+                                  name,
                                   style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold,
@@ -340,46 +392,20 @@ class _VoiceSearchState extends State<VoiceSearch> {
                                 ),
                               ),
                             ],
-                          )
-                      ),
-                    ],),
-                  SizedBox(height: 20.0,),
+                          )),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Text('رقم السوره : ' + index,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text('  عدد الايات : ' + count,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),),
-                      ),
-                    ],),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(' نوع السوره : '+ type,
+                        child: Text(
+                          'رقم السوره : ' + index,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 15.0,
@@ -395,7 +421,8 @@ class _VoiceSearchState extends State<VoiceSearch> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(' مكان النزول  : '+ place,
+                        child: Text(
+                          '  عدد الايات : ' + count,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 15.0,
@@ -411,7 +438,8 @@ class _VoiceSearchState extends State<VoiceSearch> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Text('رقم الجزء : '+ juz,
+                        child: Text(
+                          ' نوع السوره : ' + type,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 15.0,
@@ -421,12 +449,177 @@ class _VoiceSearchState extends State<VoiceSearch> {
                       ),
                     ],
                   ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          ' مكان النزول  : ' + place,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          'رقم الجزء : ' + juz,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          'ترتيب النزول  : ' + order,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          'سجده التلاوه  : ' + prostration,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new InkWell(
+                          onTap: () {
+                            print('test');
+                          },
+                          child: new Container(
+//                            margin: new EdgeInsets.only(top: 5.0),
+                            child: new Column(
+                              children: <Widget>[
+                                new Icon(Icons.description,
+                                    color: visibilityDesc
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600]),
+                                new Container(
+                                  margin: const EdgeInsets.only(top: 1.0),
+                                  child: FlatButton(
+                                    shape: BeveledRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
+                                    color: Color(0xFFFA624F),
+                                    onPressed: () {
+                                      visibilityDesc
+                                          ? null
+                                          : _changed(true, "obs");
+                                    },
+                                    child: Text(
+                                      ' موضوع السوره ' + description,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ],
+                  ),
+                  visibilityDesc
+                      ? new Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Expanded(
+                              flex: 20,
+                              child: Text(subject),
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 17.0),
+                                  child: IconButton(
+                                    color: Colors.grey[400],
+                                    alignment: AlignmentDirectional.topCenter,
+                                    icon: const Icon(
+                                      Icons.cancel,
+                                      size: 20.0,
+                                    ),
+                                    onPressed: () {
+                                      _changed(false, "obs");
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      : new Container(),
+                  visibilityReco
+                      ? new Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            new Expanded(
+                              flex: 11,
+                              child: new TextField(
+                                maxLines: 1,
+                                style: Theme.of(context).textTheme.title,
+                                decoration: new InputDecoration(isDense: true),
+                              ),
+                            ),
+                            new Expanded(
+                              flex: 1,
+                              child: new IconButton(
+                                color: Colors.grey[400],
+                                icon: const Icon(
+                                  Icons.cancel,
+                                  size: 22.0,
+                                ),
+                                onPressed: () {
+                                  _changed(false, "tag");
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      : new Container(),
                 ],
               ),
-            )
-        ),
+            )),
       ),
     );
   }
-
 }
