@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:QCSE/UI/Pages/quran.dart';
-import 'package:QCSE/UI/QuranWidgets.dart';
+//import 'package:QCSE/UI/Pages/quran.dart';
+//import 'package:QCSE/UI/QuranWidgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:medcorder_audio/medcorder_audio.dart';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart';
+import 'quran.dart';
 
 class VoiceSearch extends StatefulWidget {
   @override
@@ -97,11 +98,11 @@ class _VoiceSearchState extends State<VoiceSearch> {
         new UploadFileInfo(File.fromUri(Uri.parse(file)), basename(file)));
     return await dio
         .post(uri,
-            data: formdata,
-            options: Options(
-              method: 'POST',
-              responseType: ResponseType.json,
-            ))
+        data: formdata,
+        options: Options(
+          method: 'POST',
+          responseType: ResponseType.json,
+        ))
         .then((response) {
       return response;
     }).catchError((error) => print(error));
@@ -109,6 +110,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
 
   @override
   initState() {
+    _makeDiscoveryRequest('الحمد لله رب العالمين');
     print(quran.length);
     super.initState();
     audioModule.setCallBack((dynamic data) {
@@ -174,7 +176,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
         "position": 0.0,
       });
       if (fileUrl.length > 0) {
-//        fetchData();
+        //        fetchData();
       } else {
         print("invalid length");
       }
@@ -196,7 +198,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
       setState(() {
         playPosition = event['currentTime'];
         isPlay = true;
-//        fileUrl = url;
+        //        fileUrl = url;
       });
     }
     if (event['code'] == 'audioPlayerDidFinishPlaying') {
@@ -239,8 +241,8 @@ class _VoiceSearchState extends State<VoiceSearch> {
           leading: InkWell(
             child: Icon(Icons.arrow_back),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AllQuran()));
+              /*Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllQuran()));*/
             },
           ),
           elevation: 0.0,
@@ -267,7 +269,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
                           children: <Widget>[
                             Expanded(
                               child: SizedBox(
-                                height: 420.0,
+                                height: MediaQuery.of(context).size.height,
                                 child: ListView.builder(
                                   reverse: true,
                                   padding:
@@ -337,8 +339,8 @@ class _VoiceSearchState extends State<VoiceSearch> {
                         SizedBox(
                           width: 19.0,
                         ),
-//              new Text('recording: ' + recordPosition.toString()),
-//              new Text('power: ' + recordPower.toString()),
+                        //              new Text('recording: ' + recordPosition.toString()),
+                        //              new Text('power: ' + recordPower.toString()),
                         FloatingActionButton(
                             child: isPlay
                                 ? new Icon(Icons.play_circle_filled)
@@ -348,7 +350,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
                                 _startStopPlay();
                               }
                             }),
-//              new Text('playing: ' + playPosition.toString()),
+                        //              new Text('playing: ' + playPosition.toString()),
                       ],
                     ),
                   ),
@@ -378,7 +380,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
         child: Container(
             margin: EdgeInsets.all(8.0),
             //width: MediaQuery.of(context).size.width,
-            width: 250,
+            width: 330,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(7.0),
               color: Colors.white,
@@ -542,7 +544,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
                             print('test');
                           },
                           child: new Container(
-//                            margin: new EdgeInsets.only(top: 5.0),
+                            //                            margin: new EdgeInsets.only(top: 5.0),
                             child: new Column(
                               children: <Widget>[
                                 new Icon(Icons.description,
@@ -578,60 +580,60 @@ class _VoiceSearchState extends State<VoiceSearch> {
                   ),
                   visibilityDesc
                       ? new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            new Expanded(
-                              flex: 20,
-                              child: Text(subject),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Expanded(
+                        flex: 20,
+                        child: Text(subject),
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 17.0),
+                            child: IconButton(
+                              color: Colors.grey[400],
+                              alignment: AlignmentDirectional.topCenter,
+                              icon: const Icon(
+                                Icons.cancel,
+                                size: 20.0,
+                              ),
+                              onPressed: () {
+                                _changed(false, "obs");
+                              },
                             ),
-                            Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 17.0),
-                                  child: IconButton(
-                                    color: Colors.grey[400],
-                                    alignment: AlignmentDirectional.topCenter,
-                                    icon: const Icon(
-                                      Icons.cancel,
-                                      size: 20.0,
-                                    ),
-                                    onPressed: () {
-                                      _changed(false, "obs");
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        )
+                          ),
+                        ],
+                      )
+                    ],
+                  )
                       : new Container(),
                   visibilityReco
                       ? new Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            new Expanded(
-                              flex: 11,
-                              child: new TextField(
-                                maxLines: 1,
-                                style: Theme.of(context).textTheme.title,
-                                decoration: new InputDecoration(isDense: true),
-                              ),
-                            ),
-                            new Expanded(
-                              flex: 1,
-                              child: new IconButton(
-                                color: Colors.grey[400],
-                                icon: const Icon(
-                                  Icons.cancel,
-                                  size: 22.0,
-                                ),
-                                onPressed: () {
-                                  _changed(false, "tag");
-                                },
-                              ),
-                            ),
-                          ],
-                        )
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      new Expanded(
+                        flex: 11,
+                        child: new TextField(
+                          maxLines: 1,
+                          style: Theme.of(context).textTheme.title,
+                          decoration: new InputDecoration(isDense: true),
+                        ),
+                      ),
+                      new Expanded(
+                        flex: 1,
+                        child: new IconButton(
+                          color: Colors.grey[400],
+                          icon: const Icon(
+                            Icons.cancel,
+                            size: 22.0,
+                          ),
+                          onPressed: () {
+                            _changed(false, "tag");
+                          },
+                        ),
+                      ),
+                    ],
+                  )
                       : new Container(),
                 ],
               ),
