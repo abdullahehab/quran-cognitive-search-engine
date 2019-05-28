@@ -1,29 +1,31 @@
 import 'dart:convert';
+
 import 'package:QCSE/UI/Pages/quran.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:watson_assistant/watson_assistant.dart';
 
 
-class MyApp extends StatelessWidget {
+
+class WatsonChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+//      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Watson Assistant Example'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key}) : super(key: key);
 
-  final String title;
-
+//  final String title;
+//  final String name = "mohamed";
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -32,9 +34,9 @@ class _MyHomePageState extends State<MyHomePage> {
   String _text;
   List<String> _messages;
   List quran, highlight;
-  int searchResult ;
+  int searchResult;
   ScrollController scrollController;
-
+  String searchWord = '';
   bool enableButton = false;
 
   WatsonAssistantCredential credential = WatsonAssistantCredential(
@@ -52,17 +54,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final myController = TextEditingController();
 
-  void _callWatsonAssistant() async {
+  void _callWatsonAssistant(String search) async {
     print(myController.text);
+    searchWord = myController.text;
     setState(() {
-      _messages.add(myController.text);
+      enableButton = false;
+      myController.clear();
+      _messages.add(search + searchWord);
+
+      Future.delayed(Duration(milliseconds: 100), () {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            curve: Curves.ease, duration: Duration(milliseconds: 500));
+      });
     });
-    watsonAssistantResponse = await watsonAssistant.sendMessage(
-        myController.text, watsonAssistantContext);
+    watsonAssistantResponse =
+    await watsonAssistant.sendMessage(searchWord, watsonAssistantContext);
     print(watsonAssistantResponse.resultText);
     if (watsonAssistantResponse.resultText == "Testing") {
       setState(() {
-        String requestText = myController.text;
+        String requestText = searchWord;
         print(requestText);
         _makeDiscoveryRequest(requestText);
         print('call discovery');
@@ -74,19 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     watsonAssistantContext = watsonAssistantResponse.context;
     myController.clear();
-  }
-
-  void handleSendMessage(String text) {
-    myController.clear();
-    setState(() {
-      _messages.add(text);
-      enableButton = false;
-    });
-
-    Future.delayed(Duration(milliseconds: 100), () {
-      scrollController.animateTo(scrollController.position.maxScrollExtent,
-          curve: Curves.ease, duration: Duration(milliseconds: 500));
-    });
   }
 
   _makeDiscoveryRequest(String text) async {
@@ -107,36 +104,29 @@ class _MyHomePageState extends State<MyHomePage> {
         'https://gateway-lon.watsonplatform.net/discovery/api/v1/environments/$DISCOVERY_ENVIRONMENT_ID/collections/$DISCOVERY_COLLECTION_ID/query?version=2018-12-03&deduplicate=false&highlight=true&passages=true&passages.count=5&natural_language_query=$input',
         headers: {'authorization': basicAuth});
 
-//    int matching_results = json.decode(response.body)['matching_results'];
-//
-//    setState(() {
-//      searchResult = matching_results;
-//    });
-//
-//    print("matching_results" + matching_results.toString());
+    int matching_results = json.decode(response.body)['matching_results'];
+
+    setState(() {
+      searchResult = matching_results;
+      if ( searchResult == 0 ) {
+        _messages.add('لا يوجد نتائج ادخل الايه صحيحه');
+      }
+    });
+
+    print("matching_results : " + matching_results.toString());
 
     if (response.statusCode == 200) {
-//      print(response.statusCode);
-//      print(response.body);
+      print(response.statusCode);
+      print(response.body);
       quran = (json.decode(response.body)['results'] as List)
           .map((data) => new Quran.fromJson(data))
           .toList();
-      print(json.decode(response.body)['results']);
-      print('verse');
-//      print(json.decode(response.body)['results']['verses']);
 
       for (var q in quran) {
-        print(q.verse.runtimeType);
-        List test = q.highlight.toString().split(":");
-        List t = test[0].toString().split("{");
-        var v = t[1];
-//        for (int x=0 ; x< t.length; x++) {
-//          print(t[x]);
-//        }
-        print(v);
-
+        print(q.id);
+        print(q.name);
         setState(() {
-          _messages.add(" اسم الصوره : " +
+          _messages.add(" اسم السوره : " +
               q.name +
               "\n" +
               "عدد ايات السوره : " +
@@ -154,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
               "رقم السوره : " +
               q.index);
         });
-      }
+       }
     }
   }
 
@@ -167,7 +157,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     watsonAssistant =
         WatsonAssistantApiV1(watsonAssistantCredential: credential);
-
   }
 
   @override
@@ -197,7 +186,9 @@ class _MyHomePageState extends State<MyHomePage> {
             Icons.send,
           ),
           disabledColor: Colors.grey,
-          onPressed: _callWatsonAssistant,
+          onPressed: () {
+            _callWatsonAssistant('.');
+          },
         )
             : IconButton(
           color: Colors.blue,
@@ -243,8 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context, index) {
                 bool reverse = false;
 
-
-                if (index % 2 == 0) {
+                if (_messages[index].contains('.')) {
                   print(index);
                   reverse = true;
                 }
@@ -253,7 +243,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   const EdgeInsets.only(left: 8.0, bottom: 8.0, right: 8.0),
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
-                    child: Image.asset('images/watson_logo.png',color: Colors.deepPurple,),
+                    child: Image.asset(
+                      'images/watson_logo.png',
+                      color: Colors.deepPurple,
+                    ),
                   ),
                 );
 
@@ -261,8 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   painter: Triangle(),
                 );
 
-                var messagebody =
-                DecoratedBox(
+                var messagebody = DecoratedBox(
                   position: DecorationPosition.background,
                   decoration: BoxDecoration(
                     color: Colors.amber,
@@ -280,13 +272,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 Widget message;
 
                 if (reverse) {
-                  message =
-                      Stack(
-                        children: <Widget>[
-                          messagebody,
-                          Positioned(right: 0, bottom: 0, child: triangle),
-                        ],
-                      );
+                  message = Stack(
+                    children: <Widget>[
+                      messagebody,
+                      Positioned(right: 0, bottom: 0, child: triangle),
+                    ],
+                  );
                 } else {
                   message = Stack(
                     children: <Widget>[
@@ -311,132 +302,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   );
                 } else {
-                  return
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  return Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
+                      avatar,
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: message,
                       ),
-                      avatar,
                     ],
                   );
-//                    Row(
-//                      crossAxisAlignment: CrossAxisAlignment.end,
-//                      children: <Widget>[
-//                        avatar,
-//                        Expanded(
-//                          child: SizedBox(
-//                            height: 250.0,
-//                            child: ListView.builder(
-//                              physics: ClampingScrollPhysics(),
-//                              shrinkWrap: true,
-//                              scrollDirection: Axis.horizontal,
-//                              itemCount: quran.length,
-//                              itemBuilder: (BuildContext context, int index) => Card(
-//                                child: menuCard(quran[index].name, quran[index].name, quran[index].count, quran[index].type,quran[index].juz),
-//                              ),
-//                            ),
-//                          ),
-//                        )
-//                      ],
-//                    );
                 }
               },
             ),
           ),
-          Divider(height: 2.0,color: Colors.amber,),
+          Divider(
+            height: 2.0,
+            color: Colors.amber,
+          ),
           textInput
         ],
       ),
     );
   }
-
-  Widget menuCard(String title,  String name, String num_of_verses , String type ,String description){
-    return Padding(
-      padding: EdgeInsets.only(left: 0.0, right: 0.0),
-      child: Material(
-        borderRadius: BorderRadius.circular(7.0),
-        elevation: 4.0,
-        child: Container(
-            margin: EdgeInsets.all(8.0),
-            //width: MediaQuery.of(context).size.width,
-            width: 250,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(7.0),
-              color: Colors.white,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Expanded(
-                          flex: 11,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(title,
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  //background: Paint()..color = Colors.grey,
-                                ),
-                              ),
-                            ],
-                          )
-                      ),
-                    ],),
-                  SizedBox(height: 20.0,),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(' سورة : ' + name,
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text('  عدد الايات : ' + num_of_verses.toString(),
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w400,
-                        ),),
-                    ],),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(' نوع الاية : '+ type,
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],),
-                ],
-              ),
-            )
-        ),
-      ),
-    );
-  }
-
 
   @override
   void dispose() {
