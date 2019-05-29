@@ -7,6 +7,5 @@ import 'package:flutter/material.dart';
 import 'package:dcdg/dcdg.dart';
 
 void main() => runApp(MaterialApp(
-      home: logInPage(),
-  debugShowCheckedModeBanner: false,
-    ));
+  home: logInPage(),
+));

@@ -1,8 +1,10 @@
+import 'package:QCSE/UI/Login_SignUp/loginpage.dart';
 import 'package:QCSE/UI/Pages/allStudent.dart';
 import 'package:QCSE/UI/Pages/allTeacher.dart';
 import 'package:QCSE/UI/Pages/profilePage.dart';
 import 'package:QCSE/helpers/Heplers.dart';
 import 'package:QCSE/quranList.dart';
+import 'package:QCSE/sevices/QuranBookMark.dart';
 import 'package:QCSE/speed%20radial/speed_dial.dart';
 import 'package:QCSE/speed%20radial/speed_dial_child.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +20,7 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> gKey = new GlobalKey<ScaffoldState>();
 
   bool loggedIn = false;
+  bool test = true;
   int pageNumber = 0;
   int bookMark;
   String name, part;
@@ -158,7 +161,10 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
 //            ),
           ],
         ),
-        floatingActionButton:  SpeedDial(
+
+        floatingActionButton:
+        Helper().isLoggedIn() ?
+        SpeedDial(
                 // both default to 16
                 visible: _iconVisibility,
                 marginRight: 18,
@@ -185,10 +191,10 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
                       child: new InkWell(
                         child: Icon(Icons.person),
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => GetAllTeacher()));
+//                          Navigator.push(
+//                              context,
+//                              MaterialPageRoute(
+//                                  builder: (context) => GetAllTeacher()));
                         },
                       ),
                       onPressed: () {},
@@ -265,7 +271,8 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
                     child: InkWell(
                       child: Icon(Icons.exit_to_app),
                       onTap: () {
-                        _logOut();
+                        signOutWithGoogle();
+                        print('res');
                       },
                     ),
                     backgroundColor: Colors.green,
@@ -274,85 +281,91 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
                     onTap: () => print('THIRD CHILD'),
                   ),
                 ],
-              ),
-//            : SpeedDial(
-//                // both default to 16
-//                visible: _iconVisibility,
-//                marginRight: 18,
-//                marginBottom: 20,
-//                animatedIcon: AnimatedIcons.menu_close,
-//                animatedIconTheme: IconThemeData(size: 22.0),
-//                curve: Curves.bounceIn,
-//                overlayColor: Colors.black,
-//                overlayOpacity: 0.5,
-//                onOpen: () => print('OPENING DIAL'),
-//                onClose: () => print('DIAL CLOSED'),
-//                tooltip: 'Speed Dial',
-//                heroTag: 'speed-dial-hero-tag',
-//                backgroundColor: Colors.white,
-//                foregroundColor: Colors.black,
-//                elevation: 8.0,
-//                shape: CircleBorder(),
-//                children: [
-//                  SpeedDialChild(
-//                    child: Icon(Icons.keyboard_voice),
-//                    backgroundColor: Colors.green,
-//                    label: 'Voice Search',
-//                    //    labelStyle: TextTheme(fontSize: 18.0),
-//                    onTap: () => print('THIRD CHILD'),
-//                  ),
-//                  SpeedDialChild(
-//                    child: InkWell(
-//                      child: Icon(Icons.chat),
-//                      onTap: () {
-//                        Helper help = new Helper();
-////                help.loggedin();
-//                        //Navigator.push(context, MaterialPageRoute(builder: (context) => FriendlychatApp()));
-//                      },
-//                    ),
-//                    backgroundColor: Colors.green,
-//                    label: 'Chat-Bot',
-//                    //    labelStyle: TextTheme(fontSize: 18.0),
-//                    onTap: () => print('THIRD CHILD'),
-//                  ),
-//                  SpeedDialChild(
-//                    child: InkWell(
-//                      child: Icon(Icons.bookmark),
-//                      onTap: () {
-//                        QuranBookMark().saveQuranPage(pageNumber);
-////                        readLocal();
-////                        print(pageNumber);
-//                      },
-//                    ),
-//                    backgroundColor: Colors.green,
-//                    label: 'Book-Mark',
-//                    //    labelStyle: TextTheme(fontSize: 18.0),
-//                    onTap: () => print('THIRD CHILD'),
-//                  ),
-//                  SpeedDialChild(
-//                    child: InkWell(
-//                      child: Icon(Icons.bookmark_border),
-//                      onTap: () {
-////                        readLocal();
-//                        QuranBookMark().returnQuranPage(bookMark);
-//                     },
-//                    ),
-//                    backgroundColor: Colors.green,
-//                    label: 'Return-book',
-//                    //    labelStyle: TextTheme(fontSize: 18.0),
-//                    onTap: () => print('THIRD CHILD'),
-//                  ),
-//                ],
-//              )
+              ):
+             SpeedDial(
+                // both default to 16
+                visible: _iconVisibility,
+                marginRight: 18,
+                marginBottom: 20,
+                animatedIcon: AnimatedIcons.menu_close,
+                animatedIconTheme: IconThemeData(size: 22.0),
+                curve: Curves.bounceIn,
+                overlayColor: Colors.black,
+                overlayOpacity: 0.5,
+                onOpen: () => print('OPENING DIAL'),
+                onClose: () => print('DIAL CLOSED'),
+                tooltip: 'Speed Dial',
+                heroTag: 'speed-dial-hero-tag',
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                elevation: 8.0,
+                shape: CircleBorder(),
+                children: [
+                  SpeedDialChild(
+                    child: Icon(Icons.keyboard_voice),
+                    backgroundColor: Colors.green,
+                    label: 'Voice Search',
+                    //    labelStyle: TextTheme(fontSize: 18.0),
+                    onTap: () => print('THIRD CHILD'),
+                  ),
+                  SpeedDialChild(
+                    child: InkWell(
+                      child: Icon(Icons.chat),
+                      onTap: () {
+                        Helper help = new Helper();
+//                help.loggedin();
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => FriendlychatApp()));
+                      },
+                    ),
+                    backgroundColor: Colors.green,
+                    label: 'Chat-Bot',
+                    //    labelStyle: TextTheme(fontSize: 18.0),
+                    onTap: () => print('THIRD CHILD'),
+                  ),
+                  SpeedDialChild(
+                    child: InkWell(
+                      child: Icon(Icons.bookmark),
+                      onTap: () {
+                        QuranBookMark().saveQuranPage(pageNumber);
+//                        readLocal();
+//                        print(pageNumber);
+                      },
+                    ),
+                    backgroundColor: Colors.green,
+                    label: 'Book-Mark',
+                    //    labelStyle: TextTheme(fontSize: 18.0),
+                    onTap: () => print('THIRD CHILD'),
+                  ),
+                  SpeedDialChild(
+                    child: InkWell(
+                      child: Icon(Icons.bookmark_border),
+                      onTap: () {
+//                        readLocal();
+                        QuranBookMark().returnQuranPage(bookMark);
+                     },
+                    ),
+                    backgroundColor: Colors.green,
+                    label: 'Return-book',
+                    //    labelStyle: TextTheme(fontSize: 18.0),
+                    onTap: () => print('THIRD CHILD'),
+                  ),
+                ],
+              )
     );
   }
 
-  _logOut() async {
-    await _auth.signOut().then((_) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil("/login", ModalRoute.withName("/home"));
+  Future<void> signOutWithGoogle() async {
+//    await _auth.signOut();
+    FirebaseAuth.instance.signOut().then((_){
+      print('success logging out');
+    }).catchError((e) {
+      print('failure logging out');
+      print(e);
     });
+    return await FirebaseAuth.instance.signOut();
+//    Helper().isLoggedIn();
   }
+
 
 /*  Future<void> handleSignOut() async {
     FirebaseAuth.instance.signOut();

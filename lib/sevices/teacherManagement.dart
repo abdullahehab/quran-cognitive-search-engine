@@ -1,3 +1,4 @@
+import 'package:QCSE/Tools/progress_dialog.dart';
 import 'package:QCSE/UI/QuranWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,6 +66,7 @@ class TeacherManagement {
       'university': university
     };
     ds.updateData(user).whenComplete(() {
+      closeProgressDialog(context);
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => AllQuran()));
       Toast.show('user $name profile updated done', context,

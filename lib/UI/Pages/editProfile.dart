@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:QCSE/Tools/const.dart';
+import 'package:QCSE/Tools/progress_dialog.dart';
 import 'package:QCSE/Tools/snackBar.dart';
 import 'package:QCSE/sevices/studentManagment.dart';
 import 'package:QCSE/sevices/teacherManagement.dart';
@@ -51,11 +52,13 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future uploadFile() async {
+    displayProgressDialog(context, "updating photo Insha'llah");
     String fileName = email;
     StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
     StorageUploadTask uploadTask = reference.putFile(avatarImageFile);
     StorageTaskSnapshot storageTaskSnapshot;
-    uploadTask.onComplete.then((value) {
+    uploadTask.onComplete.then((value)
+    {
       if (value.error == null) {
         storageTaskSnapshot = value;
         storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
@@ -114,6 +117,8 @@ class _EditProfileState extends State<EditProfile> {
       });
       Toast.show(err.toString(), context,
           duration: Toast.LENGTH_LONG, backgroundColor: Colors.green);
+    }).whenComplete(() {
+      closeProgressDialog(context);
     });
   }
 
@@ -237,13 +242,13 @@ class _EditProfileState extends State<EditProfile> {
               child: Container(
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [
-                          Color.fromRGBO(0, 0, 0, 0.0),
-                          Color.fromRGBO(0, 0, 0, 0.3)
-                        ],
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomCenter,
-                      )),
+                    colors: [
+                      Color.fromRGBO(0, 0, 0, 0.0),
+                      Color.fromRGBO(0, 0, 0, 0.3)
+                    ],
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                  )),
                   child: SingleChildScrollView(
                     child: Stack(
                       //alignment: AlignmentDirectional.bottomCenter,
@@ -269,57 +274,62 @@ class _EditProfileState extends State<EditProfile> {
                                                   children: <Widget>[
                                                     (avatarImageFile == null)
                                                         ? (photoUrl != ''
-                                                        ? Material(
-                                                      child:
-                                                      CachedNetworkImage(
-                                                        placeholder:
-                                                            (context,
-                                                            url) =>
-                                                            Container(
-                                                              child: CircularProgressIndicator(
-                                                                strokeWidth: 2.0,
-                                                                valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-                                                              ),
+                                                            ? Material(
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  placeholder:
+                                                                      (context,
+                                                                              url) =>
+                                                                          Container(
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              strokeWidth: 2.0,
+                                                                              valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+                                                                            ),
+                                                                            width:
+                                                                                90.0,
+                                                                            height:
+                                                                                90.0,
+                                                                            padding:
+                                                                                EdgeInsets.all(20.0),
+                                                                          ),
+                                                                  imageUrl: photoUrl ==
+                                                                          null
+                                                                      ? ""
+                                                                      : photoUrl,
+                                                                  width: 90.0,
+                                                                  height: 90.0,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            45.0)),
+                                                                clipBehavior:
+                                                                    Clip.hardEdge,
+                                                              )
+                                                            : Icon(
+                                                                Icons
+                                                                    .account_circle,
+                                                                size: 90.0,
+                                                                color:
+                                                                    greyColor,
+                                                              ))
+                                                        : Material(
+                                                            child: Image.file(
+                                                              avatarImageFile,
                                                               width: 90.0,
                                                               height: 90.0,
-                                                              padding: EdgeInsets.all(20.0),
+                                                              fit: BoxFit.cover,
                                                             ),
-                                                        imageUrl: photoUrl == null ? "" : photoUrl,
-                                                        width: 90.0,
-                                                        height:
-                                                        90.0,
-                                                        fit: BoxFit
-                                                            .cover,
-                                                      ),
-                                                      borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              45.0)),
-                                                      clipBehavior:
-                                                      Clip.hardEdge,
-                                                    )
-                                                        : Icon(
-                                                      Icons
-                                                          .account_circle,
-                                                      size: 90.0,
-                                                      color:
-                                                      greyColor,
-                                                    ))
-                                                        : Material(
-                                                      child: Image.file(
-                                                        avatarImageFile,
-                                                        width: 90.0,
-                                                        height: 90.0,
-                                                        fit: BoxFit
-                                                            .cover,
-                                                      ),
-                                                      borderRadius: BorderRadius
-                                                          .all(Radius
-                                                          .circular(
-                                                          45.0)),
-                                                      clipBehavior:
-                                                      Clip.hardEdge,
-                                                    ),
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        45.0)),
+                                                            clipBehavior:
+                                                                Clip.hardEdge,
+                                                          ),
                                                     IconButton(
                                                       icon: Icon(
                                                         Icons.camera_alt,
@@ -327,12 +337,11 @@ class _EditProfileState extends State<EditProfile> {
                                                             .withOpacity(0.5),
                                                       ),
                                                       onPressed: getImage,
-                                                      padding: EdgeInsets.all(
-                                                          30.0),
+                                                      padding:
+                                                          EdgeInsets.all(30.0),
                                                       splashColor:
-                                                      Colors.transparent,
-                                                      highlightColor:
-                                                      greyColor,
+                                                          Colors.transparent,
+                                                      highlightColor: greyColor,
                                                       iconSize: 30.0,
                                                     ),
                                                   ],
@@ -428,8 +437,8 @@ class _EditProfileState extends State<EditProfile> {
                                                 color: Colors.transparent,
                                                 shape: OutlineInputBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(
-                                                      10.0),
+                                                      BorderRadius.circular(
+                                                          10.0),
                                                   borderSide: BorderSide(
                                                       color: Colors.teal),
                                                 ),
@@ -444,97 +453,90 @@ class _EditProfileState extends State<EditProfile> {
                                             ),
                                             userType == 'Teacher'
                                                 ? ListTile(
-                                              title:
-                                              DropdownButtonHideUnderline(
-                                                child: DropdownButton<
-                                                    String>(
-                                                  style: TextStyle(
-                                                    color: Colors.teal,
-                                                    fontSize: 20.0,
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                  ),
-                                                  items: _currencies
-                                                      .map((String
-                                                  dropDownStringItem) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value:
-                                                      dropDownStringItem,
-                                                      child: new Row(
-                                                        children: <
-                                                            Widget>[
-                                                          Padding(
-                                                            padding: const EdgeInsets
-                                                                .only(
-                                                                right:
-                                                                30.0),
-                                                          ),
-                                                          new Text(
-                                                              dropDownStringItem),
-                                                        ],
+                                                    title:
+                                                        DropdownButtonHideUnderline(
+                                                      child: DropdownButton<
+                                                          String>(
+                                                        style: TextStyle(
+                                                          color: Colors.teal,
+                                                          fontSize: 20.0,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        items: _currencies.map(
+                                                            (String
+                                                                dropDownStringItem) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value:
+                                                                dropDownStringItem,
+                                                            child: new Row(
+                                                              children: <
+                                                                  Widget>[
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      right:
+                                                                          30.0),
+                                                                ),
+                                                                new Text(
+                                                                    dropDownStringItem),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (String
+                                                            newValueSelected) {
+                                                          //your code to execute , when a menu item is selected from drop down
+                                                          _onDropDownItemSelected(
+                                                              newValueSelected);
+                                                        },
+                                                        value:
+                                                            _currentItemSelected,
                                                       ),
-                                                    );
-                                                  }).toList(),
-                                                  onChanged: (String
-                                                  newValueSelected) {
-                                                    //your code to execute , when a menu item is selected from drop down
-                                                    _onDropDownItemSelected(
-                                                        newValueSelected);
-                                                  },
-                                                  value:
-                                                  _currentItemSelected,
-                                                ),
-                                              ),
-                                              leading: RaisedButton(
-                                                color:
-                                                Colors.transparent,
-                                                shape:
-                                                OutlineInputBorder(
-                                                  borderRadius:
-                                                  BorderRadius
-                                                      .circular(
-                                                      10.0),
-                                                  borderSide:
-                                                  BorderSide(
-                                                      color: Colors
-                                                          .teal),
-                                                ),
-                                                onPressed: () => {},
-                                                child: Text(
-                                                  ' ايجازه ',
-                                                  style: TextStyle(
-                                                      color:
-                                                      Colors.white),
-                                                ),
-                                              ),
-                                            )
+                                                    ),
+                                                    leading: RaisedButton(
+                                                      color: Colors.transparent,
+                                                      shape: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors.teal),
+                                                      ),
+                                                      onPressed: () => {},
+                                                      child: Text(
+                                                        ' ايجازه ',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  )
                                                 : Container(),
                                             ListTile(
                                               title:
-                                              DropdownButtonHideUnderline(
+                                                  DropdownButtonHideUnderline(
                                                 child: DropdownButton<String>(
                                                   style: TextStyle(
                                                     color: Colors.teal,
                                                     fontSize: 20.0,
-                                                    fontWeight:
-                                                    FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  items: _currenciesGender
-                                                      .map((String
-                                                  dropDownStringItem) {
+                                                  items: _currenciesGender.map(
+                                                      (String
+                                                          dropDownStringItem) {
                                                     return DropdownMenuItem<
                                                         String>(
-                                                      value:
-                                                      dropDownStringItem,
+                                                      value: dropDownStringItem,
                                                       child: new Row(
                                                         children: <Widget>[
                                                           Padding(
                                                             padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right:
-                                                                30.0),
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right:
+                                                                        30.0),
                                                           ),
                                                           new Text(
                                                               dropDownStringItem),
@@ -543,21 +545,21 @@ class _EditProfileState extends State<EditProfile> {
                                                     );
                                                   }).toList(),
                                                   onChanged: (String
-                                                  newValueSelected) {
+                                                      newValueSelected) {
                                                     //your code to execute , when a menu item is selected from drop down
                                                     _onDropDownItemSelectedGender(
                                                         newValueSelected);
                                                   },
                                                   value:
-                                                  _currentItemSelectedGender,
+                                                      _currentItemSelectedGender,
                                                 ),
                                               ),
                                               leading: RaisedButton(
                                                 color: Colors.transparent,
                                                 shape: OutlineInputBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(
-                                                      10.0),
+                                                      BorderRadius.circular(
+                                                          10.0),
                                                   borderSide: BorderSide(
                                                       color: Colors.teal),
                                                 ),
@@ -581,20 +583,18 @@ class _EditProfileState extends State<EditProfile> {
                                                   decoration: BoxDecoration(
                                                       boxShadow: [
                                                         BoxShadow(
-                                                            color: Colors
-                                                                .black38,
+                                                            color:
+                                                                Colors.black38,
                                                             blurRadius: 15.0)
                                                       ],
-                                                      gradient:
-                                                      LinearGradient(
+                                                      gradient: LinearGradient(
                                                           colors: [
                                                             Colors.teal[400],
                                                             Colors.teal[400]
                                                           ]),
                                                       borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          30.0)),
+                                                          BorderRadius.circular(
+                                                              30.0)),
                                                   child: FlatButton(
                                                     child: Text(
                                                       "Update",
@@ -602,35 +602,34 @@ class _EditProfileState extends State<EditProfile> {
                                                           color: Colors.white,
                                                           fontSize: 22.0,
                                                           fontWeight:
-                                                          FontWeight.w600,
+                                                              FontWeight.w600,
                                                           fontFamily:
-                                                          "UbuntuBold"),
+                                                              "UbuntuBold"),
                                                     ),
                                                     onPressed: () {
+                                                      displayProgressDialog(context,"Update Data Insha'llah");
                                                       print('selected date');
-                                                      print(
-                                                          selectedDate.year);
+                                                      print(selectedDate.year);
                                                       print(
                                                           'end selected date');
                                                       if (_nameController
-                                                          .text ==
-                                                          "" ||
-                                                          _jobTitleController
-                                                              .text ==
+                                                                  .text ==
                                                               "" ||
-                                                          _numOfReadingController.text ==
+                                                          _jobTitleController.text ==
+                                                              "" ||
+                                                          _numOfReadingController
+                                                                  .text ==
                                                               "" ||
                                                           _numOfPartsController
-                                                              .text ==
+                                                                  .text ==
                                                               "" ||
-                                                          _educationController
-                                                              .text ==
+                                                          _educationController.text ==
                                                               "" ||
                                                           _aboutMeController
-                                                              .text ==
+                                                                  .text ==
                                                               "" ||
                                                           _universityController
-                                                              .text ==
+                                                                  .text ==
                                                               "") {
                                                         showSnackBar(
                                                             "All Fields required",
@@ -755,8 +754,7 @@ class _EditProfileState extends State<EditProfile> {
                                                         prefs.setString(
                                                             'gender',
                                                             _currentItemSelectedGender);
-                                                        prefs.setString(
-                                                            'igaza',
+                                                        prefs.setString('igaza',
                                                             _currentItemSelected);
                                                         prefs.setString(
                                                             'university',
@@ -857,7 +855,7 @@ class GeneralButton extends StatelessWidget {
 }
 
 class TextFromField extends StatelessWidget {
-  TextFromField(this.name, this.icon, this.inputType, this. controller,
+  TextFromField(this.name, this.icon, this.inputType, this.controller,
       this.inputValue, this.focusNode);
 
   String name;

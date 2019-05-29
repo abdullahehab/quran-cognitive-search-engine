@@ -110,7 +110,6 @@ class _VoiceSearchState extends State<VoiceSearch> {
 
   @override
   initState() {
-    _makeDiscoveryRequest('الحمد لله رب العالمين');
     print(quran.length);
     super.initState();
     audioModule.setCallBack((dynamic data) {
@@ -176,7 +175,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
         "position": 0.0,
       });
       if (fileUrl.length > 0) {
-        //        fetchData();
+//        fetchData();
       } else {
         print("invalid length");
       }
@@ -198,7 +197,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
       setState(() {
         playPosition = event['currentTime'];
         isPlay = true;
-        //        fileUrl = url;
+//        fileUrl = url;
       });
     }
     if (event['code'] == 'audioPlayerDidFinishPlaying') {
@@ -242,7 +241,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
             child: Icon(Icons.arrow_back),
             onTap: () {
               /*Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AllQuran()));*/
+                  MaterialPageRoute(builder: (context) => AllQuran()));*/
             },
           ),
           elevation: 0.0,
@@ -269,7 +268,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
                           children: <Widget>[
                             Expanded(
                               child: SizedBox(
-                                height: MediaQuery.of(context).size.height,
+                                height: 500.0,
                                 child: ListView.builder(
                                   reverse: true,
                                   padding:
@@ -339,8 +338,8 @@ class _VoiceSearchState extends State<VoiceSearch> {
                         SizedBox(
                           width: 19.0,
                         ),
-                        //              new Text('recording: ' + recordPosition.toString()),
-                        //              new Text('power: ' + recordPower.toString()),
+//              new Text('recording: ' + recordPosition.toString()),
+//              new Text('power: ' + recordPower.toString()),
                         FloatingActionButton(
                             child: isPlay
                                 ? new Icon(Icons.play_circle_filled)
@@ -350,7 +349,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
                                 _startStopPlay();
                               }
                             }),
-                        //              new Text('playing: ' + playPosition.toString()),
+//              new Text('playing: ' + playPosition.toString()),
                       ],
                     ),
                   ),
@@ -385,258 +384,261 @@ class _VoiceSearchState extends State<VoiceSearch> {
               borderRadius: BorderRadius.circular(7.0),
               color: Colors.white,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Expanded(
-                          flex: 11,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  name,
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                    //background: Paint()..color = Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          'رقم السوره : ' + index,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          '  عدد الايات : ' + count,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          ' نوع السوره : ' + type,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          ' مكان النزول  : ' + place,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          'رقم الجزء : ' + juz,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          'ترتيب النزول  : ' + order,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          'سجده التلاوه  : ' + prostration,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new InkWell(
-                          onTap: () {
-                            print('test');
-                          },
-                          child: new Container(
-                            //                            margin: new EdgeInsets.only(top: 5.0),
-                            child: new Column(
+            child: ListView(
+              children: <Widget>[ Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Expanded(
+                            flex: 11,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                new Icon(Icons.description,
-                                    color: visibilityDesc
-                                        ? Colors.grey[400]
-                                        : Colors.grey[600]),
-                                new Container(
-                                  margin: const EdgeInsets.only(top: 1.0),
-                                  child: FlatButton(
-                                    shape: BeveledRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4.0),
-                                    ),
-                                    color: Color(0xFFFA624F),
-                                    onPressed: () {
-                                      visibilityDesc
-                                          ? null
-                                          : _changed(true, "obs");
-                                    },
-                                    child: Text(
-                                      ' موضوع السوره ' + description,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15.0,
-                                        color: Colors.white,
-                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    name,
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      //background: Paint()..color = Colors.grey,
                                     ),
                                   ),
                                 ),
                               ],
+                            )),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            'رقم السوره : ' + index,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
                             ),
-                          )),
-                    ],
-                  ),
-                  visibilityDesc
-                      ? new Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new Expanded(
-                        flex: 20,
-                        child: Text(subject),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 17.0),
-                            child: IconButton(
-                              color: Colors.grey[400],
-                              alignment: AlignmentDirectional.topCenter,
-                              icon: const Icon(
-                                Icons.cancel,
-                                size: 20.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            '  عدد الايات : ' + count,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            ' نوع السوره : ' + type,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            ' مكان النزول  : ' + place,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            'رقم الجزء : ' + juz,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            'ترتيب النزول  : ' + order,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            'سجده التلاوه  : ' + prostration,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new InkWell(
+                            onTap: () {
+                              print('test');
+                            },
+                            child: new Container(
+//                            margin: new EdgeInsets.only(top: 5.0),
+                              child: new Column(
+                                children: <Widget>[
+                                  new Icon(Icons.description,
+                                      color: visibilityDesc
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600]),
+                                  new Container(
+                                    margin: const EdgeInsets.only(top: 1.0),
+                                    child: FlatButton(
+                                      shape: BeveledRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4.0),
+                                      ),
+                                      color: Color(0xFFFA624F),
+                                      onPressed: () {
+                                        visibilityDesc
+                                            ? null
+                                            : _changed(true, "obs");
+                                      },
+                                      child: Text(
+                                        ' موضوع السوره ' + description,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15.0,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              onPressed: () {
-                                _changed(false, "obs");
-                              },
+                            )),
+                      ],
+                    ),
+                    visibilityDesc
+                        ? new Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        new Expanded(
+                          flex: 20,
+                          child: Text(subject),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 17.0),
+                              child: IconButton(
+                                color: Colors.grey[400],
+                                alignment: AlignmentDirectional.topCenter,
+                                icon: const Icon(
+                                  Icons.cancel,
+                                  size: 20.0,
+                                ),
+                                onPressed: () {
+                                  _changed(false, "obs");
+                                },
+                              ),
                             ),
+                          ],
+                        )
+                      ],
+                    )
+                        : new Container(),
+                    visibilityReco
+                        ? new Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        new Expanded(
+                          flex: 11,
+                          child: new TextField(
+                            maxLines: 1,
+                            style: Theme.of(context).textTheme.title,
+                            decoration: new InputDecoration(isDense: true),
                           ),
-                        ],
-                      )
-                    ],
-                  )
-                      : new Container(),
-                  visibilityReco
-                      ? new Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      new Expanded(
-                        flex: 11,
-                        child: new TextField(
-                          maxLines: 1,
-                          style: Theme.of(context).textTheme.title,
-                          decoration: new InputDecoration(isDense: true),
                         ),
-                      ),
-                      new Expanded(
-                        flex: 1,
-                        child: new IconButton(
-                          color: Colors.grey[400],
-                          icon: const Icon(
-                            Icons.cancel,
-                            size: 22.0,
+                        new Expanded(
+                          flex: 1,
+                          child: new IconButton(
+                            color: Colors.grey[400],
+                            icon: const Icon(
+                              Icons.cancel,
+                              size: 22.0,
+                            ),
+                            onPressed: () {
+                              _changed(false, "tag");
+                            },
                           ),
-                          onPressed: () {
-                            _changed(false, "tag");
-                          },
                         ),
-                      ),
-                    ],
-                  )
-                      : new Container(),
-                ],
+                      ],
+                    )
+                        : new Container(),
+                  ],
+                ),
               ),
+              ],
             )),
       ),
     );
