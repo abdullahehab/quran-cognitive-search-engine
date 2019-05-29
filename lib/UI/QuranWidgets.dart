@@ -184,25 +184,21 @@ class _AllQuranState extends State<AllQuran> with TickerProviderStateMixin {
         shape: CircleBorder(),
         children: [
           SpeedDialChild(
-            child: FloatingActionButton(
-              heroTag: 'speed',
-              //   backgroundColor: backgroundColor,
-              mini: true,
-              child: new InkWell(
-                child: Icon(Icons.person),
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => GetAllTeacher()));
-                },
-              ),
-              onPressed: () {},
+            child: InkWell(
+              child: Icon(Icons.person),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => GetAllTeacher()));
+              },
             ),
             backgroundColor: Colors.green,
             label: 'All Teachers',
+            //    labelStyle: TextTheme(fontSize: 18.0),
+            onTap: () => print('THIRD CHILD'),
           ),
           SpeedDialChild(
             child: InkWell(
-              child: Icon(Icons.chat),
+              child: Icon(Icons.person),
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => GetAllStudent()));
