@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 //import 'package:QCSE/UI/Pages/quran.dart';
 //import 'package:QCSE/UI/QuranWidgets.dart';
+import 'package:QCSE/UI/QuranWidgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -240,8 +241,8 @@ class _VoiceSearchState extends State<VoiceSearch> {
           leading: InkWell(
             child: Icon(Icons.arrow_back),
             onTap: () {
-              /*Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AllQuran()));*/
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AllQuran()));
             },
           ),
           elevation: 0.0,
@@ -325,6 +326,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FloatingActionButton(
+                          heroTag: "button1",
                             child: isRecord
                                 ? new Icon(Icons.mic_off)
                                 : Icon(Icons.mic),
@@ -341,6 +343,7 @@ class _VoiceSearchState extends State<VoiceSearch> {
 //              new Text('recording: ' + recordPosition.toString()),
 //              new Text('power: ' + recordPower.toString()),
                         FloatingActionButton(
+                          heroTag: 'button2',
                             child: isPlay
                                 ? new Icon(Icons.play_circle_filled)
                                 : Icon(Icons.pause_circle_filled),

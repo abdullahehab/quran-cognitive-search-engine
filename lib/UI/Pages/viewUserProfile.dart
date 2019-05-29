@@ -416,7 +416,7 @@ List<Widget> education(String education, String university, String numOfParts,
                                   Padding(
                                     padding: const EdgeInsets.only(left: 15.0),
                                     child: Text(
-                                      "English School",
+                                      "Islamic Education",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 22.0,
@@ -457,7 +457,7 @@ List<Widget> education(String education, String university, String numOfParts,
                                       child: Row(
                                         children: <Widget>[
                                           Text(
-                                            "Igaza : ${igaza}",
+                                            "Igaza : ${userType}",
                                             style: TextStyle(fontSize: 18.0),
                                           )
                                         ],

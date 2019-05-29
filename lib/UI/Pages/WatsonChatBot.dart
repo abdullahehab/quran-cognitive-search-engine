@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:QCSE/UI/Pages/quran.dart';
+import 'package:QCSE/UI/QuranWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:watson_assistant/watson_assistant.dart';
@@ -207,7 +208,9 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.deepPurple,
         leading: InkWell(
           child: Icon(Icons.arrow_back),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AllQuran()));
+          },
         ),
         title: Text("Watson Chat-Bot",
             style: TextStyle(fontWeight: FontWeight.bold)),
